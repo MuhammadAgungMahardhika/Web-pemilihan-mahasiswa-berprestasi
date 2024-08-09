@@ -18,9 +18,14 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id_role',
+        'id_mahasiswa',
+        'id_departmen',
+        'id_fakultas',
         'name',
-        'email',
+        'username',
         'password',
+        'status',
     ];
 
     /**
@@ -39,7 +44,15 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');
+    }
+    public function fakultas()
+    {
+        return $this->belongsTo(Fakultas::class, 'id_fakultas');
+    }
 }
