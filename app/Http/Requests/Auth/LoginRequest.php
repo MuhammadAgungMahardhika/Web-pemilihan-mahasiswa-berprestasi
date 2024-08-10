@@ -45,7 +45,17 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'username' => __('auth.failed'),
+                'username' => __('Tidak ada akun yang terdaftar'),
+            ]);
+        }
+
+        $user = Auth::user();
+        // Periksa status pengguna
+        if ($user->status !== 'aktif') {
+            // Jika status tidak aktif, logout dan lemparkan pengecualian
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'username' => __('Akun Tidak Aktif'),
             ]);
         }
 

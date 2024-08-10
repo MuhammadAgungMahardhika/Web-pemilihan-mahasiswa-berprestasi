@@ -117,8 +117,8 @@ function addModal() {
         <form class="form form-horizontal">
             <div class="form-body">
                 <div class="row">
-                  <input type="hidden" value=${id_mahasiswa} id="id_mahasiswa" class="form-control">
-                  <div class="col-6 form-group">
+                    <input type="hidden" value=${id_mahasiswa} id="id_mahasiswa" class="form-control">
+                    <div class="col-6 form-group">
                         <label for="id_capaian_unggulan">Capaian Unggulan <i class="text-danger">*</i></label>
                          <select class="form-select" id="id_capaian_unggulan" onclick="selectCapaianUnggulan()">
                            
@@ -210,18 +210,26 @@ function editModal(id) {
         type: "GET",
         url: `/api/dokumen-prestasi/${id}`,
         success: function (response) {
-            let { id_capaian_unggulan, id_mahasiswa, judul, dokumen_url } =
-                response.data;
+            let {
+                id_capaian_unggulan,
+                id_mahasiswa,
+                judul,
+                status,
+                dokumen_url,
+            } = response.data;
             const modalHeader = "Edit Dokumen Prestasi";
             const modalBody = `
                 <form class="form form-horizontal">
                     <div class="form-body">
                         <div class="row">
                             <input type="hidden" id="id_mahasiswa" value="${id_mahasiswa}" class="form-control">
+                            <input type="hidden" id="status" value="${status}" class="form-control">
                             <div class="col-6 form-group">
-                                <label for="id_capaian_unggulan">Capaian Unggulan <i class="text-danger">*</i></label>
-                                <input type="number" id="id_capaian_unggulan" value="${id_capaian_unggulan}" class="form-control">
-                            </div> 
+                            <label for="id_capaian_unggulan">Capaian Unggulan <i class="text-danger">*</i></label>
+                            <select class="form-select" id="id_capaian_unggulan">
+                                
+                            </select>
+                            </div>
                             <div class="col-6 form-group">
                                 <label for="judul">Judul <i class="text-danger">*</i></label>
                                 <input type="text" id="judul" value="${judul}" class="form-control">
@@ -237,6 +245,7 @@ function editModal(id) {
             `;
             const modalFooter = `<a class="btn btn-success btn-lg" onclick="update('${id}')"><i class="fa fa-save me-2"> </i> Simpan Perubahan</a>`;
             showLargeModal(modalHeader, modalBody, modalFooter);
+            selectCapaianUnggulan(id_capaian_unggulan);
 
             // Filepond: Load existing file
             pond = FilePond.create(document.querySelector("#dokumen_url"), {
@@ -307,6 +316,7 @@ function update(id) {
     const id_capaian_unggulan = $("#id_capaian_unggulan").val();
     const id_mahasiswa = $("#id_mahasiswa").val();
     const judul = $("#judul").val();
+    const status = $("#status").val();
 
     const pondFile = pond.getFile();
     const dokumen_url = pondFile ? JSON.parse(pondFile.serverId).folder : null;
@@ -314,6 +324,7 @@ function update(id) {
         id_capaian_unggulan: id_capaian_unggulan,
         id_mahasiswa: id_mahasiswa,
         judul: judul,
+        status: status,
         dokumen_url: dokumen_url,
     };
 
