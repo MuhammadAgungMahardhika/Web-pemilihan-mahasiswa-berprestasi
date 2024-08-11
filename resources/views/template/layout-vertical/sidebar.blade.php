@@ -40,14 +40,21 @@
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Menu</li>
+                @if (session('universitas'))
+                    <li class="sidebar-title"> {{ session('universitas')->nama }}</li>
+                @endif
+                @if (session('fakultas'))
+                    <li class="sidebar-title"> {{ session('fakultas')->nama_fakultas }}</li>
+                @endif
+                @if (session('departmen'))
+                    <li class="sidebar-title"> {{ session('departmen')->nama_departmen }}</li>
+                @endif
 
                 <li class="sidebar-item  {{ request()->is('dashboard') ? 'active' : '' }}">
                     <a href="{{ url('dashboard') }}" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
-
                 </li>
 
                 @role('admin_universitas')
@@ -55,6 +62,7 @@
                 @endrole
 
                 @role('admin_fakultas')
+                    @include('menu.admin-fakultas')
                 @endrole
 
                 @role('admin_departmen')
@@ -64,7 +72,6 @@
                 @role('mahasiswa')
                     @include('menu.mahasiswa')
                 @endrole
-
 
                 {{-- <li class="sidebar-title">Forms &amp; Tables</li> --}}
 

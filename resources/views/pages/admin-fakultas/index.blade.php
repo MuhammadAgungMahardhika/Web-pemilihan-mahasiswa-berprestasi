@@ -21,15 +21,15 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Fakultas</th>
                                     <th>Username</th>
                                     <th>Nama</th>
-                                    <th>Fakultas</th>
                                     <th>Status Akun</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Data akan diisi oleh DataTables --}}
+
                             </tbody>
                         </table>
                     </div>
@@ -37,6 +37,7 @@
             </div>
         </section>
     </div>
+
 
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/app/admin_fakultas.js') }}"></script>

@@ -20,7 +20,7 @@ class FakultasController extends Controller
     public function getFakultasData(): JsonResponse
     {
         try {
-            $fakultas = Fakultas::orderBy('id', 'DESC')->get();
+            $fakultas = Fakultas::get();
             return DataTables::of($fakultas)
                 ->make(true);
         } catch (Exception $e) {

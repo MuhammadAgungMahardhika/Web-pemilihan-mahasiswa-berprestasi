@@ -20,7 +20,7 @@ class BidangController extends Controller
     public function getBidangData(): JsonResponse
     {
         try {
-            $bidang = Bidang::orderBy('id', 'DESC');
+            $bidang = Bidang::get();
             return DataTables::of($bidang)
                 ->make(true);
         } catch (Exception $e) {

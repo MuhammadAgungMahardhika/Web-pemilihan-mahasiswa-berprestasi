@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="card-header">
                     <a onclick="addModal()" class="btn btn-primary" title="Tambah Capaian Unggulan"><i class="fa fa-plus"></i>
-                        Tambah Capaian Unggulan</a>
+                    </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -32,7 +32,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Data akan diisi oleh DataTable -->
+
                             </tbody>
                         </table>
                     </div>

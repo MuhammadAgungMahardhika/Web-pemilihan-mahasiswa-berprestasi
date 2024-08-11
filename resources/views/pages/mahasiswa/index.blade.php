@@ -39,6 +39,9 @@
         </section>
     </div>
 
+    <script>
+        const idDepartmen = '{{ Auth::user()->id_departmen }}'
+    </script>
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/app/mahasiswa.js') }}"></script> {{-- Ganti nama file JS sesuai dengan tabel mahasiswa --}}
 @endsection

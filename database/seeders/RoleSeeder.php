@@ -15,7 +15,6 @@ class RoleSeeder extends Seeder
     {
         DB::table('roles')->insert([
             'nama' => 'mahasiswa',
-            'deskripsi' => 'akun mahasiswa untuk upload file prestasi'
         ]);
         DB::table('roles')->insert([
             'nama' => 'admin_departmen',

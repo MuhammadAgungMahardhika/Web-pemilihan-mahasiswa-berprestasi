@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('utusans', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_mahasiswa')->nullable();
+            $table->integer('total_skor');
             $table->enum('status', ['departmen', 'fakultas', 'universitas'])->nullable();
             $table->date('tanggal_utus_departmen')->nullable();
             $table->date('tanggal_utus_fakultas')->nullable();

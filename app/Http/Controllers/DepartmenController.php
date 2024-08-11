@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Departmen;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class DepartmenController extends Controller
@@ -13,15 +14,29 @@ class DepartmenController extends Controller
     protected $message = [
         'nama_departmen.required' => 'Nama departmen harus diisi.',
         'kepala_departmen.required' => 'Kepala departmen harus diisi',
-        'id_fakultas.required' => 'Fakultas dipilih',
+        'id_fakultas.required' => 'Fakultas harus dipilih',
         'email.unique' => 'Email sudah terdaftar.',
     ];
 
-    // Method untuk DataTables API
+    // ambil data departmen 
     public function getDepartmenData(): JsonResponse
     {
         try {
-            $departmen = Departmen::orderBy('id', 'DESC');
+            $departmen = Departmen::get();
+            return DataTables::of($departmen)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data departmen tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+    // ambil data departmen berdasarkan fakultas admin
+    public function getDepartmenDataByFakultas($idFakultas): JsonResponse
+    {
+        try {
+            $departmen = Departmen::where('id_fakultas', $idFakultas)->get();
             return DataTables::of($departmen)
                 ->make(true);
         } catch (Exception $e) {

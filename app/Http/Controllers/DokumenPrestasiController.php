@@ -29,7 +29,7 @@ class DokumenPrestasiController extends Controller
             $idMahasiswa = Auth::user()->id_mahasiswa;
             $dokumenPrestasi = DokumenPrestasi::with(['capaian_unggulan', 'mahasiswa'])
                 ->where('id_mahasiswa', $idMahasiswa)
-                ->orderBy('id', 'desc');
+                ->get();
             return DataTables::of($dokumenPrestasi)
                 ->make(true);
         } catch (Exception $e) {
@@ -40,15 +40,14 @@ class DokumenPrestasiController extends Controller
         }
     }
     // Method ambil data dokumen prestasi oleh admin departmen
-    public function getDokumenPrestasiDataByAdminDepartmen(): JsonResponse
+    public function getDokumenPrestasiDataByDepartmen($idDepartmen): JsonResponse
     {
         try {
-            $idDepartmen = Auth::user()->id_departmen;
             $dokumenPrestasi = DokumenPrestasi::with(['capaian_unggulan', 'mahasiswa'])
                 ->whereHas('mahasiswa', function ($query) use ($idDepartmen) {
                     $query->where('id_departmen', $idDepartmen);
                 })
-                ->orderBy('id', 'desc');
+                ->get();
             return DataTables::of($dokumenPrestasi)
                 ->make(true);
         } catch (Exception $e) {

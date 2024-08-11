@@ -112,7 +112,7 @@
             success: function(response) {
                 const message = response.message;
                 showToastSuccessAlert(message);
-                return window.reload();
+                return window.location.reload();
             },
             error: function(err) {
                 let errorResponse = err.responseJSON;

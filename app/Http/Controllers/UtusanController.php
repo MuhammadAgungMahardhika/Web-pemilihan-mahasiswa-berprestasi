@@ -22,7 +22,7 @@ class UtusanController extends Controller
     public function getUtusanData(): JsonResponse
     {
         try {
-            $utusan = Utusan::orderBy('id', 'DESC');
+            $utusan = Utusan::get();
             return DataTables::of($utusan)
                 ->make(true);
         } catch (Exception $e) {

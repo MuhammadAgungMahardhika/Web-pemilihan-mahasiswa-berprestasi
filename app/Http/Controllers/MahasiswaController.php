@@ -8,6 +8,7 @@ use App\Models\Mahasiswa;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
@@ -23,11 +24,51 @@ class MahasiswaController extends Controller
         'jenis_kelamin.required' => 'Jenis kelamin harus dipilih.',
     ];
 
-    // Method untuk DataTables API
+    // ambil data mahasiswa
     public function getMahasiswaData(): JsonResponse
     {
         try {
-            $mahasiswa = Mahasiswa::with(['user'])->orderBy('id', 'DESC');
+            $mahasiswa = Mahasiswa::with(['user'])->get();
+            return DataTables::of($mahasiswa)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data mahasiswa tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+
+    // ambil data mahasiswa berdasarkan departmen
+    public function getMahasiswaDataByDepartmen($idDepartmen): JsonResponse
+    {
+        try {
+            $mahasiswa = Mahasiswa::with(['user'])
+                ->where('id_departmen', $idDepartmen)
+                ->get();
+            return DataTables::of($mahasiswa)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data mahasiswa tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+    // ambil data ranking mahasiswa berdasarkan departmen
+    public function getMahasiswaRankingDataByDepartmen($idDepartmen): JsonResponse
+    {
+        try {
+            $mahasiswa = Mahasiswa::select('mahasiswas.id', 'mahasiswas.nim', 'mahasiswas.nama', DB::raw('SUM(capaian_unggulans.skor) as total_skor'))
+                ->join('dokumen_prestasis', function ($join) {
+                    $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')
+                        ->where('dokumen_prestasis.status', '=', 'diterima');
+                })
+                ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
+                ->where('mahasiswas.id_departmen', $idDepartmen)
+                ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim')
+                ->get();
+
             return DataTables::of($mahasiswa)
                 ->make(true);
         } catch (Exception $e) {

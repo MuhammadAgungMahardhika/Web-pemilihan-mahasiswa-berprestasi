@@ -6,7 +6,7 @@ function showData() {
     table = $("#datatable").DataTable({
         processing: true,
         serverSide: true,
-        ajax: "/api/mahasiswa/data", // Update URL API
+        ajax: `/api/mahasiswa/departmen/${idDepartmen}`,
         autoWidth: false,
         columnDefs: [
             {
@@ -51,12 +51,14 @@ function showData() {
             {
                 data: "user.status",
                 name: "user.status",
-                orderable: true,
+                orderable: false,
                 searchable: true,
             },
             {
                 data: null,
                 className: "text-center",
+                orderable: false,
+                searchable: false,
                 render: function (data, type, row) {
                     console.log(row);
                     const activateUserButton =
@@ -79,6 +81,7 @@ function showData() {
                 },
             },
         ],
+        order: [[0, 'desc']] 
     });
 }
 
@@ -178,11 +181,6 @@ function addModal() {
                             <option value="8">8</option>
                         </select>
                     </div>
-                    <div class="col-md-4 form-group">
-                        <label for="id_departmen">Departemen <i class="text-danger">*</i></label>
-                        <select class="form-select" id="id_departmen" onclick="selectDepartmen()">
-                        </select>
-                    </div>
                     <div class="col-4 form-group">
                         <label for="no_hp">No HP</label>
                         <input type="text" id="no_hp" class="form-control">
@@ -211,27 +209,7 @@ function addModal() {
     showLargeModal(modalHeader, modalBody, modalFooter);
 }
 
-function selectDepartmen(selectedId) {
-    const departmenOptionLenght = $("#id_departmen option").length;
-    if (departmenOptionLenght != 0) {
-        return;
-    }
-    $.ajax({
-        type: "GET",
-        url: `/api/departmen`,
-        dataType: "json",
-        success: function (response) {
-            const responseData = response.data;
-            let dataOption = `<option value=""></option>`;
-            responseData.forEach((r) => {
-                dataOption += `<option value="${r.id}" ${
-                    selectedId == r.id ? "selected" : ""
-                }>${r.nama_departmen}</option>`;
-            });
-            $("#id_departmen").html(dataOption);
-        },
-    });
-}
+
 function editModal(id) {
     $.ajax({
         type: "GET",
@@ -255,21 +233,36 @@ function editModal(id) {
                 <form class="form form-horizontal">
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-6 form-group">
+                            <div class="col-4 form-group">
                                 <label for="nik">Nik</label>
                                 <input type="text" id="nik" value="${
                                     nik || ""
                                 }" class="form-control" autocomplete="one-time-code">
                             </div>
-                            <div class="col-6 form-group">
+                            <div class="col-4 form-group">
                                 <label for="nim">Nim <i class="text-danger">*</i></label>
                                 <input type="text" id="nim" value="${nim}" class="form-control" autocomplete="one-time-code">
                             </div>
-                            <div class="col-6 form-group">
+                            <div class="col-4 form-group">
                                 <label for="nama">Nama <i class="text-danger">*</i></label>
                                 <input type="text" id="nama" value="${nama}" class="form-control" autocomplete="one-time-code">
                             </div>
-                            <div class="col-6 form-group">
+                            <div class="col-4 form-group">
+                                <label for="jenis_kelamin">Jenis Kelamin <i class="text-danger">*</i></label>
+                                <select id="jenis_kelamin" class="form-control">
+                                    <option value="perempuan" ${
+                                        jenis_kelamin === "perempuan"
+                                            ? "selected"
+                                            : ""
+                                    }>Perempuan</option>
+                                    <option value="laki-laki" ${
+                                        jenis_kelamin === "laki-laki"
+                                            ? "selected"
+                                            : ""
+                                    }>Laki-laki</option>
+                                </select>
+                            </div>
+                            <div class="col-4 form-group">
                                 <label for="semester">Semester <i class="text-danger">*</i></label>
                                 <select id="semester" class="form-control">
                                     <option value="1" ${
@@ -298,50 +291,36 @@ function editModal(id) {
                                     }>8</option>
                                 </select>
                             </div>
-                            <div class="col-6 form-group">
-                                <label for="jenis_kelamin">Jenis Kelamin <i class="text-danger">*</i></label>
-                                <select id="jenis_kelamin" class="form-control">
-                                    <option value="perempuan" ${
-                                        jenis_kelamin === "perempuan"
-                                            ? "selected"
-                                            : ""
-                                    }>Perempuan</option>
-                                    <option value="laki-laki" ${
-                                        jenis_kelamin === "laki-laki"
-                                            ? "selected"
-                                            : ""
-                                    }>Laki-laki</option>
-                                </select>
-                            </div>
-                            <div class="col-6 form-group">
+                            
+                            <div class="col-4 form-group">
                                 <label for="no_hp">No HP</label>
                                 <input type="text" id="no_hp" value="${
                                     no_hp || ""
                                 }" class="form-control">
                             </div>
-                            <div class="col-6 form-group">
-                                <label for="alamat">Alamat</label>
-                                <textarea id="alamat" class="form-control">${
-                                    alamat || ""
-                                }</textarea>
-                            </div>
-                            <div class="col-6 form-group">
+                            <div class="col-4 form-group">
                                 <label for="nama_ayah">Nama Ayah</label>
                                 <input type="text" id="nama_ayah" value="${
                                     nama_ayah || ""
                                 }" class="form-control">
                             </div>
-                            <div class="col-6 form-group">
+                            <div class="col-4 form-group">
                                 <label for="no_hp_ayah">No HP Ayah</label>
                                 <input type="text" id="no_hp_ayah" value="${
                                     no_hp_ayah || ""
                                 }" class="form-control">
                             </div>
-                            <div class="col-6 form-group">
+                            <div class="col-4 form-group">
                                 <label for="nama_ibu">Nama Ibu</label>
                                 <input type="text" id="nama_ibu" value="${
                                     nama_ibu || ""
                                 }" class="form-control">
+                            </div>
+                            <div class="col-4 form-group">
+                                <label for="alamat">Alamat</label>
+                                <textarea id="alamat" class="form-control">${
+                                    alamat || ""
+                                }</textarea>
                             </div>
                         </div>
                     </div>
@@ -369,7 +348,6 @@ function deleteModal(id, nama) {
 // API
 function save() {
     const nik = $("#nik").val();
-    const id_departmen = $("#id_departmen").val();
     const nim = $("#nim").val();
     const nama = $("#nama").val();
     const semester = $("#semester").val();
@@ -382,7 +360,7 @@ function save() {
 
     let data = {
         nik: nik,
-        id_departmen: id_departmen,
+        id_departmen: idDepartmen,
         nim: nim,
         nama: nama,
         semester: semester,
@@ -432,6 +410,7 @@ function update(id) {
     let data = {
         nik: nik,
         nim: nim,
+        id_departmen: idDepartmen,
         nama: nama,
         semester: semester,
         jenis_kelamin: jenis_kelamin,

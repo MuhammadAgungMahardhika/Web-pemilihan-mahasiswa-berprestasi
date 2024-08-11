@@ -26,15 +26,20 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware(['auth'])->group(function () {
-    Route::get('dokumen-prestasi/data', [DokumenPrestasiController::class, 'getDokumenPrestasiData'])->name('dokumen-prestasi.data');
-    Route::get('dokumen-prestasi/admin-departmen/data', [DokumenPrestasiController::class, 'getDokumenPrestasiDataByAdminDepartmen'])->name('dokumen-prestasi.admin-departmen.data');
-    Route::get('capaian-unggulan/data', [CapaianUnggulanController::class, 'getCapaianUnggulanData'])->name('capaian-unggulan.data');
-    Route::get('bidang/data', [BidangController::class, 'getBidangData'])->name('bidang.data');
-    Route::get('kategori/data', [KategoriController::class, 'getKategoriData'])->name('kategori.data');
-    Route::get('mahasiswa/data', [MahasiswaController::class, 'getMahasiswaData'])->name('mahasiswa.data');
-    Route::get('departmen/data', [DepartmenController::class, 'getDepartmenData'])->name('departmen.data');
-    Route::get('fakultas/data', [FakultasController::class, 'getFakultasData'])->name('fakultas.data');
-    Route::get('user/data', [UserController::class, 'getUserData'])->name('user.data');
+    Route::get('dokumen-prestasi/data', [DokumenPrestasiController::class, 'getDokumenPrestasiData']);
+    Route::get('dokumen-prestasi/departmen/{id}', [DokumenPrestasiController::class, 'getDokumenPrestasiDataByDepartmen']);
+    Route::get('capaian-unggulan/data', [CapaianUnggulanController::class, 'getCapaianUnggulanData']);
+    Route::get('bidang/data', [BidangController::class, 'getBidangData']);
+    Route::get('kategori/data', [KategoriController::class, 'getKategoriData']);
+    Route::get('mahasiswa/data', [MahasiswaController::class, 'getMahasiswaData']);
+    Route::get('mahasiswa/departmen/{id}', [MahasiswaController::class, 'getMahasiswaDataByDepartmen']);
+    Route::get('mahasiswa/ranking/departmen/{id}', [MahasiswaController::class, 'getMahasiswaRankingDataByDepartmen']);
+    Route::get('departmen/data', [DepartmenController::class, 'getDepartmenData']);
+    Route::get('fakultas/data', [FakultasController::class, 'getFakultasData']);
+    Route::get('user/data', [UserController::class, 'getUserData']);
+
+    Route::get('user/fakultas/data', [UserController::class, 'getUserDataByFakultas']);
+    Route::get('user/departmen/data', [UserController::class, 'getUserDataByDepartmen']);
 
 
     Route::post('user/activate', [UserController::class, 'activateUser']);
@@ -51,4 +56,5 @@ Route::middleware(['auth'])->group(function () {
 
     // costume
     Route::patch('dokumen-prestasi/status/{id}', [DokumenPrestasiController::class, 'changeStatus']);
+    Route::get('departmen/fakultas/{id}', [DepartmenController::class, 'getDepartmenDataByFakultas']);
 });

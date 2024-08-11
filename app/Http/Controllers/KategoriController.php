@@ -22,7 +22,7 @@ class KategoriController extends Controller
     public function getKategoriData(): JsonResponse
     {
         try {
-            $kategori = Kategori::orderBy('id', 'DESC');
+            $kategori = Kategori::get();
             return DataTables::of($kategori)
                 ->make(true);
         } catch (Exception $e) {

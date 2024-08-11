@@ -56,7 +56,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Data akan diisi oleh DataTables --}}
+
                             </tbody>
                         </table>
                     </div>

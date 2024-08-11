@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Departmen;
+use App\Models\Fakultas;
+use App\Models\Mahasiswa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,10 +23,35 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+
+        $this->storeDepartmenOrFakultasSession();
+
         return response()->json([
             'message' => 'Berhasil Login',
             'data' => null
         ], 200);
+    }
+
+    private function storeDepartmenOrFakultasSession()
+    {
+        $user = Auth::user();
+        if ($user->id_departmen) {
+            $departmen = Departmen::find($user->id_departmen);
+            return session(['departmen' => $departmen]);
+        } elseif ($user->id_fakultas) {
+            $fakultas = Fakultas::find($user->id_fakultas);
+            return session(['fakultas' => $fakultas]);
+        } elseif ($user->id_mahasiswa) {
+            $mahasiswa = Mahasiswa::find($user->id_mahasiswa);
+
+            $departmen = $mahasiswa->departmen;
+            return session(['departmen' => $departmen]);
+        } else {
+            $universitas = new \stdClass();
+            $universitas->nama = "Universitas Andalas";
+
+            return session(['universitas' => $universitas]);
+        }
     }
 
     /**

@@ -26,7 +26,7 @@ class CapaianUnggulanController extends Controller
     public function getCapaianUnggulanData(): JsonResponse
     {
         try {
-            $capaianUnggulan = CapaianUnggulan::with(['bidang', 'kategori'])->orderBy('id', 'DESC');
+            $capaianUnggulan = CapaianUnggulan::with(['bidang', 'kategori'])->get();
             return DataTables::of($capaianUnggulan)
                 ->make(true);
         } catch (Exception $e) {

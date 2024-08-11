@@ -45,8 +45,8 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Mahasiswa</th>
                                     <th>Nim</th>
+                                    <th>Nama Mahasiswa</th>
                                     <th>Judul</th>
                                     <th>Capaian Unggulan</th>
                                     <th>Status</th>
@@ -54,7 +54,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Data dari tabel Dokumen_Prestasi akan diisi di sini --}}
+
                             </tbody>
                         </table>
                     </div>
@@ -62,7 +62,9 @@
             </div>
         </section>
     </div>
-
+    <script>
+        const idDepartmen = '{{ Auth::user()->id_departmen }}'
+    </script>
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/app/verifikasi_dokumen.js') }}"></script>
 @endsection

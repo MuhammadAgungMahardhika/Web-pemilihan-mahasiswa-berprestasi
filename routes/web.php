@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/verifikasi-dokumen', [PageController::class, 'verifikasiDokumen']);
     Route::get('/admin-fakultas', [PageController::class, 'adminFakultas']);
-
+    Route::get('/admin-departmen', [PageController::class, 'adminDepartmen']);
     Route::get('/utusan-departmen', [PageController::class, 'utusanDepartmen']);
+    Route::get('/ranking', [PageController::class, 'ranking']);
 });

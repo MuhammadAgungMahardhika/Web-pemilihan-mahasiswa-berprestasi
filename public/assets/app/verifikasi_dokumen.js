@@ -14,7 +14,7 @@ function showData() {
     table = $("#datatable").DataTable({
         processing: true,
         serverSide: true,
-        ajax: `/api/dokumen-prestasi/admin-departmen/data`,
+        ajax: `/api/dokumen-prestasi/departmen/${idDepartmen}`,
         autoWidth: false,
         columnDefs: [
             {
@@ -33,17 +33,18 @@ function showData() {
                 searchable: false,
             },
             {
-                data: "mahasiswa.nama",
-                name: "mahasiswa.nama",
-                orderable: true,
-                searchable: true,
-            },
-            {
                 data: "mahasiswa.nim",
                 name: "mahasiswa.nim",
                 orderable: true,
                 searchable: true,
             },
+            {
+                data: "mahasiswa.nama",
+                name: "mahasiswa.nama",
+                orderable: true,
+                searchable: true,
+            },
+           
             {
                 data: "judul",
                 name: "judul",
@@ -83,6 +84,7 @@ function showData() {
                 },
             },
         ],
+        order: [[0, 'desc']] 
     });
 }
 

@@ -6,7 +6,7 @@ function showData() {
     table = $("#datatable").DataTable({
         processing: true,
         serverSide: true,
-        ajax: "/api/user/fakultas/data",
+        ajax: "/api/user/departmen/data",
         autoWidth: false,
         columnDefs: [
             {
@@ -25,14 +25,8 @@ function showData() {
                 searchable: false,
             },
             {
-                data: "fakultas.nama_fakultas",
-                name: "fakultas.nama_fakultas",
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: "username",
-                name: "username",
+                data: "departmen.nama_departmen",
+                name: "departmen.nama_departmen",
                 orderable: true,
                 searchable: true,
             },
@@ -42,7 +36,6 @@ function showData() {
                 orderable: true,
                 searchable: true,
             },
-           
             {
                 data: "status",
                 name: "status",
@@ -72,7 +65,7 @@ function showData() {
                     `;
                 },
             },
-        ], order: [[0, 'desc']] 
+        ],
     });
 }
 
@@ -137,15 +130,15 @@ function reloadData() {
 }
 
 function addModal() {
-    const modalHeader = "Tambah Admin Fakultas";
+    const modalHeader = "Tambah Admin Departemen";
     const modalBody = `
         <form class="form form-horizontal">
             <div class="form-body">
                 <div class="row">
-                    <input type="hidden" id="id_role" value="3">
+                    <input type="hidden" id="id_role" value="2">
                     <div class="col-4 form-group">
-                        <label for="id_fakultas">Fakultas <i class="text-danger">*</i></label>
-                        <select class="form-select" id="id_fakultas" onclick="selectFakultas()">
+                        <label for="id_departmen">Departemen <i class="text-danger">*</i></label>
+                        <select class="form-select" id="id_departmen" onclick="selectDepartmen()">
                         </select>
                     </div>
                     <div class="col-4 form-group">
@@ -178,14 +171,14 @@ function addModal() {
     const modalFooter = `<a class="btn btn-success btn-lg" onclick="save()"><i class="fa fa-save"> </i> Save</a>`;
     showLargeModal(modalHeader, modalBody, modalFooter);
 }
-function selectFakultas(fakultasId = null) {
-    const fakultasOptionLenght = $("#id_fakultas option").length;
-    if (fakultasOptionLenght != 0) {
+function selectDepartmen(departmenId = null) {
+    const departmenOptionLenght = $("#id_departmen option").length;
+    if (departmenOptionLenght != 0) {
         return;
     }
     $.ajax({
         type: "GET",
-        url: `/api/fakultas`,
+        url: `/api/departmen/fakultas/${idFakultas}`,
         dataType: "json",
         headers: {
             "X-CSRF-TOKEN": csrfToken,
@@ -195,10 +188,10 @@ function selectFakultas(fakultasId = null) {
             let dataOption = `<option value=""></option>`;
             responseData.forEach((r) => {
                 dataOption += `<option value="${r.id}" ${
-                    fakultasId != null && fakultasId == r.id ? "selected" : ""
-                }>${r.nama_fakultas}</option>`;
+                    departmenId != null && departmenId == r.id ? "selected" : ""
+                }>${r.nama_departmen}</option>`;
             });
-            $("#id_fakultas").html(dataOption);
+            $("#id_departmen").html(dataOption);
         },
         error: function (err) {
             result = null;
@@ -214,15 +207,15 @@ function editModal(id) {
         type: "GET",
         url: `/api/user/${id}`,
         success: function (response) {
-            let { id, id_fakultas, name, username, status } = response.data;
-            const modalHeader = "Ubah Data Admin Fakultas";
+            let { id, id_departmen, name, username, status } = response.data;
+            const modalHeader = "Ubah Data Admin Departmen";
             const modalBody = `
                 <form class="form form-horizontal">
                     <div class="form-body">
                         <div class="row">
                             <div class="col-4 form-group">
-                                <label for="id_fakultas">Fakultas <i class="text-danger">*</i></label>
-                                <select class="form-select" id="id_fakultas">
+                                <label for="id_departmen">Departemen <i class="text-danger">*</i></label>
+                                <select class="form-select" id="id_departmen">
                                 </select>
                             </div>
                             <div class="col-4 form-group">
@@ -230,7 +223,7 @@ function editModal(id) {
                                 <input type="text" id="username" value="${username}" class="form-control" autocomplete="one-time-code">
                             </div>
                             <div class="col-4 form-group">
-                                <label for="name">Nama <i class="text-danger">*</i></label>
+                                <label for="name">Name <i class="text-danger">*</i></label>
                                 <input type="text" id="name" value="${name}" class="form-control" autocomplete="one-time-code">
                             </div>
                     
@@ -251,7 +244,7 @@ function editModal(id) {
             `;
             const modalFooter = `<a class="btn btn-success btn-lg" onclick="update('${id}')"><i class="fa fa-save"> </i> Save Changes</a>`;
             showLargeModal(modalHeader, modalBody, modalFooter);
-            selectFakultas(id_fakultas);
+            selectDepartmen(id_departmen);
         },
         error: function (err) {
             let errorResponse = err.responseJSON;
@@ -271,7 +264,7 @@ function deleteModal(id, name) {
 
 // API
 function save() {
-    const id_fakultas = parseInt($("#id_fakultas").val());
+    const id_departmen = parseInt($("#id_departmen").val());
     const name = $("#name").val();
     const username = $("#username").val();
     const id_role = $("#id_role").val();
@@ -279,9 +272,9 @@ function save() {
     const password_confirm = $("#password_confirm").val();
     const status = $("#status").val();
 
-    if(!id_fakultas){
+    if(!id_departmen){
         return showToastErrorAlert(
-            "Fakultas wajib diisi"
+            "Departemen wajib diisi"
         );
     }
     if (password != password_confirm) {
@@ -292,7 +285,7 @@ function save() {
 
     let data = {
         id_role: id_role,
-        id_fakultas: id_fakultas,
+        id_departmen: id_departmen,
         name: name,
         username: username,
         password: password,
@@ -324,19 +317,19 @@ function save() {
 }
 
 function update(id) {
-    const id_fakultas = $("#id_fakultas").val();
+    const id_departmen = $("#id_departmen").val();
     const username = $("#username").val();
     const name = $("#name").val();
     const role = $("#id_role").val();
     const status = $("#status").val();
 
-    if(!id_fakultas){
+    if(!id_departmen){
         return showToastErrorAlert(
             "Fakultas wajib diisi"
         );
     }
     let data = {
-        id_fakultas: id_fakultas,
+        id_departmen: id_departmen,
         username: username,
         name: name,
         role: role,

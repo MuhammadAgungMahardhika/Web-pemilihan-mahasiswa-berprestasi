@@ -5,17 +5,17 @@
     </a>
 
 </li>
-<li class="sidebar-item  {{ request()->is('utusan-universitas') ? 'active' : '' }}">
-    <a href="{{ url('utusan-universitas') }}" class="sidebar-link">
+<li class="sidebar-item  {{ request()->is('utusan-fakultas') ? 'active' : '' }}">
+    <a href="{{ url('utusan-fakultas') }}" class="sidebar-link">
         <i class="bi bi-grid-fill"></i>
-        <span>Utusan </span>
+        <span>Utusan Fakultas</span>
     </a>
 
 </li>
-<li class="sidebar-item  {{ request()->is('utusan-universitas') ? 'active' : '' }}">
-    <a href="{{ url('utusan-universitas') }}" class="sidebar-link">
+<li class="sidebar-item  {{ request()->is('utusan-kampus') ? 'active' : '' }}">
+    <a href="{{ url('utusan-kampus') }}" class="sidebar-link">
         <i class="bi bi-grid-fill"></i>
-        <span>Calon utusan </span>
+        <span>Utusan Kampus</span>
     </a>
 
 </li>

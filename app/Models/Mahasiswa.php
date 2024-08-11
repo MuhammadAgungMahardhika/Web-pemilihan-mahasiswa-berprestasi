@@ -18,4 +18,8 @@ class Mahasiswa extends Model
     {
         return $this->hasOne(DokumenPrestasi::class, 'id_mahasiswa');
     }
+    public function departmen()
+    {
+        return $this->belongsTo(Departmen::class, 'id_departmen');
+    }
 }

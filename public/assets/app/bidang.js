@@ -46,7 +46,7 @@ function showData() {
                     `;
                 },
             },
-        ],
+        ], order: [[0, 'desc']] 
     });
 }
 

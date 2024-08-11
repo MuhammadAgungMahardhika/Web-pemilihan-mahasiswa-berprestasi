@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use Yajra\DataTables\DataTables;
 
@@ -19,11 +20,37 @@ class UserController extends Controller
         'status.required' => 'Status harus diisi.',
     ];
 
-    // Method untuk DataTables API
-    public function getUserData(): JsonResponse
+    // Method untuk ambil data user berdasarkan fakultas
+    public function getUserDataByFakultas(): JsonResponse
     {
         try {
-            $user = User::with(['fakultas'])->where('id_role', 3)->orderBy('id', 'DESC')->get();
+
+            $user = User::with(['fakultas'])
+                ->where('id_role', 3)
+                ->where('id_fakultas', '!=', null)
+                ->get();
+            return DataTables::of($user)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data user tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+
+    // Method untuk DataTables API
+    public function getUserDataByDepartmen(): JsonResponse
+    {
+        try {
+            $idFakultas = Auth::user()->id_fakultas;
+            $user = User::with(['departmen'])
+                ->where('id_role', 2)
+                ->where('id_departmen', '!=', null)
+                ->whereHas('departmen', function ($query) use ($idFakultas) {
+                    $query->where('id_fakultas', $idFakultas);
+                })
+                ->orderBy('id', 'desc');
             return DataTables::of($user)
                 ->make(true);
         } catch (Exception $e) {

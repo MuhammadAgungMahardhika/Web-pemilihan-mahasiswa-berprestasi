@@ -38,5 +38,5 @@
     </div>
 
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/kategori.js') }}"></script> {{-- Ganti nama file JS sesuai dengan kategori --}}
+    <script src="{{ asset('assets/app/kategori.js') }}"></script>
 @endsection

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,9 +12,15 @@ class DepartmenSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('departments')->insert([
-            'nama' => 'Sistem Informasi',
-            'deskripsi' => 'akun mahasiswa untuk upload file prestasi'
+        DB::table('departmens')->insert([
+            'id_fakultas' => 1,
+            'nama_departmen' => 'Sistem Informasi',
+            'kepala_departmen' => 'Harle',
+        ]);
+        DB::table('departmens')->insert([
+            'id_fakultas' => 1,
+            'nama_departmen' => 'Teknik Komputer',
+            'kepala_departmen' => 'Adinama',
         ]);
     }
 }
