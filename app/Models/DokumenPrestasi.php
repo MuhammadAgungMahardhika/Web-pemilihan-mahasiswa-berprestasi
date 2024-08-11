@@ -14,4 +14,9 @@ class DokumenPrestasi extends Model
     {
         return $this->belongsTo(CapaianUnggulan::class, 'id_capaian_unggulan');
     }
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');
+    }
 }

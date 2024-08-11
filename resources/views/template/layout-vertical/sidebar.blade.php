@@ -49,80 +49,24 @@
                     </a>
 
                 </li>
-                <li class="sidebar-item  {{ request()->is('dokumen-prestasi') ? 'active' : '' }}">
-                    <a href="{{ url('dokumen-prestasi') }}" class="sidebar-link">
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Dokumen Prestasi</span>
-                    </a>
 
-                </li>
-                <li class="sidebar-item  {{ request()->is('verifikasi-dokumen') ? 'active' : '' }}">
-                    <a href="{{ url('verifikasi-dokumen') }}" class="sidebar-link">
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Verifikasi Dokumen</span>
-                    </a>
-                </li>
+                @role('admin_universitas')
+                    @include('menu.super-admin')
+                @endrole
 
+                @role('admin_fakultas')
+                @endrole
 
-                <li
-                    class="sidebar-item  has-sub {{ request()->is('mahasiswa') || request()->is('admin-fakultas') || request()->is('fakultas') || request()->is('departmen') ? 'active' : '' }}">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-stack"></i>
-                        <span>Data</span>
-                    </a>
+                @role('admin_departmen')
+                    @include('menu.admin-departmen')
+                @endrole
 
-                    <ul class="submenu submenu-closed {{ request()->is('mahasiswa') || request()->is('admin-fakultas') || request()->is('fakultas') || request()->is('departmen') ? 'active' : '' }}"
-                        style="--submenu-height: 731px;">
-
-                        <li class="submenu-item  {{ request()->is('mahasiswa') ? 'active' : '' }}">
-                            <a href="{{ url('mahasiswa') }}" class="submenu-link">Mahasiswa</a>
-
-                        </li>
-                        <li class="submenu-item  {{ request()->is('admin-fakultas') ? 'active' : '' }}">
-                            <a href="{{ url('admin-fakultas') }}" class="submenu-link">Admin Fakultas</a>
-                        </li>
-                        <li class="submenu-item  {{ request()->is('pengguna') ? 'active' : '' }}">
-                            <a href="{{ url('pengguna') }}" class="submenu-link">Admin Departmen</a>
-                        </li>
-                        <li class="submenu-item  {{ request()->is('fakultas') ? 'active' : '' }}">
-                            <a href="{{ url('fakultas') }}" class="submenu-link">Fakultas</a>
-
-                        </li>
-                        <li class="submenu-item  {{ request()->is('departmen') ? 'active' : '' }}">
-                            <a href="{{ url('departmen') }}" class="submenu-link">Departmen</a>
-
-                        </li>
+                @role('mahasiswa')
+                    @include('menu.mahasiswa')
+                @endrole
 
 
-                    </ul>
-                </li>
-
-                <li
-                    class="sidebar-item  has-sub {{ request()->is('capaian-unggulan') || request()->is('bidang') || request()->is('kategori') ? 'active' : '' }}">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-stack"></i>
-                        <span>Data Perhitungan</span>
-                    </a>
-
-                    <ul class="submenu submenu-closed {{ request()->is('capaian-unggulan') || request()->is('bidang') || request()->is('kategori') ? 'active' : '' }}"
-                        style="--submenu-height: 731px;">
-
-                        <li class="submenu-item  {{ request()->is('capaian-unggulan') ? 'active' : '' }}">
-                            <a href="{{ url('capaian-unggulan') }}" class="submenu-link">Capaian Unggulan</a>
-
-                        </li>
-                        <li class="submenu-item  {{ request()->is('bidang') ? 'active' : '' }}">
-                            <a href="{{ url('bidang') }}" class="submenu-link">Bidang</a>
-
-                        </li>
-                        <li class="submenu-item {{ request()->is('kategori') ? 'active' : '' }} ">
-                            <a href="{{ url('kategori') }}" class="submenu-link">Kategori</a>
-
-                        </li>
-
-                    </ul>
-                </li>
-                <li class="sidebar-title">Forms &amp; Tables</li>
+                {{-- <li class="sidebar-title">Forms &amp; Tables</li> --}}
 
             </ul>
         </div>

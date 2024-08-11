@@ -33,6 +33,12 @@ function showData() {
                 searchable: false,
             },
             {
+                data: "uploaded_at",
+                name: "uploaded_at",
+                orderable: true,
+                searchable: true,
+            },
+            {
                 data: "judul",
                 name: "judul",
                 orderable: true,
@@ -61,17 +67,28 @@ function showData() {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
+                    let actionButton = ''
+                    const status = row.status
+                    if(status == "pending"){
+                        actionButton = 
+                        `<div class="col">
+                            <a title="Ubah Dokumen Prestasi" onclick="editModal('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-info"></i> </a>
+                        </div>
+                        <div class="col">
+                            <a title="Preview file" onclick="previewFile('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> </a>
+                        </div>
+                        <div class="col">
+                            <a title="Hapus Dokumen Prestasi" onclick="deleteModal('${row.id}', '${row.judul}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </a>
+                        </div>`
+                    }else {
+                        actionButton = 
+                        `<div class="col">
+                            <a title="Preview file" onclick="previewFile('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> </a>
+                        </div>`
+                    }
                     return `
                         <div class="row g-2 text-center">
-                            <div class="col">
-                                <a title="Ubah Dokumen Prestasi" onclick="editModal('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-info"></i> </a>
-                            </div>
-                            <div class="col">
-                                <a title="Preview file" onclick="previewFile('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> </a>
-                            </div>
-                            <div class="col">
-                                <a title="Hapus Dokumen Prestasi" onclick="deleteModal('${row.id}', '${row.judul}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </a>
-                            </div>
+                            ${actionButton}
                         </div>
                     `;
                 },
@@ -279,6 +296,7 @@ function save() {
     const id_capaian_unggulan = parseInt($("#id_capaian_unggulan").val());
     const id_mahasiswa = parseInt($("#id_mahasiswa").val());
     const judul = $("#judul").val();
+    const uploaded_at = dateNow();
     const pondFile = pond.getFile();
     const dokumen_url = pondFile ? JSON.parse(pondFile.serverId).folder : null;
 
@@ -286,6 +304,7 @@ function save() {
         id_capaian_unggulan: id_capaian_unggulan,
         id_mahasiswa: id_mahasiswa,
         judul: judul,
+        uploaded_at: uploaded_at,
         dokumen_url: dokumen_url,
     };
     console.log(data);

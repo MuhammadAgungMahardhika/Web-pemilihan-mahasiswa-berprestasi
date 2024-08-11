@@ -70,4 +70,11 @@ class PageController extends Controller
         ];
         return view('pages.admin-fakultas.index', $send);
     }
+    public function utusanDepartmen()
+    {
+        $send = [
+            'title' => "Utusan Departemen"
+        ];
+        return view('pages.utusan-departmen.index', $send);
+    }
 }

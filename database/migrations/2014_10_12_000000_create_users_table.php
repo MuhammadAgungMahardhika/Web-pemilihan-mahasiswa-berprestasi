@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('foto_url')->nullable();
-            $table->enum('status', ['aktif', 'nonaktif'])->default('nonaktif');
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_mahasiswa')->nullable();
             $table->string('judul')->nullable();
             $table->string('dokumen_url')->nullable();
+            $table->date('uploaded_at');
             $table->enum('status', ['pending', 'ditolak', 'diterima'])->nullable();
             $table->timestamps(); // for created_at and updated_at columns
             $table->unsignedBigInteger('created_by')->nullable();

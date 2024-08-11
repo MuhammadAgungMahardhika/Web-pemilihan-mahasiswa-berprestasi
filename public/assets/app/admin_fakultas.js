@@ -278,6 +278,11 @@ function save() {
     const password_confirm = $("#password_confirm").val();
     const status = $("#status").val();
 
+    if(!id_fakultas){
+        return showToastErrorAlert(
+            "Fakultas wajib diisi"
+        );
+    }
     if (password != password_confirm) {
         return showToastErrorAlert(
             "Konfirmasi password tidak sama dengan password"
@@ -324,6 +329,11 @@ function update(id) {
     const role = $("#id_role").val();
     const status = $("#status").val();
 
+    if(!id_fakultas){
+        return showToastErrorAlert(
+            "Fakultas wajib diisi"
+        );
+    }
     let data = {
         id_fakultas: id_fakultas,
         username: username,

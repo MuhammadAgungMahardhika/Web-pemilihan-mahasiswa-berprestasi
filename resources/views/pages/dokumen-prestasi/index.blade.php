@@ -48,8 +48,9 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Tanggal upload</th>
                                     <th>Judul</th>
-                                    <th>Dokumen</th>
+                                    <th>Capaian Unggulan</th>
                                     <th>Status</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>

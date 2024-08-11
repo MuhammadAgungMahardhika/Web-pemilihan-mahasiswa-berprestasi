@@ -14,4 +14,8 @@ class Mahasiswa extends Model
     {
         return $this->hasOne(User::class, 'id_mahasiswa');
     }
+    public function dokumen_prestasi()
+    {
+        return $this->hasOne(DokumenPrestasi::class, 'id_mahasiswa');
+    }
 }
