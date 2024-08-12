@@ -8,10 +8,11 @@
         <div class="row">
             <div class="col-6">
                 <input class="form-check-input  me-0" type="hidden" id="toggle-dark">
-                <div id="auth-left">
-                    <a href=""><img src="{{ asset('assets/images/logo.png') }}" alt="Logo" width="120"></a>
+                <div id="auth-left" class="p-2">
+                    <a href=""><img src="{{ asset('assets/static/images/logo/unand.png') }}" alt="Logo"
+                            width="120"></a>
                     <h1 class="auth-title">Log in.</h1>
-                    <p class="auth-subtitle mb-5">Log in with your data that you entered durings registration.</p>
+                    <p class="auth-subtitle mb-5">Silahkan Login Dengan Menggunakan Akun Anda</p>
                     <div id="loginForm">
                         <div class="form-group position-relative has-icon-left mb-4">
                             <input class="form-control form-control-xl" type="text" name="username"
@@ -36,8 +37,8 @@
                         <button type="submit" onclick="login()" class="btn btn-primary btn-block btn-lg shadow-lg mt-5"
                             id="btnLogin">Log
                             in</button>
-                        <a type="submit" href="{{ url('forgot-password') }}" class="mt-4" id="btnLogin">Forgot password
-                            ?</a>
+                        {{-- <a type="submit" href="{{ url('forgot-password') }}" class="mt-4" id="btnLogin">Forgot password
+                            ?</a> --}}
                     </div>
                 </div>
             </div>

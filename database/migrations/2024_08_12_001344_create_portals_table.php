@@ -15,6 +15,8 @@ return new class extends Migration
             $table->year('periode')->primary();
             $table->enum('status', ['tutup', 'buka']);
             $table->timestamps();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
         });
     }
 

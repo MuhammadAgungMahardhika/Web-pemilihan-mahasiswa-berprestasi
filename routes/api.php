@@ -9,6 +9,7 @@ use App\Http\Controllers\DokumenPrestasiController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\PortalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UtusanController;
 
@@ -28,6 +29,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 Route::middleware(['auth'])->group(function () {
     // route untuk datatable
+    Route::get('portal/data', [PortalController::class, 'getPortalData']);
     Route::get('dokumen-prestasi/data', [DokumenPrestasiController::class, 'getDokumenPrestasiData']);
     Route::get('dokumen-prestasi/departmen/{id}', [DokumenPrestasiController::class, 'getDokumenPrestasiDataByDepartmen']);
     Route::get('capaian-unggulan/data', [CapaianUnggulanController::class, 'getCapaianUnggulanData']);
@@ -56,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::apiResource('fakultas', FakultasController::class);
     Route::apiResource('user', UserController::class);
     Route::apiResource('utusan', UtusanController::class);
+    Route::apiResource('portal', PortalController::class);
 
     // costume
     Route::patch('dokumen-prestasi/status/{id}', [DokumenPrestasiController::class, 'changeStatus']);

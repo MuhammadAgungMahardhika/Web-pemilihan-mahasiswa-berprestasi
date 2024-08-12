@@ -56,4 +56,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin-departmen', [PageController::class, 'adminDepartmen']);
     Route::get('/utusan-departmen', [PageController::class, 'utusanDepartmen']);
     Route::get('/ranking', [PageController::class, 'ranking']);
+    Route::get('/portal', [PageController::class, 'portal']);
 });

@@ -11,7 +11,14 @@ class PageController extends Controller
         $send = [
             'title' => "Dashboard"
         ];
-        return view('pages.dashboard.index');
+        return view('pages.dashboard.index', $send);
+    }
+    public function portal()
+    {
+        $send = [
+            'title' => "Portal"
+        ];
+        return view('pages.portal.index', $send);
     }
     public function dokumenPrestasi()
     {

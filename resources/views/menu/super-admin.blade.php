@@ -1,3 +1,10 @@
+<li class="sidebar-item  {{ request()->is('portal') ? 'active' : '' }}">
+    <a href="{{ url('portal') }}" class="sidebar-link">
+        <i class="bi bi-grid-fill"></i>
+        <span>Portal</span>
+    </a>
+
+</li>
 <li class="sidebar-item  {{ request()->is('admin-fakultas') ? 'active' : '' }}">
     <a href="{{ url('admin-fakultas') }}" class="sidebar-link">
         <i class="bi bi-grid-fill"></i>
