@@ -3,8 +3,8 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="index.html"><img src="{{ asset('assets/static/images/logo/unand.png') }}"
-                            style="height:100px;" alt="Logo" srcset=""></a>
+                    <a href=""><img src="{{ asset('assets/static/images/logo/unand.png') }}" style="height:100px;"
+                            alt="Logo" srcset=""></a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"

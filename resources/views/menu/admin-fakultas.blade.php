@@ -6,10 +6,10 @@
 
 </li>
 
-<li class="sidebar-item  {{ request()->is('utusan-departmen') ? 'active' : '' }}">
-    <a href="{{ url('utusan-departmen') }}" class="sidebar-link">
+<li class="sidebar-item  {{ request()->is('ranking-fakultas') ? 'active' : '' }}">
+    <a href="{{ url('ranking-fakultas') }}" class="sidebar-link">
         <i class="bi bi-grid-fill"></i>
-        <span>Utusan Departemen</span>
+        <span>Ranking </span>
     </a>
 </li>
 <li class="sidebar-item  {{ request()->is('utusan-fakultas') ? 'active' : '' }}">

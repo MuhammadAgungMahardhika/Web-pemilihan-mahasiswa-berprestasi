@@ -23,8 +23,9 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Departemen</th>
+                                    <th>Username</th>
                                     <th>Nama</th>
-                                    <th>Status</th>
+                                    <th>Status Akun</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>

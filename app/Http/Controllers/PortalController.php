@@ -12,6 +12,12 @@ use Yajra\DataTables\DataTables;
 class PortalController extends Controller
 {
 
+    protected $message = [
+        'periode.required' => 'Periode wajib diisi',
+        'periode.unique' => 'Periode sudah ada',
+        'periode.max' => 'Tahun Periode Tidak Valid',
+        'periode.min' => 'Tahun Periode Tidak Valid',
+    ];
 
     // Method untuk DataTables API
     public function getPortalData(): JsonResponse
@@ -51,11 +57,28 @@ class PortalController extends Controller
     public function store(Request $request): JsonResponse
     {
         try {
+            // Validasi awal
+            $request->validate([
+                'periode' => 'required|string|min:4|max:4|unique:portals',
+                'status' => 'required|in:tutup,buka',
+            ], $this->message);
 
+            // Ambil nilai periode maksimal yang sudah ada di database
+            $maxPeriode = Portal::max('periode');
+
+            // Validasi periode baru agar tidak lebih kecil dari periode maksimal yang ada
+            if ($maxPeriode && $request->periode < $maxPeriode) {
+                throw new \Exception('Periode tidak boleh lebih kecil dari periode terakhir yang sudah ada (' . $maxPeriode . ')');
+            }
+
+            // Tambahkan informasi created_by ke dalam request
             $request->merge([
                 'created_by' => Auth::user()->id
             ]);
+
+            // Simpan data portal
             $portal = Portal::create($request->all());
+
             return response()->json([
                 'message' => 'Berhasil menambahkan data Portal baru',
                 'data' => $portal
@@ -67,6 +90,7 @@ class PortalController extends Controller
             ], 500);
         }
     }
+
 
     public function show($id): JsonResponse
     {
@@ -91,6 +115,10 @@ class PortalController extends Controller
     public function update(Request $request, $id): JsonResponse
     {
         try {
+            $request->validate([
+                'periode' => 'required|string|min:4|max:4|unique:portals,periode,' . $id,
+                'status' => 'required|in:tutup,buka',
+            ], $this->message);
 
             $request->merge([
                 'updated_by' => Auth::user()->id

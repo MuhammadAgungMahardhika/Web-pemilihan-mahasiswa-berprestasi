@@ -31,6 +31,12 @@ function showData() {
                 searchable: true,
             },
             {
+                data: "username",
+                name: "username",
+                orderable: true,
+                searchable: true,
+            },
+            {
                 data: "name",
                 name: "name",
                 orderable: true,
@@ -272,10 +278,8 @@ function save() {
     const password_confirm = $("#password_confirm").val();
     const status = $("#status").val();
 
-    if(!id_departmen){
-        return showToastErrorAlert(
-            "Departemen wajib diisi"
-        );
+    if (!id_departmen) {
+        return showToastErrorAlert("Departemen wajib diisi");
     }
     if (password != password_confirm) {
         return showToastErrorAlert(
@@ -323,10 +327,8 @@ function update(id) {
     const role = $("#id_role").val();
     const status = $("#status").val();
 
-    if(!id_departmen){
-        return showToastErrorAlert(
-            "Fakultas wajib diisi"
-        );
+    if (!id_departmen) {
+        return showToastErrorAlert("Fakultas wajib diisi");
     }
     let data = {
         id_departmen: id_departmen,

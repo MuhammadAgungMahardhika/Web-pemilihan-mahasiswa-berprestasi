@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Http\Request;
 use App\Models\Mahasiswa;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 
 class MahasiswaController extends Controller
@@ -20,6 +18,7 @@ class MahasiswaController extends Controller
         'nama.required' => 'Nama mahasiswa harus diisi.',
         'nim.required' => 'NIM harus diisi.',
         'nim.unique' => 'NIM sudah terdaftar.',
+        'ipk.required' => 'Ipk wajib diisi',
         'semester.required' => 'Semester harus dipilih.',
         'jenis_kelamin.required' => 'Jenis kelamin harus dipilih.',
     ];
@@ -55,6 +54,7 @@ class MahasiswaController extends Controller
             ], 404);
         }
     }
+
     // ambil data ranking mahasiswa berdasarkan departmen
     public function getMahasiswaRankingDataByDepartmen($idDepartmen): JsonResponse
     {
@@ -69,6 +69,78 @@ class MahasiswaController extends Controller
                 ->where('utusans.id_mahasiswa', '=', null)
                 ->where('mahasiswas.id_departmen', $idDepartmen)
                 ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim')
+                ->get();
+
+            return DataTables::of($mahasiswa)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data mahasiswa tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+
+    // ambil data ranking mahasiswa berdasarkan fakultas
+    public function getMahasiswaRankingDataByFakultas($idFakultas): JsonResponse
+    {
+        try {
+
+            $mahasiswa = Mahasiswa::select(
+                'mahasiswas.id',
+                'mahasiswas.nim',
+                'mahasiswas.nama',
+                'departmens.nama_departmen as nama_departmen',
+                'utusans.id as id_utusan',
+                DB::raw('SUM(capaian_unggulans.skor) as total_skor')
+            )
+                ->join('dokumen_prestasis', function ($join) {
+                    $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')
+                        ->where('dokumen_prestasis.status', '=', 'diterima');
+                })
+                ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
+                ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
+                ->where('departmens.id_fakultas', $idFakultas)
+                ->leftJoin('utusans', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
+                ->where('utusans.tingkat', 'departmen')
+                ->where('utusans.id_portal', session('portal')->id)
+                ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim', 'departmens.nama_departmen', 'utusans.id')
+                ->get();
+
+            return DataTables::of($mahasiswa)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data mahasiswa tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+    // ambil data ranking mahasiswa berdasarkan universitas
+    public function getMahasiswaRankingDataByUniversitas(): JsonResponse
+    {
+        try {
+
+            $mahasiswa = Mahasiswa::select(
+                'mahasiswas.id',
+                'mahasiswas.nim',
+                'mahasiswas.nama',
+                'fakultas.nama_fakultas as nama_fakultas',
+                'departmens.nama_departmen as nama_departmen',
+                'utusans.id as id_utusan',
+                DB::raw('SUM(capaian_unggulans.skor) as total_skor')
+            )
+                ->join('dokumen_prestasis', function ($join) {
+                    $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')
+                        ->where('dokumen_prestasis.status', '=', 'diterima');
+                })
+                ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
+                ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
+                ->join('fakultas', 'departmens.id_fakultas', '=', 'fakultas.id')
+                ->leftJoin('utusans', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
+                ->where('utusans.tingkat', 'fakultas')
+                ->where('utusans.id_portal', session('portal')->id)
+                ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim', 'departmens.nama_departmen', 'utusans.id')
                 ->get();
 
             return DataTables::of($mahasiswa)
@@ -108,6 +180,7 @@ class MahasiswaController extends Controller
                 'nik' => 'nullable|string|max:20',
                 'nim' => 'required|string|max:20|unique:mahasiswas',
                 'nama' => 'required|string|max:255',
+                'ipk' => 'required|string',
                 'semester' => 'required|in:1,2,3,4,5,6,7,8',
                 'id_departmen' => 'required',
                 'jenis_kelamin' => 'required|in:perempuan,laki-laki',

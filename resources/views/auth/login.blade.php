@@ -11,7 +11,7 @@
                 <div id="auth-left" class="p-2">
                     <a href=""><img src="{{ asset('assets/static/images/logo/unand.png') }}" alt="Logo"
                             width="120"></a>
-                    <h1 class="auth-title">Log in.</h1>
+                    <h2 class="auth-title">Sistem Informasi Pemilihan Mahasiswa Berprestasi</h2>
                     <p class="auth-subtitle mb-5">Silahkan Login Dengan Menggunakan Akun Anda</p>
                     <div id="loginForm">
                         <div class="form-group position-relative has-icon-left mb-4">

@@ -39,8 +39,8 @@
         </section>
     </div>
     <script>
-        const idDepartmen = '{{ Auth::user()->id_departmen }}'
+        const idFakultas = '{{ Auth::user()->id_fakultas }}'
     </script>
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/utusan_departmen.js') }}"></script>
+    <script src="{{ asset('assets/app/utusan_fakultas.js') }}"></script>
 @endsection

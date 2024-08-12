@@ -22,4 +22,9 @@ class Mahasiswa extends Model
     {
         return $this->belongsTo(Departmen::class, 'id_departmen');
     }
+
+    public function utusan()
+    {
+        return $this->hasMany(Utusan::class, 'id_mahasiswa');
+    }
 }

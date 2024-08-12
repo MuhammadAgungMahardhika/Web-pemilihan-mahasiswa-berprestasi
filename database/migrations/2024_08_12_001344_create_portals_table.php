@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('portals', function (Blueprint $table) {
-            $table->year('periode')->primary();
+            $table->id();
+            $table->year('periode')->unique();
             $table->enum('status', ['tutup', 'buka']);
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();

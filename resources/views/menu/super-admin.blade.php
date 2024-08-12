@@ -12,17 +12,17 @@
     </a>
 
 </li>
-<li class="sidebar-item  {{ request()->is('utusan-fakultas') ? 'active' : '' }}">
-    <a href="{{ url('utusan-fakultas') }}" class="sidebar-link">
+<li class="sidebar-item  {{ request()->is('ranking-universitas') ? 'active' : '' }}">
+    <a href="{{ url('ranking-universitas') }}" class="sidebar-link">
         <i class="bi bi-grid-fill"></i>
-        <span>Utusan Fakultas</span>
+        <span>Ranking</span>
     </a>
 
 </li>
-<li class="sidebar-item  {{ request()->is('utusan-kampus') ? 'active' : '' }}">
-    <a href="{{ url('utusan-kampus') }}" class="sidebar-link">
+<li class="sidebar-item  {{ request()->is('utusan-universitas') ? 'active' : '' }}">
+    <a href="{{ url('utusan-universitas') }}" class="sidebar-link">
         <i class="bi bi-grid-fill"></i>
-        <span>Utusan Kampus</span>
+        <span>Utusan Universitas</span>
     </a>
 
 </li>

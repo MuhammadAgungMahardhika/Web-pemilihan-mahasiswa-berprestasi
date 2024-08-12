@@ -6,7 +6,7 @@ function showData() {
     table = $("#datatable").DataTable({
         processing: true,
         serverSide: true,
-        ajax: `/api/utusan/departmen/${idDepartmen}`,
+        ajax: `/api/mahasiswa/ranking/universitas`,
         autoWidth: false,
         columnDefs: [
             {
@@ -25,14 +25,26 @@ function showData() {
                 searchable: false,
             },
             {
-                data: "mahasiswa.nim",
-                name: "mahasiswa.nim",
+                data: "nim",
+                name: "nim",
                 orderable: true,
                 searchable: true,
             },
             {
-                data: "mahasiswa.nama",
-                name: "mahasiswa.nama",
+                data: "nama",
+                name: "nama",
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: "nama_fakultas",
+                name: "nama_fakultas",
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: "nama_departmen",
+                name: "nama_departmen",
                 orderable: true,
                 searchable: true,
             },
@@ -43,33 +55,28 @@ function showData() {
                 searchable: true,
             },
             {
-                data: "tanggal_utus_departmen",
-                name: "tanggal_utus_departmen",
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: "portal.periode",
-                name: "portal.periode",
-                orderable: true,
-                searchable: true,
-            },
-            {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
                     return `
                         <div class="row g-2 text-center">
                             <div class="col">
-                                <a onclick="deleteModal('${row.id}','${row.mahasiswa.nama}')" class="btn btn-danger btn-sm"><i class="fa fa-x"></i> </a>
+                                <a onclick="sendModal('${row.id_utusan}','${row.nama}')" title="Utus mahasiswa" class="btn btn-success btn-sm"><i class="fa fa-paper-plane"></i> </a>
                             </div>
                         </div>
                     `;
                 },
             },
         ],
-        order: [[0, "desc"]],
+        order: [[5, "desc"]],
     });
+}
+function sendModal(id, nama) {
+    console.log(id);
+    const modalHeader = "Kirim Utusan Kampus";
+    const modalBody = `Apakah Anda Yakin Mengutus Mahasiswa (${nama}) Sebagai Utusan Kampus?`;
+    const modalFooter = `<a class="btn btn-success btn-lg" onclick="updateTingkat('${id}')">Kirim</a>`;
+    showModal(modalHeader, modalBody, modalFooter);
 }
 
 function reloadData() {
@@ -78,24 +85,23 @@ function reloadData() {
     }
 }
 
-function deleteModal(id, nama) {
-    const modalHeader = "Batalkan Utusan";
-    const modalBody = `Apakah Anda Yakin Menghapus (${nama}) dari Utusan Departemen ?`;
-    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Batalkan</a>`;
-    showModal(modalHeader, modalBody, modalFooter);
-}
-
 // API
+function updateTingkat(id) {
+    let data = {
+        tingkat: "universitas",
+    };
 
-function deleteItem(id) {
     $.ajax({
-        type: "DELETE",
-        url: `/api/utusan/${id}`,
+        type: "PATCH",
+        url: `/api/utusan/tingkat/${id}`,
+        contentType: "application/json",
         headers: {
             "X-CSRF-TOKEN": csrfToken,
         },
+        data: JSON.stringify(data),
         success: function (response) {
-            showToastSuccessAlert(response.message);
+            const message = response.message;
+            showToastSuccessAlert(message);
             closeModal();
             return reloadData();
         },

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_departmen')->nullable();
             $table->string('nim');
             $table->string('nama');
+            $table->float('ipk')->default(0);
             $table->string('nik')->nullable();
             $table->enum('semester', [1, 2, 3, 4, 5, 6, 7, 8])->nullable();
             $table->enum('jenis_kelamin', ['perempuan', 'laki-laki']);

@@ -22,10 +22,11 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nim</th>
-                                    <th>Nama Mahasiswa</th>
+                                    <th>Nama </th>
+                                    <th>Fakultas </th>
+                                    <th>Departemen </th>
                                     <th>Total Skor</th>
                                     <th>Tanggal Diutus</th>
-                                    <th>Periode</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -38,9 +39,7 @@
             </div>
         </section>
     </div>
-    <script>
-        const idDepartmen = '{{ Auth::user()->id_departmen }}'
-    </script>
+
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/utusan_departmen.js') }}"></script>
+    <script src="{{ asset('assets/app/utusan_universitas.js') }}"></script>
 @endsection

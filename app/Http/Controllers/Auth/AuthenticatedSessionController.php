@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Departmen;
 use App\Models\Fakultas;
 use App\Models\Mahasiswa;
+use App\Models\Portal;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -23,7 +24,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-
+        $this->storePortalSession();
         $this->storeDepartmenOrFakultasSession();
 
         return response()->json([
@@ -32,6 +33,15 @@ class AuthenticatedSessionController extends Controller
         ], 200);
     }
 
+    private function storePortalSession()
+    {
+        $activePortal = Portal::orderBy('id', 'desc')->first();
+
+        // Simpan data portal di session
+        if ($activePortal) {
+            session(['portal' => $activePortal]);
+        }
+    }
     private function storeDepartmenOrFakultasSession()
     {
         $user = Auth::user();

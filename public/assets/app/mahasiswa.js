@@ -81,7 +81,7 @@ function showData() {
                 },
             },
         ],
-        order: [[0, 'desc']] 
+        order: [[0, "desc"]],
     });
 }
 
@@ -182,9 +182,14 @@ function addModal() {
                         </select>
                     </div>
                     <div class="col-4 form-group">
+                        <label for="ipk">Ipk</label>
+                        <input type="text" id="ipk" class="form-control">
+                    </div>
+                    <div class="col-4 form-group">
                         <label for="no_hp">No HP</label>
                         <input type="text" id="no_hp" class="form-control">
                     </div>
+                    
                     <div class="col-4 form-group">
                         <label for="nama_ayah">Nama Ayah</label>
                         <input type="text" id="nama_ayah" class="form-control">
@@ -209,7 +214,6 @@ function addModal() {
     showLargeModal(modalHeader, modalBody, modalFooter);
 }
 
-
 function editModal(id) {
     $.ajax({
         type: "GET",
@@ -220,6 +224,7 @@ function editModal(id) {
                 nik,
                 nim,
                 nama,
+                ipk,
                 semester,
                 jenis_kelamin,
                 no_hp,
@@ -291,7 +296,12 @@ function editModal(id) {
                                     }>8</option>
                                 </select>
                             </div>
-                            
+                            <div class="col-4 form-group">
+                                <label for="ipk">Ipk</label>
+                                <input type="text" id="ipk" value="${
+                                    ipk || ""
+                                }" class="form-control">
+                            </div>
                             <div class="col-4 form-group">
                                 <label for="no_hp">No HP</label>
                                 <input type="text" id="no_hp" value="${
@@ -350,6 +360,7 @@ function save() {
     const nik = $("#nik").val();
     const nim = $("#nim").val();
     const nama = $("#nama").val();
+    const ipk = $("#ipk").val();
     const semester = $("#semester").val();
     const jenis_kelamin = $("#jenis_kelamin").val();
     const no_hp = $("#no_hp").val();
@@ -363,6 +374,7 @@ function save() {
         id_departmen: idDepartmen,
         nim: nim,
         nama: nama,
+        ipk: ipk,
         semester: semester,
         jenis_kelamin: jenis_kelamin,
         no_hp: no_hp,

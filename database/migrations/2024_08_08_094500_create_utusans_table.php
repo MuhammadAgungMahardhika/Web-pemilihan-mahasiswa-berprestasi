@@ -19,7 +19,8 @@ return new class extends Migration
             $table->date('tanggal_utus_departmen')->nullable();
             $table->date('tanggal_utus_fakultas')->nullable();
             $table->date('tanggal_utus_universitas')->nullable();
-            $table->timestamps(); // for created_at and updated_at columns
+            $table->unsignedBigInteger('id_portal')->nullable();
+            $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
         });

@@ -6,7 +6,7 @@ function showData() {
     table = $("#datatable").DataTable({
         processing: true,
         serverSide: true,
-        ajax: `/api/utusan/departmen/${idDepartmen}`,
+        ajax: `/api/utusan/fakultas/${idFakultas}`,
         autoWidth: false,
         columnDefs: [
             {
@@ -43,8 +43,8 @@ function showData() {
                 searchable: true,
             },
             {
-                data: "tanggal_utus_departmen",
-                name: "tanggal_utus_departmen",
+                data: "tanggal_utus_fakultas",
+                name: "tanggal_utus_fakultas",
                 orderable: true,
                 searchable: true,
             },
@@ -80,22 +80,28 @@ function reloadData() {
 
 function deleteModal(id, nama) {
     const modalHeader = "Batalkan Utusan";
-    const modalBody = `Apakah Anda Yakin Menghapus (${nama}) dari Utusan Departemen ?`;
-    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Batalkan</a>`;
+    const modalBody = `Apakah Anda Yakin Menghapus (${nama}) dari Utusan Fakultas ?`;
+    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="updateTingkat('${id}')">Batalkan</a>`;
     showModal(modalHeader, modalBody, modalFooter);
 }
 
-// API
+function updateTingkat(id) {
+    const tingkat = "departmen";
+    let data = {
+        tingkat: tingkat,
+    };
 
-function deleteItem(id) {
     $.ajax({
-        type: "DELETE",
-        url: `/api/utusan/${id}`,
+        type: "PATCH",
+        url: `/api/utusan/tingkat/${id}`,
+        data: JSON.stringify(data),
+        contentType: "application/json",
         headers: {
             "X-CSRF-TOKEN": csrfToken,
         },
         success: function (response) {
-            showToastSuccessAlert(response.message);
+            const successMessage = response.message;
+            showToastSuccessAlert(successMessage);
             closeModal();
             return reloadData();
         },

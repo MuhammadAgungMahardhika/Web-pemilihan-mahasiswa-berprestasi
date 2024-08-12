@@ -22,6 +22,8 @@
                                     <th>No</th>
                                     <th>Nim</th>
                                     <th>Nama</th>
+                                    <th>Fakultas</th>
+                                    <th>Departemen</th>
                                     <th>Total Skor</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -36,9 +38,6 @@
         </section>
     </div>
 
-    <script>
-        const idDepartmen = '{{ Auth::user()->id_departmen }}'
-    </script>
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/ranking.js') }}"></script>
+    <script src="{{ asset('assets/app/ranking_universitas.js') }}"></script>
 @endsection

@@ -38,12 +38,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('mahasiswa/data', [MahasiswaController::class, 'getMahasiswaData']);
     Route::get('mahasiswa/departmen/{id}', [MahasiswaController::class, 'getMahasiswaDataByDepartmen']);
     Route::get('mahasiswa/ranking/departmen/{id}', [MahasiswaController::class, 'getMahasiswaRankingDataByDepartmen']);
+    Route::get('mahasiswa/ranking/fakultas/{id}', [MahasiswaController::class, 'getMahasiswaRankingDataByFakultas']);
+    Route::get('mahasiswa/ranking/universitas', [MahasiswaController::class, 'getMahasiswaRankingDataByUniversitas']);
     Route::get('fakultas/data', [FakultasController::class, 'getFakultasData']);
     Route::get('departmen/data', [DepartmenController::class, 'getDepartmenData']);
     Route::get('user/data', [UserController::class, 'getUserData']);
     Route::get('user/fakultas/data', [UserController::class, 'getUserDataByFakultas']);
     Route::get('user/departmen/data', [UserController::class, 'getUserDataByDepartmen']);
 
+    Route::get('utusan/data', [UtusanController::class, 'getUtusanData']);
     Route::get('utusan/universitas/data', [UtusanController::class, 'getUtusanDataByUniversitas']);
     Route::get('utusan/fakultas/{id}', [UtusanController::class, 'getUtusanDataByFakultas']);
     Route::get('utusan/departmen/{id}', [UtusanController::class, 'getUtusanDataByDepartmen']);
@@ -65,4 +68,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('departmen/fakultas/{id}', [DepartmenController::class, 'getDepartmenDataByFakultas']);
     Route::post('user/activate', [UserController::class, 'activateUser']);
     Route::post('user/deactivate', [UserController::class, 'deactivateUser']);
+    Route::patch('utusan/tingkat/{id}', [UtusanController::class, 'updateTingkat']);
 });

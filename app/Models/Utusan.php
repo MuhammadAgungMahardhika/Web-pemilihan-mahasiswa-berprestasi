@@ -14,4 +14,9 @@ class Utusan extends Model
     {
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');
     }
+
+    public function portal()
+    {
+        return $this->belongsTo(Portal::class, 'id_portal');
+    }
 }

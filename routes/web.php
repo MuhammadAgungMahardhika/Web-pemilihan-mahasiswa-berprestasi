@@ -40,21 +40,26 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/temp-upload', [TemporaryFileController::class, 'upload']);
     Route::delete('/temp-delete', [TemporaryFileController::class, 'delete']);
 
-    Route::get('/dashboard', [PageController::class, 'dashboard']);
-    Route::get('/dokumen-prestasi', [PageController::class, 'dokumenPrestasi']);
+    Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
     Route::get('/capaian-unggulan', [PageController::class, 'capaianUnggulan']);
     Route::get('/bidang', [PageController::class, 'bidang']);
     Route::get('/kategori', [PageController::class, 'kategori']);
-
     Route::get('/mahasiswa', [PageController::class, 'mahasiswa']);
     Route::get('/departmen', [PageController::class, 'departmen']);
     Route::get('/fakultas', [PageController::class, 'fakultas']);
-
-
-    Route::get('/verifikasi-dokumen', [PageController::class, 'verifikasiDokumen']);
     Route::get('/admin-fakultas', [PageController::class, 'adminFakultas']);
     Route::get('/admin-departmen', [PageController::class, 'adminDepartmen']);
-    Route::get('/utusan-departmen', [PageController::class, 'utusanDepartmen']);
-    Route::get('/ranking', [PageController::class, 'ranking']);
     Route::get('/portal', [PageController::class, 'portal']);
+    Route::get('/profil', [PageController::class, 'profil']);
+
+    Route::middleware('portal')->group(function () {
+        Route::get('/dokumen-prestasi', [PageController::class, 'dokumenPrestasi']);
+        Route::get('/ranking-departmen', [PageController::class, 'rankingDepartmen']);
+        Route::get('/ranking-fakultas', [PageController::class, 'rankingFakultas']);
+        Route::get('/ranking-universitas', [PageController::class, 'rankingUniversitas']);
+        Route::get('/utusan-departmen', [PageController::class, 'utusanDepartmen']);
+        Route::get('/utusan-fakultas', [PageController::class, 'utusanFakultas']);
+        Route::get('/utusan-universitas', [PageController::class, 'utusanUniversitas']);
+        Route::get('/verifikasi-dokumen', [PageController::class, 'verifikasiDokumen']);
+    });
 });
