@@ -62,7 +62,7 @@ function showData() {
 function sendModal(id, nama,totalSkor) {
     const modalHeader = "Kirim Utusan Departemen";
     const modalBody = `Apakah Anda Yakin Mengutus Mahasiswa (${nama}) Sebagai Utusan Departemen?`;
-    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="save('${id}','${totalSkor}')">Hapus</a>`;
+    const modalFooter = `<a class="btn btn-success btn-lg" onclick="save('${id}','${totalSkor}')">Kirim</a>`;
     showModal(modalHeader, modalBody, modalFooter);
 }
 
@@ -77,7 +77,8 @@ function save(idMahasiswa,totalSkor) {
    
     let data = {
         id_mahasiswa : idMahasiswa,
-        total_skor : totalSkor
+        total_skor : parseInt(totalSkor),
+        tingkat : "departmen"
     };
 
     $.ajax({
@@ -91,7 +92,7 @@ function save(idMahasiswa,totalSkor) {
         success: function (response) {
             const message = response.message;
             showToastSuccessAlert(message);
-            closeLargeModal();
+            closeModal();
             return reloadData();
         },
         error: function (err) {

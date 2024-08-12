@@ -40,9 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/temp-upload', [TemporaryFileController::class, 'upload']);
     Route::delete('/temp-delete', [TemporaryFileController::class, 'delete']);
 
-    Route::get('/dashboard', function () {
-        return view('pages.dashboard.index');
-    });
+    Route::get('/dashboard', [PageController::class, 'dashboard']);
     Route::get('/dokumen-prestasi', [PageController::class, 'dokumenPrestasi']);
     Route::get('/capaian-unggulan', [PageController::class, 'capaianUnggulan']);
     Route::get('/bidang', [PageController::class, 'bidang']);

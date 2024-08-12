@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_mahasiswa')->nullable();
             $table->integer('total_skor');
-            $table->enum('status', ['departmen', 'fakultas', 'universitas'])->nullable();
+            $table->enum('tingkat', ['departmen', 'fakultas', 'universitas'])->nullable();
             $table->date('tanggal_utus_departmen')->nullable();
             $table->date('tanggal_utus_fakultas')->nullable();
             $table->date('tanggal_utus_universitas')->nullable();

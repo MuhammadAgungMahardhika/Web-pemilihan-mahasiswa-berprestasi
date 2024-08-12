@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Kategori;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class KategoriController extends Controller
@@ -61,6 +62,9 @@ class KategoriController extends Controller
                 'jenis' => 'required|in:A,B,C,D,E',
             ], $this->message);
 
+            $request->merge([
+                'created_by' => Auth::user()->id
+            ]);
             $kategori = Kategori::create($request->all());
             return response()->json([
                 'message' => 'Berhasil menambahkan data kategori baru',
@@ -102,6 +106,9 @@ class KategoriController extends Controller
                 'jenis' => 'required|in:A,B,C,D,E',
             ], $this->message);
 
+            $request->merge([
+                'updated_by' => Auth::user()->id
+            ]);
             $kategori = Kategori::findOrFail($id);
             $kategori->update($request->all());
             return response()->json([

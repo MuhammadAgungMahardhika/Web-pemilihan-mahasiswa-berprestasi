@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
+    public function dashboard()
+    {
+        $send = [
+            'title' => "Dashboard"
+        ];
+        return view('pages.dashboard.index');
+    }
     public function dokumenPrestasi()
     {
         $send = [

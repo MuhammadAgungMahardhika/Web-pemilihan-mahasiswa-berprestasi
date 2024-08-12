@@ -2,31 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Bidang;
-use Illuminate\Http\JsonResponse;
+use App\Models\Portal;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
-class BidangController extends Controller
+class PortalController extends Controller
 {
-    protected $message = [
-        'nama.required' => 'Nama harus diisi.',
-        'nama.max' => 'Nama tidak boleh lebih dari :max karakter.',
-        'nama.unique' => 'Nama bidang sudah ada di database.',
-    ];
+
 
     // Method untuk DataTables API
-    public function getBidangData(): JsonResponse
+    public function getPortalData(): JsonResponse
     {
         try {
-            $bidang = Bidang::get();
-            return DataTables::of($bidang)
+            $portal = Portal::get();
+            return DataTables::of($portal)
                 ->make(true);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Data bidang tidak ditemukan',
+                'message' => 'Data Portal tidak ditemukan',
                 'data' => $e->getMessage()
             ], 404);
         }
@@ -35,13 +31,13 @@ class BidangController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $bidang = Bidang::all();
+            $portal = Portal::all();
             return response()->json([
-                'data' => $bidang
+                'data' => $portal
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Data bidang tidak ditemukan',
+                'message' => 'Data Portal tidak ditemukan',
                 'data' => $e->getMessage()
             ], 500);
         }
@@ -55,21 +51,18 @@ class BidangController extends Controller
     public function store(Request $request): JsonResponse
     {
         try {
-            $request->validate([
-                'nama' => 'required|string|max:255|unique:bidangs',
-            ], $this->message);
 
             $request->merge([
                 'created_by' => Auth::user()->id
             ]);
-            $bidang = Bidang::create($request->all());
+            $portal = Portal::create($request->all());
             return response()->json([
-                'message' => 'Berhasil menambahkan data bidang baru',
-                'data' => $bidang
+                'message' => 'Berhasil menambahkan data Portal baru',
+                'data' => $portal
             ], 201);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Gagal menambahkan data bidang baru',
+                'message' => 'Gagal menambahkan data Portal baru',
                 'data' => $e->getMessage()
             ], 500);
         }
@@ -78,13 +71,13 @@ class BidangController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $bidang = Bidang::findOrFail($id);
+            $portal = Portal::findOrFail($id);
             return response()->json([
-                'data' => $bidang
+                'data' => $portal
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Bidang tidak ditemukan',
+                'message' => 'Portal tidak ditemukan',
                 'data' => $e->getMessage()
             ], 404);
         }
@@ -98,22 +91,19 @@ class BidangController extends Controller
     public function update(Request $request, $id): JsonResponse
     {
         try {
-            $request->validate([
-                'nama' => 'required|string|max:255|unique:bidangs,nama,' . $id,
-            ], $this->message);
 
             $request->merge([
                 'updated_by' => Auth::user()->id
             ]);
-            $bidang = Bidang::findOrFail($id);
-            $bidang->update($request->all());
+            $portal = Portal::findOrFail($id);
+            $portal->update($request->all());
             return response()->json([
-                'message' => 'Berhasil mengubah data bidang',
-                'data' => $bidang
+                'message' => 'Berhasil mengubah data Portal',
+                'data' => $portal
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Gagal mengubah data bidang',
+                'message' => 'Gagal mengubah data Portal',
                 'data' => $e->getMessage()
             ], 500);
         }
@@ -122,14 +112,14 @@ class BidangController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
-            $bidang = Bidang::findOrFail($id);
-            $bidang->delete();
+            $portal = Portal::findOrFail($id);
+            $portal->delete();
             return response()->json([
-                'message' => 'Data bidang ' . $bidang->nama . ' berhasil dihapus'
+                'message' => 'Data Portal ' . $portal->nama . ' berhasil dihapus'
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Gagal menghapus data bidang',
+                'message' => 'Gagal menghapus data Portal',
                 'data' => $e->getMessage()
             ], 500);
         }

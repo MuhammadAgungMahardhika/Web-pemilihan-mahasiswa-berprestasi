@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->string('deskripsi')->nullable();
+        Schema::create('portals', function (Blueprint $table) {
+            $table->year('periode')->primary();
+            $table->enum('status', ['tutup', 'buka']);
             $table->timestamps();
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
         });
     }
 
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('portals');
     }
 };

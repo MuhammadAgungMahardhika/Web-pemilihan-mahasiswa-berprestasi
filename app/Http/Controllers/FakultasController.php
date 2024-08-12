@@ -6,6 +6,7 @@ use App\Models\Fakultas;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class FakultasController extends Controller
@@ -56,6 +57,9 @@ class FakultasController extends Controller
                 'email' => 'nullable|string|email|max:255|unique:fakultas',
             ], $this->message);
 
+            $request->merge([
+                'created_by' => Auth::user()->id
+            ]);
             $fakultas = Fakultas::create($request->all());
 
             return response()->json([
@@ -95,6 +99,9 @@ class FakultasController extends Controller
                 'email' => 'nullable|string|email|max:255|unique:fakultas,email,' . $id,
             ], $this->message);
 
+            $request->merge([
+                'updated_by' => Auth::user()->id
+            ]);
             $fakultas = Fakultas::findOrFail($id);
             $fakultas->update($request->all());
 

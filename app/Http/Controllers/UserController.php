@@ -96,6 +96,9 @@ class UserController extends Controller
                 'status' => 'required|in:aktif,nonaktif',
             ], $this->message);
 
+            $request->merge([
+                'created_by' => Auth::user()->id
+            ]);
             $user = User::create($request->all());
 
             return response()->json([
@@ -144,6 +147,9 @@ class UserController extends Controller
                 'status' => 'required|in:aktif,nonaktif',
             ], $this->message);
 
+            $request->merge([
+                'updated_by' => Auth::user()->id
+            ]);
             $user = User::findOrFail($id);
             $user->update($request->all());
             return response()->json([

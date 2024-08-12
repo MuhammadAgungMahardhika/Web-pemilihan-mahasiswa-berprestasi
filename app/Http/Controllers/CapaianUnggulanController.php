@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\CapaianUnggulan; // Model untuk tabel capaian_unggulan
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
@@ -65,6 +66,9 @@ class CapaianUnggulanController extends Controller
 
             DB::beginTransaction();
 
+            $request->merge([
+                'created_by' => Auth::user()->id
+            ]);
             $capaianUnggulan = CapaianUnggulan::create($request->all());
 
             DB::commit();
@@ -109,6 +113,9 @@ class CapaianUnggulanController extends Controller
 
             DB::beginTransaction();
 
+            $request->merge([
+                'updated_by' => Auth::user()->id
+            ]);
             $capaianUnggulan = CapaianUnggulan::findOrFail($id);
             $capaianUnggulan->update($request->all());
 

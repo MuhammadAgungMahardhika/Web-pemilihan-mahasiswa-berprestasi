@@ -78,6 +78,9 @@ class DepartmenController extends Controller
                 'email' => 'nullable|string|email|max:255|unique:departmens',
             ], $this->message);
 
+            $request->merge([
+                'created_by' => Auth::user()->id
+            ]);
             $departmen = Departmen::create($request->all());
 
             return response()->json([
@@ -123,6 +126,9 @@ class DepartmenController extends Controller
                 'email' => 'nullable|string|email|max:255|unique:departmens,email,' . $id,
             ], $this->message);
 
+            $request->merge([
+                'updated_by' => Auth::user()->id
+            ]);
             $departmen = Departmen::findOrFail($id);
             $departmen->update($request->all());
             return response()->json([

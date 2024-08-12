@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Utusan;
 use Illuminate\Http\Request;
-use App\Models\Utusan; // Ganti dengan model Utusan
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class UtusanController extends Controller
 {
     protected $message = [
-        'id_mahasiswa.required' => 'Mahasiswa harus dipilih.',
-        'status.required' => 'Status harus diisi.',
-        'tanggal_utus_departmen.date' => 'Tanggal utus departmen harus berupa tanggal.',
-        'tanggal_utus_fakultas.date' => 'Tanggal utus fakultas harus berupa tanggal.',
-        'tanggal_utus_universitas.date' => 'Tanggal utus universitas harus berupa tanggal.',
+        'id_mahasiswa.required' => 'Mahasiswa harus diisi.',
+        'tingkat.required' => 'Tingkat harus diisi.',
+        'total_skor.required' => 'Total skor harus diisi.',
     ];
 
     // Method untuk DataTables API
     public function getUtusanData(): JsonResponse
     {
         try {
-            $utusan = Utusan::get();
+            $utusan = Utusan::with('mahasiswa')->get();
             return DataTables::of($utusan)
                 ->make(true);
         } catch (Exception $e) {
@@ -48,24 +47,24 @@ class UtusanController extends Controller
         }
     }
 
-    public function create(): JsonResponse
-    {
-        return response()->json(['message' => 'Create form not available in API']);
-    }
-
     public function store(Request $request): JsonResponse
     {
         try {
             $request->validate([
-                'id_mahasiswa' => 'required|integer',
-                'status' => 'required|in:departmen,fakultas,universitas',
+                'id_mahasiswa' => 'required|exists:mahasiswas,id',
+                'tingkat' => 'required|in:departmen,fakultas,universitas',
+                'total_skor' => 'required|integer|min:0',
                 'tanggal_utus_departmen' => 'nullable|date',
                 'tanggal_utus_fakultas' => 'nullable|date',
                 'tanggal_utus_universitas' => 'nullable|date',
             ], $this->message);
 
-            $utusan = Utusan::create($request->all());
-
+            $data = $request->all();
+            if ($data['tingkat'] === 'departmen') {
+                $data['tanggal_utus_departmen'] = now();
+            }
+            $data['created_by'] = Auth::user()->id;
+            $utusan = Utusan::create($data);
             return response()->json([
                 'message' => 'Berhasil menambahkan data utusan baru',
                 'data' => $utusan
@@ -87,30 +86,39 @@ class UtusanController extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Utusan tidak ditemukan',
+                'message' => 'Data utusan tidak ditemukan',
                 'data' => $e->getMessage()
             ], 404);
         }
-    }
-
-    public function edit($id): JsonResponse
-    {
-        return response()->json(['message' => 'Edit form not available in API']);
     }
 
     public function update(Request $request, $id): JsonResponse
     {
         try {
             $request->validate([
-                'id_mahasiswa' => 'required|integer',
-                'status' => 'required|in:departmen,fakultas,universitas',
+                'id_mahasiswa' => 'required|exists:mahasiswas,id',
+                'tingkat' => 'required|in:departmen,fakultas,universitas',
+                'total_skor' => 'required|integer|min:0',
                 'tanggal_utus_departmen' => 'nullable|date',
                 'tanggal_utus_fakultas' => 'nullable|date',
                 'tanggal_utus_universitas' => 'nullable|date',
             ], $this->message);
 
+            $data = $request->all();
+
+            if ($data['tingkat'] === 'universitas') {
+                $data['tanggal_utus_universitas'] = now();
+            } else if ($data['tingkat'] === 'fakultas') {
+                $data['tanggal_utus_fakultas'] = now();
+            } else {
+                $data['tanggal_utus_departmen'] = now();
+            }
+
+            $data['updated_by'] = Auth::user()->id;
             $utusan = Utusan::findOrFail($id);
-            $utusan->update($request->all());
+
+            $utusan->update($data);
+
             return response()->json([
                 'message' => 'Berhasil mengubah data utusan',
                 'data' => $utusan
@@ -128,6 +136,7 @@ class UtusanController extends Controller
         try {
             $utusan = Utusan::findOrFail($id);
             $utusan->delete();
+
             return response()->json([
                 'message' => 'Data utusan berhasil dihapus'
             ]);

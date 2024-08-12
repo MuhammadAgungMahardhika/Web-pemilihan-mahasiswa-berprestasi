@@ -65,6 +65,8 @@ class MahasiswaController extends Controller
                         ->where('dokumen_prestasis.status', '=', 'diterima');
                 })
                 ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
+                ->leftJoin('utusans', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
+                ->where('utusans.id_mahasiswa', '=', null)
                 ->where('mahasiswas.id_departmen', $idDepartmen)
                 ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim')
                 ->get();
@@ -117,6 +119,10 @@ class MahasiswaController extends Controller
             ], $this->message);
 
             DB::beginTransaction();
+            $userId =  Auth::user()->id;
+            $request->merge([
+                'created_by' => $userId
+            ]);
             $mahasiswa = Mahasiswa::create($request->all());
 
             $userData = [
@@ -126,7 +132,8 @@ class MahasiswaController extends Controller
                 'password_confirmation' => '12345678',
                 'id_role' => 1,
                 'id_mahasiswa' => $mahasiswa->id,
-                'status' => 'nonaktif'
+                'status' => 'aktif',
+                'created_by' =>  $userId
             ];
 
             $filteredRequest = new Request($userData);
@@ -184,6 +191,9 @@ class MahasiswaController extends Controller
                 'nama_ibu' => 'nullable|string|max:255',
             ], $this->message);
 
+            $request->merge([
+                'updated_by' => Auth::user()->id
+            ]);
             $mahasiswa = Mahasiswa::findOrFail($id);
             $mahasiswa->update($request->all());
             return response()->json([

@@ -10,6 +10,7 @@ use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UtusanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware(['auth'])->group(function () {
+    // route untuk datatable
     Route::get('dokumen-prestasi/data', [DokumenPrestasiController::class, 'getDokumenPrestasiData']);
     Route::get('dokumen-prestasi/departmen/{id}', [DokumenPrestasiController::class, 'getDokumenPrestasiDataByDepartmen']);
     Route::get('capaian-unggulan/data', [CapaianUnggulanController::class, 'getCapaianUnggulanData']);
@@ -34,17 +36,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('mahasiswa/data', [MahasiswaController::class, 'getMahasiswaData']);
     Route::get('mahasiswa/departmen/{id}', [MahasiswaController::class, 'getMahasiswaDataByDepartmen']);
     Route::get('mahasiswa/ranking/departmen/{id}', [MahasiswaController::class, 'getMahasiswaRankingDataByDepartmen']);
-    Route::get('departmen/data', [DepartmenController::class, 'getDepartmenData']);
     Route::get('fakultas/data', [FakultasController::class, 'getFakultasData']);
+    Route::get('departmen/data', [DepartmenController::class, 'getDepartmenData']);
     Route::get('user/data', [UserController::class, 'getUserData']);
-
     Route::get('user/fakultas/data', [UserController::class, 'getUserDataByFakultas']);
     Route::get('user/departmen/data', [UserController::class, 'getUserDataByDepartmen']);
 
+    Route::get('utusan/universitas/data', [UtusanController::class, 'getUtusanDataByUniversitas']);
+    Route::get('utusan/fakultas/{id}', [UtusanController::class, 'getUtusanDataByFakultas']);
+    Route::get('utusan/departmen/{id}', [UtusanController::class, 'getUtusanDataByDepartmen']);
 
-    Route::post('user/activate', [UserController::class, 'activateUser']);
-    Route::post('user/deactivate', [UserController::class, 'deactivateUser']);
-
+    // API CRUD
     Route::apiResource('dokumen-prestasi', DokumenPrestasiController::class);
     Route::apiResource('capaian-unggulan', CapaianUnggulanController::class);
     Route::apiResource('bidang', BidangController::class);
@@ -53,8 +55,11 @@ Route::middleware(['auth'])->group(function () {
     Route::apiResource('departmen', DepartmenController::class);
     Route::apiResource('fakultas', FakultasController::class);
     Route::apiResource('user', UserController::class);
+    Route::apiResource('utusan', UtusanController::class);
 
     // costume
     Route::patch('dokumen-prestasi/status/{id}', [DokumenPrestasiController::class, 'changeStatus']);
     Route::get('departmen/fakultas/{id}', [DepartmenController::class, 'getDepartmenDataByFakultas']);
+    Route::post('user/activate', [UserController::class, 'activateUser']);
+    Route::post('user/deactivate', [UserController::class, 'deactivateUser']);
 });
