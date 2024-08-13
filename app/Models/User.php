@@ -24,6 +24,7 @@ class User extends Authenticatable
         'id_fakultas',
         'name',
         'username',
+        'foto_url',
         'password',
         'status',
     ];

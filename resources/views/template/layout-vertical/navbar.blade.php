@@ -67,13 +67,14 @@
                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="user-menu d-flex">
                         <div class="user-name text-end me-3">
-                            <h6 class="mb-0 text-gray-600">{{ Auth::user()->name }}</h6>
+                            <h6 class="mb-0 text-gray-600">{{ Auth::user()->username }}</h6>
                             <p class="mb-0 text-sm text-gray-600">
                                 {{ Auth::user()->id_role == 1 ? 'Mahasiswa' : 'Admin' }}</p>
                         </div>
                         <div class="user-img d-flex align-items-center">
                             <div class="avatar avatar-md">
-                                <img src="{{ asset('assets/compiled/jpg/1.jpg') }}">
+                                <img src="{{ Auth::user()->foto_url ? asset('storage/profil/' . Auth::user()->foto_url) : asset('assets/compiled/jpg/1.jpg') }}"
+                                    alt="Profile Image">
                             </div>
                         </div>
                     </div>

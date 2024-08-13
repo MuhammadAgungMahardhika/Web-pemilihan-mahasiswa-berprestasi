@@ -15,7 +15,7 @@ class TemporaryFileController extends Controller
         // Path ke folder temporary
         $tempPath = storage_path('app/files/temp/' . $folderId);
         if (!is_dir($tempPath)) {
-            return response()->json(['message' => 'Temporary folder not found'], 404);
+            return null;
         }
         // Path ke folder permanen
         $permanentPath = storage_path('app/public/' . $permanentFolder);
@@ -57,7 +57,7 @@ class TemporaryFileController extends Controller
             // Dapatkan ekstensi file
             $extension = $file->getClientOriginalExtension();
             // Buat nama file baru yang unik menggunakan timestamp
-            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '-' . time() . '.' . $extension;
+            $filename = uniqid() . '-' . time() . '.' . $extension;
 
             $folder = uniqid() . '-' . time();
             $file->storeAs('files/temp/' . $folder, $filename);

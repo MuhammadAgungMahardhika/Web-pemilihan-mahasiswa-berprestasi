@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -137,26 +138,34 @@ class UserController extends Controller
     {
         try {
             $request->validate([
+                'name' => 'required|string|max:255',
                 'username' => 'required|string|max:255|unique:users,username,' . $id,
                 'password' => 'nullable|string|max:255',
-                'name' => 'required|string|max:255',
                 'id_mahasiswa' => 'nullable|integer',
                 'id_departmen' => 'nullable|integer',
                 'id_fakultas' => 'nullable|integer',
                 'foto_url' => 'nullable|string|max:255',
                 'status' => 'required|in:aktif,nonaktif',
             ], $this->message);
-
+            DB::beginTransaction();
+            $folderId  = $request->foto_url;
+            if ($folderId) {
+                $temporary = new TemporaryFileController();
+                $fileUrl = $temporary->moveToPermanentPath($folderId, "profil");
+                $request->merge(['foto_url' => $fileUrl]);
+            }
             $request->merge([
                 'updated_by' => Auth::user()->id
             ]);
             $user = User::findOrFail($id);
             $user->update($request->all());
+            DB::commit();
             return response()->json([
                 'message' => 'Berhasil mengubah data user',
                 'data' => $user
             ]);
         } catch (Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Gagal mengubah data user',
                 'data' => $e->getMessage()
