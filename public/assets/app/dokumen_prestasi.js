@@ -67,11 +67,10 @@ function showData() {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
-                    let actionButton = ''
-                    const status = row.status
-                    if(status == "pending"){
-                        actionButton = 
-                        `<div class="col">
+                    let actionButton = "";
+                    const status = row.status;
+                    if (status == "pending") {
+                        actionButton = `<div class="col">
                             <a title="Ubah Dokumen Prestasi" onclick="editModal('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-info"></i> </a>
                         </div>
                         <div class="col">
@@ -79,12 +78,11 @@ function showData() {
                         </div>
                         <div class="col">
                             <a title="Hapus Dokumen Prestasi" onclick="deleteModal('${row.id}', '${row.judul}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </a>
-                        </div>`
-                    }else {
-                        actionButton = 
-                        `<div class="col">
+                        </div>`;
+                    } else {
+                        actionButton = `<div class="col">
                             <a title="Preview file" onclick="previewFile('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> </a>
-                        </div>`
+                        </div>`;
                     }
                     return `
                         <div class="row g-2 text-center">
@@ -93,7 +91,8 @@ function showData() {
                     `;
                 },
             },
-        ], order: [[0, 'desc']] 
+        ],
+        order: [[0, "desc"]],
     });
 }
 
@@ -160,7 +159,12 @@ function addModal() {
     // Filepond: Image Resize
     pond = FilePond.create(document.querySelector("#dokumen_url"), {
         credits: null,
-        acceptedFileTypes: ["application/pdf"],
+        acceptedFileTypes: [
+            "image/png",
+            "image/jpg",
+            "image/jpeg",
+            "application/pdf",
+        ],
         server: {
             process: "/temp-upload",
             revert: "/temp-delete",
@@ -267,7 +271,12 @@ function editModal(id) {
             // Filepond: Load existing file
             pond = FilePond.create(document.querySelector("#dokumen_url"), {
                 credits: null,
-                acceptedFileTypes: ["application/pdf"],
+                acceptedFileTypes: [
+                    "image/png",
+                    "image/jpg",
+                    "image/jpeg",
+                    "application/pdf",
+                ],
                 server: {
                     process: "/temp-upload",
                     revert: "/temp-delete",
