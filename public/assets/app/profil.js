@@ -84,6 +84,7 @@ function update() {
             console.log(response);
             const message = response.message;
             showToastSuccessAlert(message);
+            return (window.location.href = "/dashboard");
         },
         error: function (err) {
             let errorResponse = err.responseJSON;

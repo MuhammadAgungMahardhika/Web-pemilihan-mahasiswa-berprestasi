@@ -33,17 +33,14 @@
         <span>Data</span>
     </a>
 
-    <ul class="submenu submenu-closed {{ request()->is('capaian-unggulan') || request()->is('bidang') || request()->is('kategori') || request()->is('fakultas') || request()->is('departmen') ? 'active' : '' }}"
+    <ul class="submenu submenu-closed {{ request()->is('capaian-unggulan') || request()->is('bidang') || request()->is('kategori') || request()->is('fakultas') ? 'active' : '' }}"
         style="--submenu-height: 731px;">
 
         <li class="submenu-item  {{ request()->is('fakultas') ? 'active' : '' }}">
             <a href="{{ url('fakultas') }}" class="submenu-link">Fakultas</a>
 
         </li>
-        <li class="submenu-item  {{ request()->is('departmen') ? 'active' : '' }}">
-            <a href="{{ url('departmen') }}" class="submenu-link">Departmen</a>
 
-        </li>
         <li class="submenu-item  {{ request()->is('capaian-unggulan') ? 'active' : '' }}">
             <a href="{{ url('capaian-unggulan') }}" class="submenu-link">Capaian Unggulan</a>
 

@@ -37,7 +37,7 @@
     {{-- Global js --}}
     <script src="{{ asset('assets/app/global.js') }}"></script>
     @yield('header')
-    <title>Mahasiswa Berprestasi</title>
+    <title>Si Pilmapres</title>
 </head>
 
 <body class="light">

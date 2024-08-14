@@ -14,7 +14,6 @@
             <div class="card">
                 <div class="card-header">
                     <a onclick="addModal()" class="btn btn-primary" title="Tambah User"><i class="fa fa-plus"></i></a>
-                    <p>TEs</p>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

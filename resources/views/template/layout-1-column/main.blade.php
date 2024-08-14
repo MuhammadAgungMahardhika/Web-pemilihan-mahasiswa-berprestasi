@@ -19,13 +19,13 @@
     {{-- Swet Alert --}}
     <script src="{{ asset('assets/extensions/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/9d17737383.js" crossorigin="anonymous"></script>
-
+    <script src="{{ asset('assets/extensions/fontawesome/fontawesome.js') }}" crossorigin="anonymous"></script>
     {{-- Jquery --}}
-    <script src="{{ url('https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/jquery/jquery.min.js') }}"></script>
+
     {{-- global js --}}
     <script src="{{ asset('assets/app/global.js') }}"></script>
-    <title>aa</title>
+    <title>Si Pilmapres</title>
 </head>
 
 <body>
