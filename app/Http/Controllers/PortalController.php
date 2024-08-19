@@ -14,6 +14,10 @@ class PortalController extends Controller
 
     protected $message = [
         'periode.required' => 'Periode wajib diisi',
+        'tanggal_tutup_departmen.required' => 'Tanggal Tutup Departemen wajib diisi',
+        'tanggal_tutup_fakultas.required' => 'Tanggal Tutup Fakultas wajib diisi',
+        'tanggal_tutup_fakultas.date' => 'Format Tanggal Tidak Valid',
+        'tanggal_tutup_departmen.date' => 'Format Tanggal Tidak Valid',
         'periode.unique' => 'Periode sudah ada',
         'periode.max' => 'Tahun Periode Tidak Valid',
         'periode.min' => 'Tahun Periode Tidak Valid',
@@ -59,7 +63,9 @@ class PortalController extends Controller
         try {
             // Validasi awal
             $request->validate([
-                'periode' => 'required|string|min:4|max:4|unique:portals',
+                'periode' => 'required|number|min:4|max:4|unique:portals',
+                'tanggal_tutup_departmen' => 'required|date',
+                'tanggal_tutup_fakultas' => 'required|date',
                 'status' => 'required|in:tutup,buka',
             ], $this->message);
 
@@ -116,7 +122,9 @@ class PortalController extends Controller
     {
         try {
             $request->validate([
-                'periode' => 'required|string|min:4|max:4|unique:portals,periode,' . $id,
+                'periode' => 'required|number|min:4|max:4|unique:portals,periode,' . $id,
+                'tanggal_tutup_departmen' => 'required|date',
+                'tanggal_tutup_fakultas' => 'required|date',
                 'status' => 'required|in:tutup,buka',
             ], $this->message);
 

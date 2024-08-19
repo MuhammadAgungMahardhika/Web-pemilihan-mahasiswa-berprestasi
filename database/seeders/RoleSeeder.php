@@ -25,5 +25,11 @@ class RoleSeeder extends Seeder
         DB::table('roles')->insert([
             'nama' => 'admin_universitas',
         ]);
+        DB::table('roles')->insert([
+            'nama' => 'juri_fakultas',
+        ]);
+        DB::table('roles')->insert([
+            'nama' => 'juri_universitas',
+        ]);
     }
 }

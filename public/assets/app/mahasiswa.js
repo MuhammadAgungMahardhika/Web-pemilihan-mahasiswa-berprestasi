@@ -183,7 +183,7 @@ function addModal() {
                     </div>
                     <div class="col-4 form-group">
                         <label for="ipk">Ipk</label>
-                        <input type="text" id="ipk" class="form-control">
+                        <input type="number"  step="0.01" id="ipk" class="form-control">
                     </div>
                     <div class="col-4 form-group">
                         <label for="no_hp">No HP</label>
@@ -298,7 +298,7 @@ function editModal(id) {
                             </div>
                             <div class="col-4 form-group">
                                 <label for="ipk">Ipk</label>
-                                <input type="text" id="ipk" value="${
+                                <input type="number" step="0.01" id="ipk" value="${
                                     ipk || ""
                                 }" class="form-control">
                             </div>

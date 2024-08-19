@@ -5,13 +5,7 @@
     </a>
 
 </li>
-<li class="sidebar-item  {{ request()->is('admin-fakultas') ? 'active' : '' }}">
-    <a href="{{ url('admin-fakultas') }}" class="sidebar-link">
-        <i class="bi bi-grid-fill"></i>
-        <span>Admin Fakultas</span>
-    </a>
 
-</li>
 <li class="sidebar-item  {{ request()->is('ranking-universitas') ? 'active' : '' }}">
     <a href="{{ url('ranking-universitas') }}" class="sidebar-link">
         <i class="bi bi-grid-fill"></i>
@@ -27,17 +21,25 @@
 
 </li>
 <li
-    class="sidebar-item  has-sub {{ request()->is('capaian-unggulan') || request()->is('bidang') || request()->is('kategori') || request()->is('fakultas') || request()->is('departmen') ? 'active' : '' }}">
+    class="sidebar-item  has-sub {{ request()->is('capaian-unggulan') || request()->is('bidang') || request()->is('kategori') || request()->is('fakultas') || request()->is('departmen') || request()->is('admin-fakultas') || request()->is('juri-universitas') ? 'active' : '' }}">
     <a href="#" class="sidebar-link">
         <i class="bi bi-stack"></i>
         <span>Data</span>
     </a>
 
-    <ul class="submenu submenu-closed {{ request()->is('capaian-unggulan') || request()->is('bidang') || request()->is('kategori') || request()->is('fakultas') ? 'active' : '' }}"
-        style="--submenu-height: 731px;">
+    <ul
+        class="submenu submenu-closed {{ request()->is('capaian-unggulan') || request()->is('bidang') || request()->is('kategori') || request()->is('fakultas') || request()->is('admin-fakultas') || request()->is('juri-universitas') ? 'active' : '' }}">
 
         <li class="submenu-item  {{ request()->is('fakultas') ? 'active' : '' }}">
             <a href="{{ url('fakultas') }}" class="submenu-link">Fakultas</a>
+
+        </li>
+        <li class="submenu-item  {{ request()->is('admin-fakultas') ? 'active' : '' }}">
+            <a href="{{ url('admin-fakultas') }}" class="submenu-link">Admin Fakultas</a>
+
+        </li>
+        <li class="submenu-item  {{ request()->is('juri-universitas') ? 'active' : '' }}">
+            <a href="{{ url('juri-universitas') }}" class="submenu-link">Juri Universitas</a>
 
         </li>
 

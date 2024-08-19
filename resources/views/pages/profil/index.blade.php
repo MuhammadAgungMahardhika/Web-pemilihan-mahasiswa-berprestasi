@@ -95,9 +95,6 @@
                                             class="form-control" id="nik">
                                     </div>
 
-
-
-
                                     <div class="col-md-6 form-group">
                                         <label for="semester">Semester</label>
                                         <select name="semester" id="semester" class="form-control">

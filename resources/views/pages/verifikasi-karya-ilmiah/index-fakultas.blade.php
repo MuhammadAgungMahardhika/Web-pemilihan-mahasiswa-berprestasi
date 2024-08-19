@@ -1,5 +1,4 @@
 @extends('template.layout-vertical.main')
-
 @section('header')
     <!-- FilePond core JS & CSS -->
     <script src="{{ asset('assets/extensions/filepond/filepond.js') }}"></script>
@@ -24,12 +23,11 @@
         src="{{ asset('assets/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.min.js') }}">
     </script>
 @endsection
-
 @section('container')
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3 class="mb-3">{{ $title }} </h3>
+                <h3 class="mb-3">{{ $title }}</h3>
             </div>
         </div>
     </div>
@@ -39,8 +37,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <a onclick="addModal()" class="btn btn-primary" title="Tambah Dokumen Prestasi"><i
-                            class="fa fa-plus"></i></a>
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -48,9 +45,10 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Tanggal upload</th>
+                                    <th>Departemen</th>
+                                    <th>Nim</th>
+                                    <th>Nama Mahasiswa</th>
                                     <th>Judul</th>
-                                    <th>Capaian Unggulan</th>
                                     <th>Status</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -65,10 +63,9 @@
         </section>
     </div>
     <script>
-        const periode = "{{ session('portal')->periode }}"
-        const id_mahasiswa = '{{ Auth()->user()->id_mahasiswa }}'
+        const periode = '{{ session('portal')->periode }}'
+        const idFakultas = '{{ Auth::user()->id_fakultas }}'
     </script>
-
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/dokumen_prestasi.js') }}"></script>
+    <script src="{{ asset('assets/app/verifikasi_karya_ilmiah_fakultas.js') }}"></script>
 @endsection

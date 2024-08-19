@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('dokumen_prestasis', function (Blueprint $table) {
             $table->id();
+            $table->year('periode');
             $table->unsignedBigInteger('id_capaian_unggulan')->nullable();
             $table->unsignedBigInteger('id_mahasiswa')->nullable();
             $table->string('judul')->nullable();

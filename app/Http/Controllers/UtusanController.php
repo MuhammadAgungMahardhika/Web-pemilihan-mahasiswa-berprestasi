@@ -12,6 +12,7 @@ use Yajra\DataTables\DataTables;
 class UtusanController extends Controller
 {
     protected $message = [
+        'periode.required' => 'Periode harus ada',
         'id_mahasiswa.required' => 'Mahasiswa harus diisi.',
         'tingkat.required' => 'Tingkat harus diisi.',
         'total_skor.required' => 'Total skor harus diisi.',
@@ -35,21 +36,13 @@ class UtusanController extends Controller
     public function getUtusanDataByDepartmen($idDepartmen): JsonResponse
     {
         try {
-            $portal = session('portal');
-            if (!$portal) {
-                throw new \Exception('Portal belum dibuka');
-            }
-            if ($portal['status'] !== 'buka') {
-                throw new \Exception('Portal saat ini tidak dibuka.');
-            }
 
             $utusan = Utusan::with(['mahasiswa', 'portal'])
-                ->where('id_portal', $portal['id'])
                 ->whereHas('mahasiswa', function ($query) use ($idDepartmen) {
                     $query->where('id_departmen', $idDepartmen);
                 })
                 ->where('tingkat', 'departmen')
-                ->where('id_portal', session('portal')->id)
+                ->where('periode', session('portal')->periode)
                 ->get();
             return DataTables::of($utusan)
                 ->make(true);
@@ -64,22 +57,13 @@ class UtusanController extends Controller
     public function getUtusanDataByFakultas($idFakultas): JsonResponse
     {
         try {
-            $portal = session('portal');
-            if (!$portal) {
-                throw new \Exception('Portal belum dibuka');
-            }
-            if ($portal['status'] !== 'buka') {
-                throw new \Exception('Portal saat ini tidak dibuka.');
-            }
-
             $utusan = Utusan::with(['mahasiswa', 'portal'])
-                ->where('id_portal', $portal['id'])
                 ->whereHas('mahasiswa', function ($query) use ($idFakultas) {
                     $query->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
                         ->where('departmens.id_fakultas', $idFakultas);
                 })
                 ->where('tingkat', 'fakultas')
-                ->where('id_portal', session('portal')->id)
+                ->where('periode', session('portal')->periode)
                 ->get();
             return DataTables::of($utusan)
                 ->make(true);
@@ -93,15 +77,8 @@ class UtusanController extends Controller
     public function getUtusanDataByUniversitas(): JsonResponse
     {
         try {
-            $portal = session('portal');
-            if (!$portal) {
-                throw new \Exception('Portal belum dibuka');
-            }
-            if ($portal['status'] !== 'buka') {
-                throw new \Exception('Portal saat ini tidak dibuka.');
-            }
 
-            $utusan = Utusan::where('utusans.id_portal', $portal['id'])
+            $utusan = Utusan::where('utusans.periode', session('portal')->periode)
                 ->where('tingkat', 'universitas')
                 ->join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
                 ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
@@ -144,6 +121,7 @@ class UtusanController extends Controller
         try {
             // Validasi awal request
             $request->validate([
+                'periode' => 'required|string|min:4|max:4',
                 'id_mahasiswa' => 'required|exists:mahasiswas,id',
                 'tingkat' => 'required|in:departmen,fakultas,universitas',
                 'total_skor' => 'required|integer|min:0',
@@ -152,18 +130,7 @@ class UtusanController extends Controller
                 'tanggal_utus_universitas' => 'nullable|date',
             ], $this->message);
 
-            $portal = session('portal');
-
-            if (!$portal) {
-                throw new \Exception('Portal belum dibuka');
-            }
-
-            if ($portal['status'] !== 'buka') {
-                throw new \Exception('Portal saat ini tidak dibuka.');
-            }
-
             $data = $request->all();
-            $data['id_portal'] = $portal['id'];
 
             // Set tanggal utus departmen jika tingkat adalah "departmen"
             if ($data['tingkat'] === 'departmen') {

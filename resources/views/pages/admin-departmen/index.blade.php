@@ -14,7 +14,8 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <a onclick="addModal()" class="btn btn-primary" title="Tambah Fakultas"><i class="fa fa-plus"></i></a>
+                    <a onclick="addModal()" class="btn btn-primary" title="Tambah Admin Departemen"><i
+                            class="fa fa-plus"></i></a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

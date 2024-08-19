@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         Blade::if('role', function ($role) {
-            return Auth::check() && Auth::user()->role->nama === $role;
+            return Auth::check() && Auth::user()->role && Auth::user()->role->nama === $role;
         });
     }
 }

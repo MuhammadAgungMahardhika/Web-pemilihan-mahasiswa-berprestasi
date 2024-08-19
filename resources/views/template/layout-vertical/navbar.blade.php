@@ -111,7 +111,7 @@
             success: function(response) {
                 const message = response.message;
                 showToastSuccessAlert(message);
-                return window.location.reload();
+                return window.location.href = "{{ url('login') }}";
             },
             error: function(err) {
                 let errorResponse = err.responseJSON;

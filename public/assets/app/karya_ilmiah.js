@@ -8,107 +8,13 @@ FilePond.registerPlugin(
     FilePondPluginFileValidateType
 );
 
-showData();
-
-function showData() {
-    table = $("#datatable").DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: `/api/dokumen-prestasi/data`,
-        autoWidth: false,
-        columnDefs: [
-            {
-                targets: -1,
-                width: "150px",
-            },
-        ],
-        columns: [
-            {
-                data: null,
-                name: "id",
-                render: function (data, type, row, meta) {
-                    return meta.row + 1;
-                },
-                orderable: true,
-                searchable: false,
-            },
-            {
-                data: "uploaded_at",
-                name: "uploaded_at",
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: "judul",
-                name: "judul",
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: "capaian_unggulan.nama",
-                name: "capaian_unggulan.nama",
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: "status",
-                name: "status",
-                orderable: true,
-                searchable: true,
-                render: function (data) {
-                    return data === "pending"
-                        ? "<span class='text-warning'>Pending<span/>"
-                        : data === "ditolak"
-                        ? "<span class='text-danger'>Ditolak<span/>"
-                        : "<span class='text-success'>Diterima<span/>";
-                },
-            },
-            {
-                data: null,
-                className: "text-center",
-                render: function (data, type, row) {
-                    let actionButton = "";
-                    const status = row.status;
-                    if (status == "pending") {
-                        actionButton = `<div class="col">
-                            <a title="Ubah Dokumen Prestasi" onclick="editModal('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-info"></i> </a>
-                        </div>
-                        <div class="col">
-                            <a title="Preview file" onclick="previewFile('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> </a>
-                        </div>
-                        <div class="col">
-                            <a title="Hapus Dokumen Prestasi" onclick="deleteModal('${row.id}', '${row.judul}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </a>
-                        </div>`;
-                    } else {
-                        actionButton = `<div class="col">
-                            <a title="Preview file" onclick="previewFile('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> </a>
-                        </div>`;
-                    }
-                    return `
-                        <div class="row g-2 text-center">
-                            ${actionButton}
-                        </div>
-                    `;
-                },
-            },
-        ],
-        order: [[0, "desc"]],
-    });
-}
-
-function reloadData() {
-    if (table) {
-        table.ajax.reload();
-    }
-}
-
 function previewFile(id) {
     $.ajax({
         type: "GET",
-        url: `/api/dokumen-prestasi/${id}`,
+        url: `/api/karya-ilmiah/${id}`,
         success: function (response) {
             let { dokumen_url } = response.data;
-            const path = `/storage/dokumen_prestasi/${dokumen_url}`;
+            const path = `/storage/karya_ilmiah/${dokumen_url}`;
             const modalHeader = "Preview File PDF";
             const modalBody = `
                 <div>
@@ -128,19 +34,13 @@ function previewFile(id) {
 }
 
 function addModal() {
-    const modalHeader = "Tambah Dokumen Prestasi";
+    const modalHeader = "Upload Karya Ilmiah";
     const modalBody = `
         <form class="form form-horizontal">
             <div class="form-body">
                 <div class="row">
                     <input type="hidden" value=${periode} id="periode" class="form-control">
                     <input type="hidden" value=${id_mahasiswa} id="id_mahasiswa" class="form-control">
-                    <div class="col-6 form-group">
-                        <label for="id_capaian_unggulan">Capaian Unggulan <i class="text-danger">*</i></label>
-                         <select class="form-select" id="id_capaian_unggulan" onclick="selectCapaianUnggulan()">
-                           
-                        </select>
-                    </div>
                     <div class="col-6 form-group">
                         <label for="judul">Judul <i class="text-danger">*</i></label>
                         <input type="text" id="judul" class="form-control">
@@ -193,73 +93,27 @@ function addModal() {
     });
 }
 
-function selectCapaianUnggulan(capaianUnggulanId = null) {
-    const capaianUnggulanOptionLenght = $("#id_capaian_unggulan option").length;
-    if (capaianUnggulanOptionLenght != 0) {
-        return;
-    }
-    $.ajax({
-        type: "GET",
-        url: `/api/capaian-unggulan`,
-        dataType: "json",
-        headers: {
-            "X-CSRF-TOKEN": csrfToken,
-        },
-        success: function (response) {
-            const responseData = response.data;
-            let dataOption = `<option value=""></option>`;
-            responseData.forEach((r) => {
-                dataOption += `<option value="${r.id}" ${
-                    capaianUnggulanId != null && capaianUnggulanId == r.id
-                        ? "selected"
-                        : ""
-                }>${r.nama}</option>`;
-            });
-            $("#id_capaian_unggulan").html(dataOption);
-        },
-        error: function (err) {
-            result = null;
-            let errorResponse = err.responseJSON;
-            const errorMessage = errorResponse.message;
-            const errorData = errorResponse.data;
-            showToastErrorAlert(errorMessage + `<br>(${errorData})`);
-        },
-    });
-}
-
 function editModal(id) {
     $.ajax({
         type: "GET",
-        url: `/api/dokumen-prestasi/${id}`,
+        url: `/api/karya-ilmiah/${id}`,
         success: function (response) {
-            let {
-                periode,
-                id_capaian_unggulan,
-                id_mahasiswa,
-                judul,
-                status,
-                dokumen_url,
-            } = response.data;
-            const modalHeader = "Edit Dokumen Prestasi";
+            let { periode, id_mahasiswa, judul, dokumen_url } = response.data;
+            const modalHeader = "Perbarui Karya Ilmiah";
             const modalBody = `
                 <form class="form form-horizontal">
                     <div class="form-body">
                         <div class="row">
                             <input type="hidden" id="periode" value="${periode}" class="form-control">
                             <input type="hidden" id="id_mahasiswa" value="${id_mahasiswa}" class="form-control">
-                            <input type="hidden" id="status" value="${status}" class="form-control">
-                            <div class="col-6 form-group">
-                            <label for="id_capaian_unggulan">Capaian Unggulan <i class="text-danger">*</i></label>
-                            <select class="form-select" id="id_capaian_unggulan">
-                                
-                            </select>
+                            <input type="hidden" id="status" value="pending" class="form-control">
                             </div>
                             <div class="col-6 form-group">
                                 <label for="judul">Judul <i class="text-danger">*</i></label>
                                 <input type="text" id="judul" value="${judul}" class="form-control">
                             </div>
                             <div class="col-12 form-group">
-                                <label for="dokumen_url">File Dokumen (Maksimal 2 MB)</label>
+                                <label for="dokumen_url">File Dokumen</label>
                                 <input type="file" id="dokumen_url" class="form-control">
                             </div>
                         
@@ -269,7 +123,6 @@ function editModal(id) {
             `;
             const modalFooter = `<a class="btn btn-success btn-lg" onclick="update('${id}')"><i class="fa fa-save me-2"> </i> Simpan Perubahan</a>`;
             showLargeModal(modalHeader, modalBody, modalFooter);
-            selectCapaianUnggulan(id_capaian_unggulan);
 
             // Filepond: Load existing file
             pond = FilePond.create(document.querySelector("#dokumen_url"), {
@@ -291,7 +144,7 @@ function editModal(id) {
             });
 
             if (dokumen_url) {
-                const filePath = `/storage/dokumen_prestasi/${dokumen_url}`;
+                const filePath = `/storage/karya_ilmiah/${dokumen_url}`;
                 pond.addFile(filePath);
             }
         },
@@ -306,25 +159,21 @@ function editModal(id) {
 
 function save() {
     const periode = $("#periode").val();
-    const id_capaian_unggulan = parseInt($("#id_capaian_unggulan").val());
     const id_mahasiswa = parseInt($("#id_mahasiswa").val());
     const judul = $("#judul").val();
-    const uploaded_at = dateNow();
     const pondFile = pond.getFile();
     const dokumen_url = pondFile ? JSON.parse(pondFile.serverId).folder : null;
 
     let data = {
         periode: periode,
-        id_capaian_unggulan: id_capaian_unggulan,
         id_mahasiswa: id_mahasiswa,
         judul: judul,
-        uploaded_at: uploaded_at,
         dokumen_url: dokumen_url,
     };
-    console.log(data);
+
     $.ajax({
         type: "POST",
-        url: `/api/dokumen-prestasi`,
+        url: `/api/karya-ilmiah`,
         data: JSON.stringify(data),
         contentType: "application/json",
         headers: {
@@ -333,7 +182,7 @@ function save() {
         success: function (response) {
             showToastSuccessAlert(response.message);
             closeLargeModal();
-            return reloadData();
+            return window.location.reload();
         },
         error: function (err) {
             let errorResponse = err.responseJSON;
@@ -347,7 +196,6 @@ function save() {
 
 function update(id) {
     const periode = $("#periode").val();
-    const id_capaian_unggulan = $("#id_capaian_unggulan").val();
     const id_mahasiswa = $("#id_mahasiswa").val();
     const judul = $("#judul").val();
     const status = $("#status").val();
@@ -356,7 +204,6 @@ function update(id) {
     const dokumen_url = pondFile ? JSON.parse(pondFile.serverId).folder : null;
     let data = {
         periode: periode,
-        id_capaian_unggulan: id_capaian_unggulan,
         id_mahasiswa: id_mahasiswa,
         judul: judul,
         status: status,
@@ -365,7 +212,7 @@ function update(id) {
 
     $.ajax({
         type: "PUT",
-        url: `/api/dokumen-prestasi/${id}`,
+        url: `/api/karya-ilmiah/${id}`,
         contentType: "application/json",
         data: JSON.stringify(data),
         headers: {
@@ -374,38 +221,7 @@ function update(id) {
         success: function (response) {
             showToastSuccessAlert(response.message);
             closeLargeModal();
-            reloadData();
-        },
-        error: function (err) {
-            let errorResponse = err.responseJSON;
-            const errorMessage = errorResponse.message;
-            const errorData = errorResponse.data;
-            showToastErrorAlert(errorMessage + `<br>(${errorData})`);
-        },
-    });
-}
-
-function deleteModal(id, judul) {
-    const modalHeader = "Hapus Dokumen Prestasi";
-    const modalBody = `Apakah Anda yakin ingin menghapus dokumen prestasi "${judul}"?`;
-    const modalFooter = `
-        <a class="btn btn-danger btn-lg" onclick="deleteData('${id}')"><i class="fa fa-trash me-2"> </i> Hapus</a>
-        <a class="btn btn-secondary btn-lg" onclick="closeModal()"><i class="fa fa-close me-2"> </i> Batal</a>
-    `;
-    showModal(modalHeader, modalBody, modalFooter);
-}
-
-function deleteData(id) {
-    $.ajax({
-        type: "DELETE",
-        url: `/api/dokumen-prestasi/${id}`,
-        headers: {
-            "X-CSRF-TOKEN": csrfToken,
-        },
-        success: function (response) {
-            showToastSuccessAlert(response.message);
-            closeModal();
-            return reloadData();
+            return window.location.reload();
         },
         error: function (err) {
             let errorResponse = err.responseJSON;

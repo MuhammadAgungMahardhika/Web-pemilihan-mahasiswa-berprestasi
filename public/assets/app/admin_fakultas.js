@@ -42,7 +42,7 @@ function showData() {
                 orderable: true,
                 searchable: true,
             },
-           
+
             {
                 data: "status",
                 name: "status",
@@ -72,7 +72,8 @@ function showData() {
                     `;
                 },
             },
-        ], order: [[0, 'desc']] 
+        ],
+        order: [[0, "desc"]],
     });
 }
 
@@ -279,10 +280,8 @@ function save() {
     const password_confirm = $("#password_confirm").val();
     const status = $("#status").val();
 
-    if(!id_fakultas){
-        return showToastErrorAlert(
-            "Fakultas wajib diisi"
-        );
+    if (!id_fakultas) {
+        return showToastErrorAlert("Fakultas wajib diisi");
     }
     if (password != password_confirm) {
         return showToastErrorAlert(
@@ -327,19 +326,17 @@ function update(id) {
     const id_fakultas = $("#id_fakultas").val();
     const username = $("#username").val();
     const name = $("#name").val();
-    const role = $("#id_role").val();
+    const id_role = $("#id_role").val();
     const status = $("#status").val();
 
-    if(!id_fakultas){
-        return showToastErrorAlert(
-            "Fakultas wajib diisi"
-        );
+    if (!id_fakultas) {
+        return showToastErrorAlert("Fakultas wajib diisi");
     }
     let data = {
         id_fakultas: id_fakultas,
         username: username,
         name: name,
-        role: role,
+        id_role: id_role,
         status: status,
     };
 

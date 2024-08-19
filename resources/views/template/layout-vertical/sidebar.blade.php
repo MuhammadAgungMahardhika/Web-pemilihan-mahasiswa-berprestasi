@@ -74,6 +74,9 @@
                     @include('menu.mahasiswa')
                 @endrole
 
+                @role('juri_fakultas')
+                    @include('menu.juri-fakultas')
+                @endrole
                 {{-- <li class="sidebar-title">Forms &amp; Tables</li> --}}
 
             </ul>

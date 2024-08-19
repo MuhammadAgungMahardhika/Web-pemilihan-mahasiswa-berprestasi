@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('utusans', function (Blueprint $table) {
+        Schema::create('karya_ilmiahs', function (Blueprint $table) {
             $table->id();
             $table->year('periode');
-            $table->unsignedBigInteger('id_mahasiswa')->nullable();
-            $table->integer('total_skor');
-            $table->enum('tingkat', ['departmen', 'fakultas', 'universitas'])->nullable();
-            $table->date('tanggal_utus_departmen')->nullable();
-            $table->date('tanggal_utus_fakultas')->nullable();
-            $table->date('tanggal_utus_universitas')->nullable();
+            $table->unsignedBigInteger('id_mahasiswa')->unique();
+            $table->string('judul');
+            $table->string('dokumen_url');
+            $table->enum('status', ['pending', 'ditolak', 'diterima'])->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('utusans');
+        Schema::dropIfExists('karya_ilmiahs');
     }
 };

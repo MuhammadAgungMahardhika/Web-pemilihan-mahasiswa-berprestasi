@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BahasaInggris;
 use App\Models\DokumenPrestasi;
+use App\Models\KaryaIlmiah;
 use App\Models\Mahasiswa;
 use App\Models\User;
 use App\Models\Utusan;
@@ -49,7 +51,7 @@ class PageController extends Controller
             $send['mahasiswa'] = $mahasiswaCount ?? 0;
             $send['utusan'] = Utusan::join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
                 ->where('mahasiswas.id_departmen', $departmenId)
-                ->where('utusans.id_portal', session('portal')->id)
+                ->where('utusans.periode', session('portal')->periode)
                 ->count();
         } else if ($userRole == "admin_fakultas") {
             $fakultasId = Auth::user()->id_fakultas;
@@ -61,7 +63,7 @@ class PageController extends Controller
                 ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
                 ->where('departmens.id_fakultas', $fakultasId) // Membatasi hanya pada fakultas tertentu
                 ->where('utusans.tingkat', 'fakultas') // Membatasi hanya pada tingkat fakultas
-                ->where('utusans.id_portal', session('portal')->id)
+                ->where('utusans.periode', session('portal')->periode)
                 ->count();
         } else if ($userRole == "admin_universitas") {
             $adminFakultas =  User::where('id_fakultas', '!=', null)
@@ -69,7 +71,7 @@ class PageController extends Controller
                 ->count();
             $send['admin_fakultas'] = $adminFakultas;
             // $send['utusan_kampus'] = Utusan::where('utusans.tingkat', 'universitas')
-            //     ->where('utusans.id_portal', session('portal')->id)
+            //     ->where('utusans.periode', session('portal')->periode)
             //     ->count();
         }
 
@@ -95,6 +97,41 @@ class PageController extends Controller
             'title' => "Dokumen Prestasi"
         ];
         return view('pages.dokumen-prestasi.index', $send);
+    }
+    public function ujiBahasaInggris()
+    {
+        $send = [
+            'title' => "Uji Bahasa Inggris"
+        ];
+        return view('pages.uji-bahasa-inggris.index', $send);
+    }
+    public function karyaIlmiah()
+    {
+        $periode = session('portal')->periode;
+        $idMahasiswa = Auth::user()->id_mahasiswa;
+        $data = KaryaIlmiah::with('user')
+            ->where('id_mahasiswa', $idMahasiswa)
+            ->where('periode', $periode)
+            ->first();
+        $send = [
+            'title' => "Karya Ilmiah",
+            'data' => $data
+        ];
+        return view('pages.karya-ilmiah.index', $send);
+    }
+    public function bahasaInggris()
+    {
+        $periode = session('portal')->periode;
+        $idMahasiswa = Auth::user()->id_mahasiswa;
+        $data = BahasaInggris::with('user')
+            ->where('id_mahasiswa', $idMahasiswa)
+            ->where('periode', $periode)
+            ->first();
+        $send = [
+            'title' => "Bahasa Inggris",
+            'data' => $data
+        ];
+        return view('pages.bahasa-inggris.index', $send);
     }
     public function capaianUnggulan()
     {
@@ -146,12 +183,34 @@ class PageController extends Controller
         ];
         return view('pages.verifikasi-dokumen.index', $send);
     }
+    public function verifikasiKaryaIlmiahFakultas()
+    {
+        $send = [
+            'title' => "Verifikasi Karya Ilmiah"
+        ];
+        return view('pages.verifikasi-karya-ilmiah.index-fakultas', $send);
+    }
+    public function juriUniversitas()
+    {
+        $send = [
+            'title' => "Juri Universitas"
+        ];
+        return view('pages.juri-universitas.index', $send);
+    }
     public function adminFakultas()
     {
         $send = [
             'title' => "Admin Fakultas"
         ];
         return view('pages.admin-fakultas.index', $send);
+    }
+
+    public function juriFakultas()
+    {
+        $send = [
+            'title' => "Juri Fakultas"
+        ];
+        return view('pages.juri-fakultas.index', $send);
     }
     public function adminDepartmen()
     {

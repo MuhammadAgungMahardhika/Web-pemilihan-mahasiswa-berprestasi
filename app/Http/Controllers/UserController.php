@@ -51,12 +51,44 @@ class UserController extends Controller
                 ->whereHas('departmen', function ($query) use ($idFakultas) {
                     $query->where('id_fakultas', $idFakultas);
                 })
-                ->orderBy('id', 'desc');
+                ->get();
             return DataTables::of($user)
                 ->make(true);
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Data user tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+    // Method untuk DataTables API
+    public function getUserDataByJuriFakultas(): JsonResponse
+    {
+        try {
+            $idFakultas = Auth::user()->id_fakultas;
+            $user = User::where('id_role', 5)
+                ->where('id_fakultas', '=', $idFakultas)
+                ->get();
+            return DataTables::of($user)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data Juri tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+    // Method untuk DataTables API
+    public function getUserDataByJuriUniversitas(): JsonResponse
+    {
+        try {
+            $user = User::where('id_role', 6)
+                ->get();
+            return DataTables::of($user)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data Juri tidak ditemukan',
                 'data' => $e->getMessage()
             ], 404);
         }

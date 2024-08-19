@@ -9,10 +9,7 @@
     <meta name="keywords" content="App">
     <meta name="author" content="Muhammad Agung Mahardhika">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="{{ url('images/LOGO-POKDARWIS.png') }}">
-
-    {{--  --}}
-    <link rel="shortcut icon" href="{{ asset('assets/compiled/svg/favicon.svg') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/static/images/logo/unand.png') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}">

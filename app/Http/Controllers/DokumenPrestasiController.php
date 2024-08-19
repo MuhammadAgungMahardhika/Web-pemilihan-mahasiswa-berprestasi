@@ -14,6 +14,7 @@ use Yajra\DataTables\DataTables;
 class DokumenPrestasiController extends Controller
 {
     protected $message = [
+        'periode.required' => 'Periode harus ada',
         'id_capaian_unggulan.required' => 'Capaian unggulan harus diisi.',
         'id_mahasiswa.required' => 'Mahasiswa harus diisi.',
         'judul.required' => 'Judul harus diisi.',
@@ -25,10 +26,11 @@ class DokumenPrestasiController extends Controller
     public function getDokumenPrestasiData(): JsonResponse
     {
         try {
-
+            $periode = session('portal')->periode;
             $idMahasiswa = Auth::user()->id_mahasiswa;
             $dokumenPrestasi = DokumenPrestasi::with(['capaian_unggulan', 'mahasiswa'])
                 ->where('id_mahasiswa', $idMahasiswa)
+                ->where('periode', $periode)
                 ->get();
             return DataTables::of($dokumenPrestasi)
                 ->make(true);
@@ -43,10 +45,12 @@ class DokumenPrestasiController extends Controller
     public function getDokumenPrestasiDataByDepartmen($idDepartmen): JsonResponse
     {
         try {
+            $periode = session('portal')->periode;
             $dokumenPrestasi = DokumenPrestasi::with(['capaian_unggulan', 'mahasiswa'])
                 ->whereHas('mahasiswa', function ($query) use ($idDepartmen) {
                     $query->where('id_departmen', $idDepartmen);
                 })
+                ->where('periode', $periode)
                 ->get();
             return DataTables::of($dokumenPrestasi)
                 ->make(true);
@@ -101,6 +105,7 @@ class DokumenPrestasiController extends Controller
     {
         try {
             $request->validate([
+                'periode' => 'required|string|min:4|max:4',
                 'id_capaian_unggulan' => 'required|integer',
                 'id_mahasiswa' => 'required|integer',
                 'judul' => 'required|string|max:255',
@@ -150,6 +155,7 @@ class DokumenPrestasiController extends Controller
     {
         try {
             $request->validate([
+                'periode' => 'required|string|min:4|max:4',
                 'id_capaian_unggulan' => 'required|integer',
                 'id_mahasiswa' => 'required|integer',
                 'judul' => 'required|string|max:255',

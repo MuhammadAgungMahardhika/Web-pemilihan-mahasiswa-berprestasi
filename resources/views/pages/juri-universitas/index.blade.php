@@ -4,7 +4,7 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3 class="mb-3">{{ $title }}</h3>
+                <h3 class="mb-3">{{ $title }} </h3>
             </div>
         </div>
     </div>
@@ -14,7 +14,8 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <a onclick="addModal()" class="btn btn-primary" title="Tambah Portal"><i class="fa fa-plus"></i></a>
+                    <a onclick="addModal()" class="btn btn-primary" title="Tambah Juri Universitas"><i
+                            class="fa fa-plus"></i></a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -22,10 +23,9 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Periode</th>
-                                    <th>Tanggal Tutup Fakultas</th>
-                                    <th>Tanggal Tutup Departemen</th>
-                                    <th>Status</th>
+                                    <th>Username</th>
+                                    <th>Nama</th>
+                                    <th>Status Akun</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -40,5 +40,5 @@
     </div>
 
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/portal.js') }}"></script>
+    <script src="{{ asset('assets/app/juri_universitas.js') }}"></script>
 @endsection

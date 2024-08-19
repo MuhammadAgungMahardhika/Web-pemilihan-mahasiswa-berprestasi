@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Departmen::class, 'id_departmen');
     }
+
+    public function penilaian_karya_ilmiah()
+    {
+        return $this->hasMany(PenilaianKaryaIlmiah::class, 'id_user');
+    }
 }

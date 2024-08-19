@@ -16,7 +16,15 @@ class Mahasiswa extends Model
     }
     public function dokumen_prestasi()
     {
-        return $this->hasOne(DokumenPrestasi::class, 'id_mahasiswa');
+        return $this->hasMany(DokumenPrestasi::class, 'id_mahasiswa');
+    }
+    public function karya_ilmiah()
+    {
+        return $this->hasOne(KaryaIlmiah::class, 'id_mahasiswa');
+    }
+    public function bahasa_inggris()
+    {
+        return $this->hasOne(BahasaInggris::class, 'id_mahasiswa');
     }
     public function departmen()
     {

@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('portals', function (Blueprint $table) {
             $table->id();
             $table->year('periode')->unique();
+            $table->date('tanggal_tutup_fakultas');
+            $table->date('tanggal_tutup_departmen');
             $table->enum('status', ['tutup', 'buka']);
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();

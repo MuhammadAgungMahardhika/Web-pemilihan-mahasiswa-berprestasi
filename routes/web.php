@@ -48,12 +48,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/departmen', [PageController::class, 'departmen']);
     Route::get('/fakultas', [PageController::class, 'fakultas']);
     Route::get('/admin-fakultas', [PageController::class, 'adminFakultas']);
+    Route::get('/juri-fakultas', [PageController::class, 'juriFakultas']);
+    Route::get('/juri-universitas', [PageController::class, 'juriUniversitas']);
     Route::get('/admin-departmen', [PageController::class, 'adminDepartmen']);
     Route::get('/portal', [PageController::class, 'portal']);
     Route::get('/profil', [PageController::class, 'profil']);
 
     Route::middleware('portal')->group(function () {
         Route::get('/dokumen-prestasi', [PageController::class, 'dokumenPrestasi']);
+        Route::get('/bahasa-inggris', [PageController::class, 'bahasaInggris']);
+        Route::get('/uji-bahasa-inggris', [PageController::class, 'ujiBahasaInggris']);
+        Route::get('/karya-ilmiah', [PageController::class, 'karyaIlmiah']);
         Route::get('/ranking-departmen', [PageController::class, 'rankingDepartmen']);
         Route::get('/ranking-fakultas', [PageController::class, 'rankingFakultas']);
         Route::get('/ranking-universitas', [PageController::class, 'rankingUniversitas']);
@@ -61,5 +66,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/utusan-fakultas', [PageController::class, 'utusanFakultas']);
         Route::get('/utusan-universitas', [PageController::class, 'utusanUniversitas']);
         Route::get('/verifikasi-dokumen', [PageController::class, 'verifikasiDokumen']);
+        Route::get('/verifikasi-karya-ilmiah-fakultas', [PageController::class, 'verifikasiKaryaIlmiahFakultas']);
     });
 });

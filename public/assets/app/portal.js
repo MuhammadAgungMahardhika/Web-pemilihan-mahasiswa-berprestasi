@@ -31,6 +31,18 @@ function showData() {
                 searchable: true,
             },
             {
+                data: "tanggal_tutup_fakultas",
+                name: "tanggal_tutup_fakultas",
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: "tanggal_tutup_departmen",
+                name: "tanggal_tutup_departmen",
+                orderable: true,
+                searchable: true,
+            },
+            {
                 data: "status",
                 name: "status",
                 orderable: true,
@@ -69,23 +81,32 @@ function addModal() {
         <form class="form form-horizontal">
             <div class="form-body"> 
                 <div class="row">
-                    <div class="col form-group">
+                    <div class="col-6 form-group">
                         <label for="periode">Periode <i class="text-danger">*</i></label>
-                        <input type="number" id="periode" class="form-control" autocomplete="one-time-code">
+                        <input type="number" id="periode" value="${new Date().getFullYear()}" class="form-control" autocomplete="one-time-code">
                     </div>
-                    <div class="col form-group">
+                     <div class="col-6 form-group">
                         <label for="status">Status <i class="text-danger">*</i></label>
                         <select id="status" class="form-control">
                             <option value="buka">Buka</option>
                             <option value="tutup">Tutup</option>
                         </select>
                     </div>
+                     <div class="col-6 form-group">
+                        <label for="tanggal_tutup_departmen">Tanggal Tutup Portal Departemen <i class="text-danger">*</i></label>
+                        <input type="date" id="tanggal_tutup_departmen" class="form-control" autocomplete="one-time-code">
+                    </div>
+                    <div class="col-6 form-group">
+                        <label for="tanggal_tutup_fakultas">Tanggal Tutup Portal Fakultas <i class="text-danger">*</i></label>
+                        <input type="date" id="tanggal_tutup_fakultas" class="form-control" autocomplete="one-time-code">
+                    </div>
+                   
                 </div>
             </div>
         </form>
     `;
     const modalFooter = `<a class="btn btn-success btn-lg" onclick="save()"><i class="fa fa-save"> </i> Simpan</a>`;
-    showModal(modalHeader, modalBody, modalFooter);
+    showLargeModal(modalHeader, modalBody, modalFooter);
 }
 
 function editModal(id) {
@@ -93,17 +114,23 @@ function editModal(id) {
         type: "GET",
         url: `/api/portal/${id}`,
         success: function (response) {
-            let { id, periode, status } = response.data;
+            let {
+                id,
+                periode,
+                tanggal_tutup_fakultas,
+                tanggal_tutup_departmen,
+                status,
+            } = response.data;
             const modalHeader = "Ubah Portal";
             const modalBody = `
                 <form class="form form-horizontal">
                     <div class="form-body">
                         <div class="row">
-                            <div class="col form-group">
+                            <div class="col-6 form-group">
                                 <label for="periode">Periode <i class="text-danger">*</i></label>
                                 <input type="number" id="periode" value="${periode}" class="form-control" autocomplete="one-time-code">
                             </div>
-                            <div class="col form-group">
+                             <div class="col-6 form-group">
                                 <label for="status">Status <i class="text-danger">*</i></label>
                                 <select id="status" class="form-control">
                                     <option value="buka" ${
@@ -114,12 +141,22 @@ function editModal(id) {
                                     }>Tutup</option>
                                 </select>
                             </div>
+                            <div class="col-6 form-group">
+                                <label for="tanggal_tutup_departmen">Tanggal Tutup Portal Departemen <i class="text-danger">*</i></label>
+                                <input type="date" id="tanggal_tutup_departmen" value="${tanggal_tutup_departmen}" class="form-control" autocomplete="one-time-code">
+                            </div>
+                            <div class="col-6 form-group">
+                                <label for="tanggal_tutup_fakultas">Tanggal Tutup Portal Fakultas <i class="text-danger">*</i></label>
+                                <input type="date" id="tanggal_tutup_fakultas" value="${tanggal_tutup_fakultas}" class="form-control" autocomplete="one-time-code">
+                            </div>
+                            
+                           
                         </div>
                     </div>
                 </form>
             `;
             const modalFooter = `<a class="btn btn-success btn-lg" onclick="update('${id}')"><i class="fa fa-save"> </i> Simpan Perubahan</a>`;
-            showModal(modalHeader, modalBody, modalFooter);
+            showLargeModal(modalHeader, modalBody, modalFooter);
         },
         error: function (err) {
             let errorResponse = err.responseJSON;
@@ -140,10 +177,14 @@ function deleteModal(id, periode) {
 // API
 function save() {
     const periode = $("#periode").val();
+    const tanggal_tutup_fakultas = $("#tanggal_tutup_fakultas").val();
+    const tanggal_tutup_departmen = $("#tanggal_tutup_departmen").val();
     const status = $("#status").val();
 
     let data = {
         periode: periode,
+        tanggal_tutup_fakultas: tanggal_tutup_fakultas,
+        tanggal_tutup_departmen: tanggal_tutup_departmen,
         status: status,
     };
 
@@ -158,7 +199,7 @@ function save() {
         success: function (response) {
             const message = response.message;
             showToastSuccessAlert(message);
-            closeModal();
+            closeLargeModal();
             return reloadData();
         },
         error: function (err) {
@@ -172,10 +213,14 @@ function save() {
 
 function update(id) {
     const periode = $("#periode").val();
+    const tanggal_tutup_fakultas = $("#tanggal_tutup_fakultas").val();
+    const tanggal_tutup_departmen = $("#tanggal_tutup_departmen").val();
     const status = $("#status").val();
 
     let data = {
         periode: periode,
+        tanggal_tutup_fakultas: tanggal_tutup_fakultas,
+        tanggal_tutup_departmen: tanggal_tutup_departmen,
         status: status,
     };
 
@@ -190,7 +235,7 @@ function update(id) {
         success: function (response) {
             const successMessage = response.message;
             showToastSuccessAlert(successMessage);
-            closeModal();
+            closeLargeModal();
             return reloadData();
         },
         error: function (err) {
