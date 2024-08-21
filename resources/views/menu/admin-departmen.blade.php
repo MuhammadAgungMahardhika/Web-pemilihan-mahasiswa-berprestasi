@@ -5,12 +5,6 @@
     </a>
 </li>
 
-<li class="sidebar-item  {{ request()->is('verifikasi-dokumen') ? 'active' : '' }}">
-    <a href="{{ url('verifikasi-dokumen') }}" class="sidebar-link">
-        <i class="bi bi-grid-fill"></i>
-        <span>Verifikasi Dokumen</span>
-    </a>
-</li>
 <li class="sidebar-item  {{ request()->is('ranking-departmen') ? 'active' : '' }}">
     <a href="{{ url('ranking-departmen') }}" class="sidebar-link">
         <i class="bi bi-grid-fill"></i>

@@ -43,10 +43,38 @@ function showData() {
                 searchable: true,
             },
             {
+                data: "ipk",
+                name: "ipk",
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: "karya_ilmiah_skor",
+                name: "karya_ilmiah_skor",
+                orderable: true,
+                searchable: true,
+                class: "text-end",
+            },
+            {
+                data: "bahasa_inggris_skor",
+                name: "bahasa_inggris_skor",
+                orderable: true,
+                searchable: true,
+                class: "text-end",
+            },
+            {
+                data: "dokumen_prestasi_skor",
+                name: "dokumen_prestasi_skor",
+                orderable: true,
+                searchable: true,
+                class: "text-end",
+            },
+            {
                 data: "total_skor",
                 name: "total_skor",
                 orderable: true,
                 searchable: true,
+                class: "text-end",
             },
             {
                 data: null,
@@ -62,13 +90,13 @@ function showData() {
                 },
             },
         ],
-        order: [[4, "desc"]],
+        order: [[8, "desc"]],
     });
 }
 function sendModal(id, nama) {
     console.log(id);
-    const modalHeader = "Kirim Utusan Departemen";
-    const modalBody = `Apakah Anda Yakin Mengutus Mahasiswa (${nama}) Sebagai Utusan Departemen?`;
+    const modalHeader = "Kirim Utusan Fakultas";
+    const modalBody = `Apakah Anda Yakin Mengutus Mahasiswa (${nama}) Sebagai Utusan Fakultas?`;
     const modalFooter = `<a class="btn btn-success btn-lg" onclick="updateTingkat('${id}')">Kirim</a>`;
     showModal(modalHeader, modalBody, modalFooter);
 }

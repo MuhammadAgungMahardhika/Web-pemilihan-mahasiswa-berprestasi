@@ -22,7 +22,7 @@
                                     <th>No</th>
                                     <th>Nim</th>
                                     <th>Nama</th>
-                                    <th>Departemen</th>
+                                    <th>Ipk</th>
                                     <th>Total Skor</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -38,8 +38,9 @@
     </div>
 
     <script>
-        const idFakultas = '{{ Auth::user()->id_fakultas }}'
+        const periode = "{{ session('portal')->periode }}"
+        const idDepartmen = '{{ Auth::user()->id_departmen }}'
     </script>
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/ranking_fakultas.js') }}"></script>
+    <script src="{{ asset('assets/app/ranking_departmen.js') }}"></script>
 @endsection

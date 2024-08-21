@@ -13,6 +13,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -20,11 +21,12 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Fakultas </th>
+                                    <th>Departemen </th>
                                     <th>Nim</th>
-                                    <th>Nama</th>
-                                    <th>Fakultas</th>
-                                    <th>Departemen</th>
+                                    <th>Nama </th>
                                     <th>Total Skor</th>
+                                    <th>Tanggal Diutus</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -39,5 +41,5 @@
     </div>
 
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/ranking_universitas.js') }}"></script>
+    <script src="{{ asset('assets/app/utusan_universitas.js') }}"></script>
 @endsection

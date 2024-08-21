@@ -1,7 +1,7 @@
-<li class="sidebar-item  {{ request()->is('verifikasi-karya-ilmiah-fakultas') ? 'active' : '' }}">
-    <a href="{{ url('verifikasi-karya-ilmiah-fakultas') }}" class="sidebar-link">
+<li class="sidebar-item  {{ request()->is('penilaian-karya-ilmiah-fakultas') ? 'active' : '' }}">
+    <a href="{{ url('penilaian-karya-ilmiah-fakultas') }}" class="sidebar-link">
         <i class="bi bi-grid-fill"></i>
-        <span>Verifikasi Karya Ilmiah</span>
+        <span>Penilaian Karya Ilmiah</span>
     </a>
 </li>
 <li class="sidebar-item  {{ request()->is('uji-bahasa-inggris') ? 'active' : '' }}">

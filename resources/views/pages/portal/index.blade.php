@@ -23,8 +23,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Periode</th>
-                                    <th>Tanggal Tutup Fakultas</th>
                                     <th>Tanggal Tutup Departemen</th>
+                                    <th>Tanggal Tutup Fakultas</th>
                                     <th>Status</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>

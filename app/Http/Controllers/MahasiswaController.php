@@ -23,21 +23,6 @@ class MahasiswaController extends Controller
         'jenis_kelamin.required' => 'Jenis kelamin harus dipilih.',
     ];
 
-    // ambil data mahasiswa
-    public function getMahasiswaData(): JsonResponse
-    {
-        try {
-            $mahasiswa = Mahasiswa::with(['user'])->get();
-            return DataTables::of($mahasiswa)
-                ->make(true);
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => 'Data mahasiswa tidak ditemukan',
-                'data' => $e->getMessage()
-            ], 404);
-        }
-    }
-
     // ambil data mahasiswa berdasarkan departmen
     public function getMahasiswaDataByDepartmen($idDepartmen): JsonResponse
     {
@@ -59,15 +44,17 @@ class MahasiswaController extends Controller
     public function getMahasiswaRankingDataByDepartmen($idDepartmen): JsonResponse
     {
         try {
-            $mahasiswa = Mahasiswa::select('mahasiswas.id', 'mahasiswas.nim', 'mahasiswas.nama', DB::raw('SUM(capaian_unggulans.skor) as total_skor'))
-                ->join('dokumen_prestasis', function ($join) {
+            $periode = session('portal')->periode;
+            $mahasiswa = Mahasiswa::select('mahasiswas.*', DB::raw('SUM(capaian_unggulans.skor) as total_skor'))
+                ->join('dokumen_prestasis', function ($join) use ($periode) {
                     $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')
-                        ->where('dokumen_prestasis.status', '=', 'diterima');
+                        ->where('dokumen_prestasis.status', '=', 'diterima')
+                        ->where('dokumen_prestasis.periode', $periode);
                 })
                 ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
                 ->leftJoin('utusans', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
-                ->where('utusans.id_mahasiswa', '=', null)
                 ->where('mahasiswas.id_departmen', $idDepartmen)
+                ->where('utusans.id_mahasiswa', '=', null)
                 ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim')
                 ->get();
 
@@ -85,28 +72,42 @@ class MahasiswaController extends Controller
     public function getMahasiswaRankingDataByFakultas($idFakultas): JsonResponse
     {
         try {
+            $periode = session('portal')->periode;
+            $subqueryKaryaIlmiah = DB::table('penilaian_karya_ilmiahs')
+                ->select('id_karya_ilmiah', DB::raw('AVG(skor_fakultas) as rata_rata_skor_fakultas'))
+                ->groupBy('id_karya_ilmiah');
 
             $mahasiswa = Mahasiswa::select(
                 'mahasiswas.id',
                 'mahasiswas.nim',
                 'mahasiswas.nama',
+                'mahasiswas.ipk',
                 'departmens.nama_departmen as nama_departmen',
                 'utusans.id as id_utusan',
-                DB::raw('SUM(capaian_unggulans.skor) as total_skor')
+                'subqueryKaryaIlmiah.rata_rata_skor_fakultas as karya_ilmiah_skor',
+                DB::raw('ROUND(bahasa_inggris.listening + bahasa_inggris.speaking + bahasa_inggris.writing,2) as bahasa_inggris_skor'),
+                DB::raw('SUM(capaian_unggulans.skor) as dokumen_prestasi_skor'),
+                DB::raw('ROUND(subqueryKaryaIlmiah.rata_rata_skor_fakultas + 
+                (bahasa_inggris.listening + bahasa_inggris.speaking + bahasa_inggris.writing) +
+                SUM(capaian_unggulans.skor), 2) as total_skor')
             )
-                ->join('dokumen_prestasis', function ($join) {
+                ->join('dokumen_prestasis', function ($join) use ($periode) {
                     $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')
-                        ->where('dokumen_prestasis.status', '=', 'diterima');
+                        ->where('dokumen_prestasis.status', '=', 'diterima')
+                        ->where('periode', $periode);
                 })
                 ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
                 ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
-                ->where('departmens.id_fakultas', $idFakultas)
+                ->joinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
+                    $join->on('mahasiswas.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
+                })
+                ->join('bahasa_inggris', 'mahasiswas.id', '=', 'bahasa_inggris.id_mahasiswa')
                 ->leftJoin('utusans', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
+                ->where('departmens.id_fakultas', $idFakultas)
                 ->where('utusans.tingkat', 'departmen')
-                ->where('utusans.id_portal', session('portal')->id)
-                ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim', 'departmens.nama_departmen', 'utusans.id')
+                ->where('utusans.periode', $periode)
+                ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim',  'mahasiswas.ipk', 'departmens.nama_departmen', 'utusans.id', 'subqueryKaryaIlmiah.rata_rata_skor_fakultas')
                 ->get();
-
             return DataTables::of($mahasiswa)
                 ->make(true);
         } catch (Exception $e) {
@@ -121,26 +122,42 @@ class MahasiswaController extends Controller
     {
         try {
 
+            $periode = session('portal')->periode;
+            $subqueryKaryaIlmiah = DB::table('penilaian_karya_ilmiahs')
+                ->select('id_karya_ilmiah', DB::raw('COALESCE(AVG(skor_universitas),0) as rata_rata_skor_fakultas'))
+                ->groupBy('id_karya_ilmiah');
+
             $mahasiswa = Mahasiswa::select(
                 'mahasiswas.id',
                 'mahasiswas.nim',
                 'mahasiswas.nama',
+                'mahasiswas.ipk',
                 'fakultas.nama_fakultas as nama_fakultas',
                 'departmens.nama_departmen as nama_departmen',
                 'utusans.id as id_utusan',
-                DB::raw('SUM(capaian_unggulans.skor) as total_skor')
+                'subqueryKaryaIlmiah.rata_rata_skor_fakultas as karya_ilmiah_skor',
+                DB::raw('ROUND(bahasa_inggris.listening + bahasa_inggris.speaking + bahasa_inggris.writing,2) as bahasa_inggris_skor'),
+                DB::raw('SUM(capaian_unggulans.skor) as dokumen_prestasi_skor'),
+                DB::raw('ROUND(subqueryKaryaIlmiah.rata_rata_skor_fakultas + 
+                (bahasa_inggris.listening + bahasa_inggris.speaking + bahasa_inggris.writing) +
+                SUM(capaian_unggulans.skor), 2) as total_skor')
             )
-                ->join('dokumen_prestasis', function ($join) {
+                ->join('dokumen_prestasis', function ($join) use ($periode) {
                     $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')
-                        ->where('dokumen_prestasis.status', '=', 'diterima');
+                        ->where('dokumen_prestasis.status', '=', 'diterima')
+                        ->where('periode', $periode);
                 })
                 ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
                 ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
                 ->join('fakultas', 'departmens.id_fakultas', '=', 'fakultas.id')
+                ->joinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
+                    $join->on('mahasiswas.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
+                })
+                ->join('bahasa_inggris', 'mahasiswas.id', '=', 'bahasa_inggris.id_mahasiswa')
                 ->leftJoin('utusans', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
                 ->where('utusans.tingkat', 'fakultas')
-                ->where('utusans.id_portal', session('portal')->id)
-                ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim', 'departmens.nama_departmen', 'utusans.id')
+                ->where('utusans.periode', $periode)
+                ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim',  'mahasiswas.ipk', 'departmens.nama_departmen', 'utusans.id', 'subqueryKaryaIlmiah.rata_rata_skor_fakultas')
                 ->get();
 
             return DataTables::of($mahasiswa)
@@ -254,6 +271,7 @@ class MahasiswaController extends Controller
                 'nik' => 'nullable|string|max:20',
                 'nim' => 'required|string|max:20|unique:mahasiswas,nim,' . $id,
                 'nama' => 'required|string|max:255',
+                'ipk' => 'required|string',
                 'semester' => 'required|in:1,2,3,4,5,6,7,8',
                 'id_departmen' => 'required',
                 'jenis_kelamin' => 'required|in:perempuan,laki-laki',

@@ -106,7 +106,6 @@ function editModal(id) {
                         <div class="row">
                             <input type="hidden" id="periode" value="${periode}" class="form-control">
                             <input type="hidden" id="id_mahasiswa" value="${id_mahasiswa}" class="form-control">
-                            <input type="hidden" id="status" value="pending" class="form-control">
                             </div>
                             <div class="col-6 form-group">
                                 <label for="judul">Judul <i class="text-danger">*</i></label>
@@ -198,7 +197,6 @@ function update(id) {
     const periode = $("#periode").val();
     const id_mahasiswa = $("#id_mahasiswa").val();
     const judul = $("#judul").val();
-    const status = $("#status").val();
 
     const pondFile = pond.getFile();
     const dokumen_url = pondFile ? JSON.parse(pondFile.serverId).folder : null;
@@ -206,7 +204,6 @@ function update(id) {
         periode: periode,
         id_mahasiswa: id_mahasiswa,
         judul: judul,
-        status: status,
         dokumen_url: dokumen_url,
     };
 

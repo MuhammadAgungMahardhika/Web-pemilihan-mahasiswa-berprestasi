@@ -31,17 +31,18 @@ function showData() {
                 searchable: true,
             },
             {
-                data: "tanggal_tutup_fakultas",
-                name: "tanggal_tutup_fakultas",
-                orderable: true,
-                searchable: true,
-            },
-            {
                 data: "tanggal_tutup_departmen",
                 name: "tanggal_tutup_departmen",
                 orderable: true,
                 searchable: true,
             },
+            {
+                data: "tanggal_tutup_fakultas",
+                name: "tanggal_tutup_fakultas",
+                orderable: true,
+                searchable: true,
+            },
+
             {
                 data: "status",
                 name: "status",

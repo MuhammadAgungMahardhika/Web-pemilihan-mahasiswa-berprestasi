@@ -42,13 +42,15 @@ class DokumenPrestasiController extends Controller
         }
     }
     // Method ambil data dokumen prestasi oleh admin departmen
-    public function getDokumenPrestasiDataByDepartmen($idDepartmen): JsonResponse
+    public function getDokumenPrestasiDataByMahasiswa($idMahasiswa): JsonResponse
     {
         try {
+            $idDepartmen = Auth::user()->id_departmen;
             $periode = session('portal')->periode;
             $dokumenPrestasi = DokumenPrestasi::with(['capaian_unggulan', 'mahasiswa'])
-                ->whereHas('mahasiswa', function ($query) use ($idDepartmen) {
-                    $query->where('id_departmen', $idDepartmen);
+                ->whereHas('mahasiswa', function ($query) use ($idMahasiswa, $idDepartmen) {
+                    $query->where('id', $idMahasiswa)
+                        ->where('id_departmen', $idDepartmen);
                 })
                 ->where('periode', $periode)
                 ->get();

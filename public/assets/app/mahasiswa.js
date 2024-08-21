@@ -11,7 +11,7 @@ function showData() {
         columnDefs: [
             {
                 targets: -1,
-                width: "150px",
+                width: "180px",
             },
         ],
         columns: [
@@ -53,6 +53,13 @@ function showData() {
                 name: "user.status",
                 orderable: false,
                 searchable: true,
+                render: function (data, type, row) {
+                    const activateUserButton =
+                        row.user.status == "nonaktif"
+                            ? `<a onclick="activateUser('${row.user.id}')" title="aktivasi akun" class="btn btn-outline-primary btn-sm"><i class="fa fa-key"></i> Aktifkan</a>`
+                            : `<a onclick="deactivateUser('${row.user.id}')" title="nonaktifkan akun" class="btn btn-outline-primary btn-sm"><i class="fa fa-lock"></i> Nonaktifkan</a>`;
+                    return activateUserButton;
+                },
             },
             {
                 data: null,
@@ -61,17 +68,15 @@ function showData() {
                 searchable: false,
                 render: function (data, type, row) {
                     console.log(row);
-                    const activateUserButton =
-                        row.user.status == "nonaktif"
-                            ? `<a onclick="activateUser('${row.user.id}')" title="aktivasi akun" class="btn btn-primary btn-sm"><i class="fa fa-key"></i> </a>`
-                            : `<a onclick="deactivateUser('${row.user.id}')" title="nonaktifkan akun" class="btn btn-primary btn-sm"><i class="fa fa-lock"></i> </a>`;
+
                     return `
                         <div class="row g-2 text-center">
+                           
                             <div class="col">
-                                ${activateUserButton}
+                                <a href="/mahasiswa/verifikasi-dokumen/${row.id}" title="Verifikasi dokumen" class="btn btn-primary btn-sm"><i class="fa fa-file"></i> </a>
                             </div>
                             <div class="col">
-                                <a onclick="editModal('${row.id}')" title="ubah data" class="btn btn-primary btn-sm"><i class="fa fa-info"></i> </a>
+                                <a onclick="editModal('${row.id}')" title="ubah data" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> </a>
                             </div>
                             <div class="col">
                                 <a onclick="deleteModal('${row.id}', '${row.nama}')" title="hapus data" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </a>
@@ -411,6 +416,7 @@ function update(id) {
     const nik = $("#nik").val();
     const nim = $("#nim").val();
     const nama = $("#nama").val();
+    const ipk = $("#ipk").val();
     const semester = $("#semester").val();
     const jenis_kelamin = $("#jenis_kelamin").val();
     const no_hp = $("#no_hp").val();
@@ -424,6 +430,7 @@ function update(id) {
         nim: nim,
         id_departmen: idDepartmen,
         nama: nama,
+        ipk: ipk,
         semester: semester,
         jenis_kelamin: jenis_kelamin,
         no_hp: no_hp,

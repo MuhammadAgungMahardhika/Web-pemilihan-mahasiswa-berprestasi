@@ -69,13 +69,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware('portal')->group(function () {
         Route::get('dokumen-prestasi/data', [DokumenPrestasiController::class, 'getDokumenPrestasiData']);
-        Route::get('dokumen-prestasi/departmen/{id}', [DokumenPrestasiController::class, 'getDokumenPrestasiDataByDepartmen']);
+        Route::get('dokumen-prestasi/mahasiswa/{id}', [DokumenPrestasiController::class, 'getDokumenPrestasiDataByMahasiswa']);
         Route::patch('dokumen-prestasi/status/{id}', [DokumenPrestasiController::class, 'changeStatus']);
         Route::apiResource('dokumen-prestasi', DokumenPrestasiController::class);
 
         Route::get('karya-ilmiah/data', [KaryaIlmiahController::class, 'getKaryaIlmiahData']);
         Route::get('karya-ilmiah/fakultas/{id}', [KaryaIlmiahController::class, 'getKaryaIlmiahDataByFakultas']);
-        Route::patch('karya-ilmiah/status/{id}', [KaryaIlmiahController::class, 'changeStatus']);
+        Route::get('karya-ilmiah/universitas', [KaryaIlmiahController::class, 'getKaryaIlmiahDataByUniversitas']);
+        Route::patch('karya-ilmiah/review-fakultas/{id}', [KaryaIlmiahController::class, 'reviewKaryaIlmiahTingkatFakultas']);
+        Route::patch('karya-ilmiah/review-universitas/{id}', [KaryaIlmiahController::class, 'reviewKaryaIlmiahTingkatUniversitas']);
         Route::apiResource('karya-ilmiah', KaryaIlmiahController::class);
 
         Route::get('bahasa-inggris/data', [BahasaInggrisController::class, 'getBahasaInggrisData']);

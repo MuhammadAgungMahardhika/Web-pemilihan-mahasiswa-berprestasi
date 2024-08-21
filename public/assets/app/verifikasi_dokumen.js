@@ -7,14 +7,12 @@ FilePond.registerPlugin(
     FilePondPluginFileValidateSize,
     FilePondPluginFileValidateType
 );
-
 showData();
-
 function showData() {
     table = $("#datatable").DataTable({
         processing: true,
         serverSide: true,
-        ajax: `/api/dokumen-prestasi/departmen/${idDepartmen}`,
+        ajax: `/api/dokumen-prestasi/mahasiswa/${idMahasiswa}`,
         autoWidth: false,
         columnDefs: [
             {
@@ -33,19 +31,6 @@ function showData() {
                 searchable: false,
             },
             {
-                data: "mahasiswa.nim",
-                name: "mahasiswa.nim",
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: "mahasiswa.nama",
-                name: "mahasiswa.nama",
-                orderable: true,
-                searchable: true,
-            },
-           
-            {
                 data: "judul",
                 name: "judul",
                 orderable: true,
@@ -58,16 +43,23 @@ function showData() {
                 searchable: true,
             },
             {
+                data: "uploaded_at",
+                name: "uploaded_at",
+                orderable: true,
+                searchable: true,
+            },
+            {
                 data: "status",
                 name: "status",
                 orderable: true,
                 searchable: true,
+                class: "text-center",
                 render: function (data) {
                     return data === "pending"
                         ? "<span class='text-warning'>Pending<span/>"
                         : data === "ditolak"
-                        ? "<span class='text-danger'>Ditolak<span/>"
-                        : "<span class='text-success'>Diterima<span/>";
+                        ? "<i class='fa fa-x text-danger'><i/>"
+                        : "<i class='fa fa-check text-success'><i/>";
                 },
             },
             {
@@ -77,14 +69,14 @@ function showData() {
                     return `
                         <div class="row g-2 text-center">
                             <div class="col">
-                                <a title="Preview file" onclick="previewFile('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> </a>
+                                <a title="Preview file" onclick="previewFile('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i> </a>
                             </div>
                         </div>
                     `;
                 },
             },
         ],
-        order: [[0, 'desc']] 
+        order: [[0, "desc"]],
     });
 }
 
@@ -99,7 +91,7 @@ function previewFile(id) {
         type: "GET",
         url: `/api/dokumen-prestasi/${id}`,
         success: function (response) {
-            let { dokumen_url,status } = response.data;
+            let { dokumen_url, status } = response.data;
             const path = `/storage/dokumen_prestasi/${dokumen_url}`;
             const modalHeader = "Preview File PDF";
             const modalBody = `
@@ -107,22 +99,19 @@ function previewFile(id) {
                     <embed src="${path}" type="application/pdf" width="100%" height="600px" />
                 </div>
             `;
-            let statusButton = ""
-            if(status == "pending"){
-                statusButton = 
-                `<a class="btn btn-success btn-lg" onclick="changeStatus('${id}','diterima')"><i class="fa fa-save me-2"> </i> Terima</a>
+            let statusButton = "";
+            if (status == "pending") {
+                statusButton = `<a class="btn btn-success btn-lg" onclick="changeStatus('${id}','diterima')"><i class="fa fa-save me-2"> </i> Terima</a>
                 <a class="btn btn-danger btn-lg" onclick="changeStatus('${id}','ditolak')"><i class="fa fa-save me-2"> </i> Tolak</a>
                 `;
-            }else if(status == "diterima"){
-                statusButton = 
-                `<a class="btn btn-danger btn-lg" onclick="changeStatus('${id}','ditolak')"><i class="fa fa-save me-2"> </i> Tolak</a>
+            } else if (status == "diterima") {
+                statusButton = `<a class="btn btn-danger btn-lg" onclick="changeStatus('${id}','ditolak')"><i class="fa fa-save me-2"> </i> Tolak</a>
                 `;
-            }else if(status == "ditolak"){
-                statusButton = 
-                `<a class="btn btn-success btn-lg" onclick="changeStatus('${id}','diterima')"><i class="fa fa-save me-2"> </i> Terima</a>`
+            } else if (status == "ditolak") {
+                statusButton = `<a class="btn btn-success btn-lg" onclick="changeStatus('${id}','diterima')"><i class="fa fa-save me-2"> </i> Terima</a>`;
             }
-            const modalFooter = statusButton
-          
+            const modalFooter = statusButton;
+
             showLargeModal(modalHeader, modalBody, modalFooter);
         },
         error: function (err) {
@@ -168,10 +157,10 @@ function selectCapaianUnggulan(capaianUnggulanId = null) {
     });
 }
 
-function changeStatus(id,status) {
+function changeStatus(id, status) {
     let data = {
-        status : status
-    }
+        status: status,
+    };
     $.ajax({
         type: "PATCH",
         url: `/api/dokumen-prestasi/status/${id}`,
@@ -193,4 +182,3 @@ function changeStatus(id,status) {
         },
     });
 }
-

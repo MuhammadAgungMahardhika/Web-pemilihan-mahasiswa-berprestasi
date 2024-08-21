@@ -24,7 +24,7 @@
                     @endif
                     {{-- Dashboard untuk mahasiswa --}}
                     @if (Auth::user()->role->nama == 'mahasiswa')
-                        <div class="col-12 col-md-6 col-lg-4">
+                        {{-- <div class="col-12 col-md-6 col-lg-4">
                             <a href="{{ url('/dokumen-prestasi') }}">
                                 <div class="card shadow daftarMenu">
                                     <div class="card-header bg-primary">
@@ -48,12 +48,12 @@
                                     </div>
                                 </div>
                             </a>
-                        </div>
+                        </div> --}}
                     @endif
 
                     {{-- Dashboard untuk admin departmen --}}
                     @if (Auth::user()->role->nama == 'admin_departmen')
-                        <div class="col-12 col-md-6 col-lg-4">
+                        {{-- <div class="col-12 col-md-6 col-lg-4">
                             <a href="{{ url('/verifikasi-dokumen') }}">
                                 <div class="card shadow daftarMenu">
                                     <div class="card-header bg-primary">
@@ -104,12 +104,12 @@
                                     </div>
                                 </div>
                             </a>
-                        </div>
+                        </div> --}}
                     @endif
 
                     {{-- Dashboard untuk admin fakultas --}}
                     @if (Auth::user()->role->nama == 'admin_fakultas')
-                        <div class="col-12 col-md-3 col-lg-4">
+                        {{-- <div class="col-12 col-md-3 col-lg-4">
                             <a href="{{ url('/admin-departmen') }}">
                                 <div class="card shadow daftarMenu">
                                     <div class="card-header bg-primary">
@@ -136,12 +136,12 @@
                                     </div>
                                 </div>
                             </a>
-                        </div>
+                        </div> --}}
                     @endif
 
                     {{-- Dashboard untuk admin universitas --}}
                     @if (Auth::user()->role->nama == 'admin_universitas')
-                        <div class="col-12 col-md-3 col-lg-4">
+                        {{-- <div class="col-12 col-md-3 col-lg-4">
                             <a href="{{ url('/admin-departmen') }}">
                                 <div class="card shadow daftarMenu">
                                     <div class="card-header bg-primary">
@@ -164,11 +164,11 @@
                                     </div>
 
                                     <div class="card-body d-flex justify-content-center align-items-center">
-                                        {{-- <h1 class="m-3">{{ $utusan_kampus }}</h1> --}}
+                                        
                                     </div>
                                 </div>
                             </a>
-                        </div>
+                        </div> --}}
                     @endif
 
                 </div>

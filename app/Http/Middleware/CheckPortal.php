@@ -18,15 +18,27 @@ class CheckPortal
         $portal = session('portal');
 
         // Cek apakah portal ada
-        if (!$portal) {
+        if ($portal) {
+            // Cek status portal
+            if ($portal['status'] !== 'buka') {
+                return redirect()->route('dashboard')->with('portalSession', 'Portal saat ini tidak dibuka.');
+            }
+            // Tentukan tanggal tutup yang sesuai dengan session fakultas atau departmen
+            $tanggalTutupPortal = null;
+            if (session('fakultas')) {
+                $tanggalTutupPortal = $portal->tanggal_tutup_fakultas;
+            } elseif (session('departmen')) {
+                $tanggalTutupPortal = $portal->tanggal_tutup_departmen;
+            }
+
+            // Periksa apakah tanggal tutup melebihi tanggal sekarang
+            if ($tanggalTutupPortal && now()->greaterThan($tanggalTutupPortal)) {
+                return redirect()->route('dashboard')
+                    ->with('portalSession', 'Portal sudah ditutup.');
+            }
+        } else {
             return redirect()->route('dashboard')->with('portalSession', 'Portal belum dibuka');
         }
-
-        // Cek status portal
-        if ($portal['status'] !== 'buka') {
-            return redirect()->route('dashboard')->with('portalSession', 'Portal saat ini tidak dibuka.');
-        }
-
         return $next($request);
     }
 }

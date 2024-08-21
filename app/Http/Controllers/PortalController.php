@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\Portal;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -63,7 +64,7 @@ class PortalController extends Controller
         try {
             // Validasi awal
             $request->validate([
-                'periode' => 'required|number|min:4|max:4|unique:portals',
+                'periode' => 'required|string|min:4|max:4|unique:portals',
                 'tanggal_tutup_departmen' => 'required|date',
                 'tanggal_tutup_fakultas' => 'required|date',
                 'status' => 'required|in:tutup,buka',
@@ -77,6 +78,12 @@ class PortalController extends Controller
                 throw new \Exception('Periode tidak boleh lebih kecil dari periode terakhir yang sudah ada (' . $maxPeriode . ')');
             }
 
+            // Validasi periode agar tidak kurang dari tahun sekarang
+            $currentYear = now()->year;
+            if ($request->periode < $currentYear) {
+                throw new \Exception('Periode tidak boleh kurang dari tahun sekarang (' . $currentYear . ')');
+            }
+
             // Tambahkan informasi created_by ke dalam request
             $request->merge([
                 'created_by' => Auth::user()->id
@@ -84,6 +91,8 @@ class PortalController extends Controller
 
             // Simpan data portal
             $portal = Portal::create($request->all());
+            $authSession = new AuthenticatedSessionController();
+            $authSession->refreshPortalSession();
 
             return response()->json([
                 'message' => 'Berhasil menambahkan data Portal baru',
@@ -122,7 +131,7 @@ class PortalController extends Controller
     {
         try {
             $request->validate([
-                'periode' => 'required|number|min:4|max:4|unique:portals,periode,' . $id,
+                'periode' => 'required|string|min:4|max:4|unique:portals,periode,' . $id,
                 'tanggal_tutup_departmen' => 'required|date',
                 'tanggal_tutup_fakultas' => 'required|date',
                 'status' => 'required|in:tutup,buka',

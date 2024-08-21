@@ -65,7 +65,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/utusan-departmen', [PageController::class, 'utusanDepartmen']);
         Route::get('/utusan-fakultas', [PageController::class, 'utusanFakultas']);
         Route::get('/utusan-universitas', [PageController::class, 'utusanUniversitas']);
-        Route::get('/verifikasi-dokumen', [PageController::class, 'verifikasiDokumen']);
-        Route::get('/verifikasi-karya-ilmiah-fakultas', [PageController::class, 'verifikasiKaryaIlmiahFakultas']);
+        Route::get('/mahasiswa/verifikasi-dokumen/{idMahasiswa}', [PageController::class, 'verifikasiDokumenByMahasiswa']);
+        Route::get('/penilaian-karya-ilmiah-fakultas', [PageController::class, 'penilaianKaryaIlmiahFakultas']);
+        Route::get('/penilaian-karya-ilmiah-universitas', [PageController::class, 'penilaianKaryaIlmiahUniversitas']);
     });
 });

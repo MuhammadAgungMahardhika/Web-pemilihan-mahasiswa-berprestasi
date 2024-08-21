@@ -49,12 +49,6 @@ function showData() {
                 searchable: true,
             },
             {
-                data: "portal.periode",
-                name: "portal.periode",
-                orderable: true,
-                searchable: true,
-            },
-            {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {

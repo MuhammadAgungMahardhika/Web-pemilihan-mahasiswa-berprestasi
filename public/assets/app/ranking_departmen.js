@@ -62,7 +62,7 @@ function showData() {
                 },
             },
         ],
-        order: [[3, "desc"]],
+        order: [[4, "desc"]],
     });
 }
 function sendModal(id, nama, totalSkor) {
@@ -81,6 +81,7 @@ function reloadData() {
 // API
 function save(idMahasiswa, totalSkor) {
     let data = {
+        periode: periode,
         id_mahasiswa: idMahasiswa,
         total_skor: parseInt(totalSkor),
         tingkat: "departmen",

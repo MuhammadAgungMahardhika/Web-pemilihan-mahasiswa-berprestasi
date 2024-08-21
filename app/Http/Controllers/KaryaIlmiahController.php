@@ -20,11 +20,17 @@ class KaryaIlmiahController extends Controller
         'dokumen_url.required' => 'Dokumen harus di upload',
     ];
 
-    // Method untuk DataTables API
-    public function getKaryaIlmiahData(): JsonResponse
+    public function getKaryaIlmiahDataByFakultas($idFakultas): JsonResponse
     {
         try {
-            $karyaIlmiah = KaryaIlmiah::get();
+            $periode = session('portal')->periode;
+
+            $karyaIlmiah = KaryaIlmiah::whereHas('mahasiswa.departmen', function ($query) use ($idFakultas) {
+                $query->where('id_fakultas', $idFakultas);
+            })->where('periode', $periode)
+                ->with(['mahasiswa.departmen', 'penilaian_karya_ilmiah'])
+                ->get();
+
             return DataTables::of($karyaIlmiah)
                 ->make(true);
         } catch (Exception $e) {
@@ -34,16 +40,16 @@ class KaryaIlmiahController extends Controller
             ], 404);
         }
     }
-    public function getKaryaIlmiahDataByFakultas($idFakultas): JsonResponse
+    public function getKaryaIlmiahDataByUniversitas(): JsonResponse
     {
         try {
             $periode = session('portal')->periode;
-            $karyaIlmiah = KaryaIlmiah::whereHas('mahasiswa.departmen', function ($query) use ($idFakultas) {
-                $query->where('id_fakultas', $idFakultas);
-            })
-                ->with(['mahasiswa.departmen'])
-                ->where('periode', $periode)
+
+            $karyaIlmiah = KaryaIlmiah::where('periode', $periode)
+                ->with(['mahasiswa.departmen', 'penilaian_karya_ilmiah'])
                 ->get();
+
+
             return DataTables::of($karyaIlmiah)
                 ->make(true);
         } catch (Exception $e) {
@@ -89,7 +95,7 @@ class KaryaIlmiahController extends Controller
             if ($folderId) {
                 $temporary = new TemporaryFileController();
                 $fileUrl = $temporary->moveToPermanentPath($folderId, "karya_ilmiah");
-                $request->merge(['dokumen_url' => $fileUrl, 'status' => 'pending']);
+                $request->merge(['dokumen_url' => $fileUrl]);
             }
             $request->merge([
                 'created_by' => Auth::user()->id
@@ -112,7 +118,7 @@ class KaryaIlmiahController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $karyaIlmiah = KaryaIlmiah::findOrFail($id);
+            $karyaIlmiah = KaryaIlmiah::with(['penilaian_karya_ilmiah'])->findOrFail($id);
             return response()->json([
                 'data' => $karyaIlmiah
             ]);
@@ -164,49 +170,83 @@ class KaryaIlmiahController extends Controller
             ], 500);
         }
     }
-
-    public function changeStatus(Request $request, $id)
+    public function reviewKaryaIlmiahTingkatFakultas(Request $request, $id)
     {
         try {
             $request->validate([
-                'status' => 'required|in:ditolak,diterima',
-                'skor_fakultas' => 'required_if:status,diterima|numeric'
+                'skor_fakultas' => 'required',
             ], $this->message);
+            $userId = Auth::user()->id;
 
-            $status = $request->status;
-            $skor_fakultas = $request->skor_fakultas;
-            $idUser = Auth::user()->id;
-            DB::beginTransaction();
-            $karyaIlmiah = KaryaIlmiah::findOrFail($id);
-            $karyaIlmiah->status =  $status;
-            $karyaIlmiah->updated_by =  $idUser;
-            $karyaIlmiah->save();
+            $karyaIlmiah = PenilaianKaryaIlmiah::where('id_karya_ilmiah', $id)
+                ->where('id_user', $userId)
+                ->first();
 
-            if ($status == "diterima" && $skor_fakultas) {
-                PenilaianKaryaIlmiah::updateOrCreate([
-                    'id_karya_ilmiah' => $karyaIlmiah->id,
-                    'id_user' => $idUser,
-                    'skor_fakultas' => $skor_fakultas
+            // Jika record ada, update; jika tidak ada, create
+            if ($karyaIlmiah) {
+                $karyaIlmiah->update([
+                    'skor_fakultas' => $request->skor_fakultas,
+                    'updated_by' => $userId,
                 ]);
-            } else if ($status == "ditolak") {
-                $penilaianKaryaIlmiah = PenilaianKaryaIlmiah::where('id_karya_ilmiah', $karyaIlmiah->id)->where('id_user', $idUser)->first();
-                if ($penilaianKaryaIlmiah) {
-                    $penilaianKaryaIlmiah->delete();
-                }
+            } else {
+                $karyaIlmiah = PenilaianKaryaIlmiah::create([
+                    'id_karya_ilmiah' => $id,
+                    'id_user' => $userId,
+                    'skor_fakultas' => $request->skor_fakultas,
+                    'created_by' => $userId,
+                ]);
             }
-            DB::commit();
             return response()->json([
-                'message' => 'Berhasil mengubah status karya ilmiah',
+                'message' => 'Berhasil melakukan penilaian karya ilmiah',
                 'data' => $karyaIlmiah
             ]);
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-                'message' => 'Gagal mengubah status karya ilmiah',
+                'message' => 'Gagal melakukan penilaian karya ilmiah',
                 'data' => $e->getMessage()
             ], 500);
         }
     }
+    public function reviewKaryaIlmiahTingkatUniversitas(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'skor_universitas' => 'required',
+            ], $this->message);
+            $userId = Auth::user()->id;
+
+            $karyaIlmiah = PenilaianKaryaIlmiah::where('id_karya_ilmiah', $id)
+                ->where('id_user', $userId)
+                ->first();
+
+            // Jika record ada, update; jika tidak ada, create
+            if ($karyaIlmiah) {
+                $karyaIlmiah->update([
+                    'skor_universitas' => $request->skor_universitas,
+                    'updated_by' => $userId,
+                ]);
+            } else {
+                $karyaIlmiah = PenilaianKaryaIlmiah::create([
+                    'id_karya_ilmiah' => $id,
+                    'id_user' => $userId,
+                    'skor_universitas' => $request->skor_universitas,
+                    'created_by' => $userId,
+                ]);
+            }
+            return response()->json([
+                'message' => 'Berhasil melakukan penilaian karya ilmiah',
+                'data' => $karyaIlmiah
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Gagal melakukan penilaian karya ilmiah',
+                'data' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function destroy($id): JsonResponse
     {

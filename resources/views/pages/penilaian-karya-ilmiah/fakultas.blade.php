@@ -65,7 +65,8 @@
     <script>
         const periode = '{{ session('portal')->periode }}'
         const idFakultas = '{{ Auth::user()->id_fakultas }}'
+        const userId = parseInt('{{ Auth::user()->id }}')
     </script>
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/verifikasi_karya_ilmiah_fakultas.js') }}"></script>
+    <script src="{{ asset('assets/app/penilaian_karya_ilmiah_fakultas.js') }}"></script>
 @endsection

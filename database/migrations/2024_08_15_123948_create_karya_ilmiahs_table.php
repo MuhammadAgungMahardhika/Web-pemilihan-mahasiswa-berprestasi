@@ -17,7 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_mahasiswa')->unique();
             $table->string('judul');
             $table->string('dokumen_url');
-            $table->enum('status', ['pending', 'ditolak', 'diterima'])->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

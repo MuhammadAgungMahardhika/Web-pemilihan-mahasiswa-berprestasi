@@ -42,6 +42,16 @@ class AuthenticatedSessionController extends Controller
             session(['portal' => $activePortal]);
         }
     }
+
+    public function refreshPortalSession()
+    {
+        $activePortal = Portal::orderBy('id', 'desc')->first();
+
+        // Simpan data portal di session
+        if ($activePortal) {
+            session(['portal' => $activePortal]);
+        }
+    }
     private function storeDepartmenOrFakultasSession()
     {
         $user = Auth::user();

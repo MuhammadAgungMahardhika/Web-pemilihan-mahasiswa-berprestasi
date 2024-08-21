@@ -25,17 +25,24 @@ function showData() {
                 searchable: false,
             },
             {
-                data: "mahasiswa.nim",
-                name: "mahasiswa.nim",
+                data: "nama_departmen",
+                name: "nama_departmen",
                 orderable: true,
                 searchable: true,
             },
             {
-                data: "mahasiswa.nama",
-                name: "mahasiswa.nama",
+                data: "nim_mahasiswa",
+                name: "nim_mahasiswa",
                 orderable: true,
                 searchable: true,
             },
+            {
+                data: "nama_mahasiswa",
+                name: "nama_mahasiswa",
+                orderable: true,
+                searchable: true,
+            },
+
             {
                 data: "total_skor",
                 name: "total_skor",
@@ -49,26 +56,20 @@ function showData() {
                 searchable: true,
             },
             {
-                data: "portal.periode",
-                name: "portal.periode",
-                orderable: true,
-                searchable: true,
-            },
-            {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
                     return `
                         <div class="row g-2 text-center">
                             <div class="col">
-                                <a onclick="deleteModal('${row.id}','${row.mahasiswa.nama}')" class="btn btn-danger btn-sm"><i class="fa fa-x"></i> </a>
+                                <a onclick="deleteModal('${row.id}','${row.nama_mahasiswa}')" class="btn btn-danger btn-sm"><i class="fa fa-x"></i> </a>
                             </div>
                         </div>
                     `;
                 },
             },
         ],
-        order: [[0, "desc"]],
+        order: [[4, "desc"]],
     });
 }
 

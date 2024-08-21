@@ -13,7 +13,6 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -22,10 +21,14 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nim</th>
-                                    <th>Nama Mahasiswa</th>
-                                    <th>Total Skor</th>
-                                    <th>Tanggal Diutus</th>
-                                    <th>Periode</th>
+                                    <th>Nama</th>
+                                    <th>Fakultas</th>
+                                    <th>Departemen</th>
+                                    <th>Ipk</th>
+                                    <th>Karya Ilmiah (a)</th>
+                                    <th>Bahasa Inggris (b)</th>
+                                    <th>Dokumen Prestasi (c)</th>
+                                    <th>Total Skor (a+b+c)</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -38,9 +41,7 @@
             </div>
         </section>
     </div>
-    <script>
-        const idFakultas = '{{ Auth::user()->id_fakultas }}'
-    </script>
+
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/utusan_fakultas.js') }}"></script>
+    <script src="{{ asset('assets/app/ranking_universitas.js') }}"></script>
 @endsection

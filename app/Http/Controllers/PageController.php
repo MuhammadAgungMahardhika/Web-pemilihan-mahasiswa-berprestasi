@@ -20,59 +20,9 @@ class PageController extends Controller
         $userRole = Auth::user()->role->nama;
 
         if ($userRole == "mahasiswa") {
-
-            $mahasiswaId = Auth::user()->id_mahasiswa;
-            $waitingDocument =  DokumenPrestasi::where('status', 'pending')
-                ->where('id_mahasiswa', $mahasiswaId)->count();
-            $acceptedDocument = DokumenPrestasi::where('status', 'diterima')
-                ->where('id_mahasiswa', $mahasiswaId)->count();
-            $abortedDocumentt = DokumenPrestasi::where('status', 'ditolak')
-                ->where('id_mahasiswa', $mahasiswaId)->count();
-            $send['menunggu'] = $waitingDocument;
-            $send['diterima'] = $acceptedDocument;
-            $send['ditolak'] = $abortedDocumentt;
         } else if ($userRole == "admin_departmen") {
-            $departmenId = Auth::user()->id_departmen;
-            $documentCounts =
-                DokumenPrestasi::join('mahasiswas', 'dokumen_prestasis.id_mahasiswa', '=', 'mahasiswas.id')
-                ->where('mahasiswas.id_departmen', $departmenId)
-                ->selectRaw('
-                SUM(CASE WHEN dokumen_prestasis.status = "pending" THEN 1 ELSE 0 END) as menunggu,
-                SUM(CASE WHEN dokumen_prestasis.status = "diterima" THEN 1 ELSE 0 END) as diterima,
-                SUM(CASE WHEN dokumen_prestasis.status = "ditolak" THEN 1 ELSE 0 END) as ditolak')
-                ->first();
-
-            // Menghitung jumlah mahasiswa
-            $mahasiswaCount = Mahasiswa::where('id_departmen', $departmenId)->count();
-
-            $send['menunggu'] = $documentCounts->menunggu ?? 0;
-            $send['diterima'] = $documentCounts->diterima ?? 0;
-            $send['ditolak'] = $documentCounts->ditolak ?? 0;
-            $send['mahasiswa'] = $mahasiswaCount ?? 0;
-            $send['utusan'] = Utusan::join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
-                ->where('mahasiswas.id_departmen', $departmenId)
-                ->where('utusans.periode', session('portal')->periode)
-                ->count();
         } else if ($userRole == "admin_fakultas") {
-            $fakultasId = Auth::user()->id_fakultas;
-            $send['admin_departmen']  = User::join('departmens', 'users.id_departmen', '=', 'departmens.id')
-                ->where('departmens.id_fakultas', $fakultasId)
-                ->where('users.id_role', 2)
-                ->count();
-            $send['utusan_fakultas'] = Utusan::join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
-                ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
-                ->where('departmens.id_fakultas', $fakultasId) // Membatasi hanya pada fakultas tertentu
-                ->where('utusans.tingkat', 'fakultas') // Membatasi hanya pada tingkat fakultas
-                ->where('utusans.periode', session('portal')->periode)
-                ->count();
         } else if ($userRole == "admin_universitas") {
-            $adminFakultas =  User::where('id_fakultas', '!=', null)
-                ->where('id_role', 3)
-                ->count();
-            $send['admin_fakultas'] = $adminFakultas;
-            // $send['utusan_kampus'] = Utusan::where('utusans.tingkat', 'universitas')
-            //     ->where('utusans.periode', session('portal')->periode)
-            //     ->count();
         }
 
         return view('pages.dashboard.index', $send);
@@ -109,7 +59,7 @@ class PageController extends Controller
     {
         $periode = session('portal')->periode;
         $idMahasiswa = Auth::user()->id_mahasiswa;
-        $data = KaryaIlmiah::with('user')
+        $data = KaryaIlmiah::with(['user', 'penilaian_karya_ilmiah'])
             ->where('id_mahasiswa', $idMahasiswa)
             ->where('periode', $periode)
             ->first();
@@ -176,33 +126,28 @@ class PageController extends Controller
         ];
         return view('pages.departmen.index', $send);
     }
-    public function verifikasiDokumen()
+    public function verifikasiDokumenByMahasiswa($idMahasiswa)
     {
+        $mahasiswa = Mahasiswa::findOrFail($idMahasiswa);
         $send = [
-            'title' => "Verifikasi Dokumen"
+            'title' => "Verifikasi Dokumen",
+            'data' =>  $mahasiswa
         ];
         return view('pages.verifikasi-dokumen.index', $send);
     }
-    public function verifikasiKaryaIlmiahFakultas()
+    public function penilaianKaryaIlmiahFakultas()
     {
         $send = [
-            'title' => "Verifikasi Karya Ilmiah"
+            'title' => "Penilaian Karya Ilmiah"
         ];
-        return view('pages.verifikasi-karya-ilmiah.index-fakultas', $send);
+        return view('pages.penilaian-karya-ilmiah.fakultas', $send);
     }
-    public function juriUniversitas()
+    public function penilaianKaryaIlmiahUniversitas()
     {
         $send = [
-            'title' => "Juri Universitas"
+            'title' => "Penilaian Karya Ilmiah"
         ];
-        return view('pages.juri-universitas.index', $send);
-    }
-    public function adminFakultas()
-    {
-        $send = [
-            'title' => "Admin Fakultas"
-        ];
-        return view('pages.admin-fakultas.index', $send);
+        return view('pages.penilaian-karya-ilmiah.universitas', $send);
     }
 
     public function juriFakultas()
@@ -210,35 +155,53 @@ class PageController extends Controller
         $send = [
             'title' => "Juri Fakultas"
         ];
-        return view('pages.juri-fakultas.index', $send);
+        return view('pages.juri.fakultas', $send);
     }
+    public function juriUniversitas()
+    {
+        $send = [
+            'title' => "Juri Universitas"
+        ];
+        return view('pages.juri.universitas', $send);
+    }
+
+
     public function adminDepartmen()
     {
         $send = [
             'title' => "Admin Departemen"
         ];
-        return view('pages.admin-departmen.index', $send);
+        return view('pages.admin.departmen', $send);
     }
+    public function adminFakultas()
+    {
+        $send = [
+            'title' => "Admin Fakultas"
+        ];
+        return view('pages.admin.fakultas', $send);
+    }
+
+
     public function utusanDepartmen()
     {
         $send = [
             'title' => "Utusan Departemen"
         ];
-        return view('pages.utusan-departmen.index', $send);
+        return view('pages.utusan.departmen', $send);
     }
     public function utusanFakultas()
     {
         $send = [
             'title' => "Utusan Fakultas"
         ];
-        return view('pages.utusan-fakultas.index', $send);
+        return view('pages.utusan.fakultas', $send);
     }
     public function utusanUniversitas()
     {
         $send = [
             'title' => "Utusan Universitas"
         ];
-        return view('pages.utusan-universitas.index', $send);
+        return view('pages.utusan.universitas', $send);
     }
 
     public function rankingDepartmen()
@@ -246,20 +209,20 @@ class PageController extends Controller
         $send = [
             'title' => "Ranking Departemen"
         ];
-        return view('pages.ranking-departmen.index', $send);
+        return view('pages.ranking.departmen', $send);
     }
     public function rankingFakultas()
     {
         $send = [
             'title' => "Ranking Fakultas"
         ];
-        return view('pages.ranking-fakultas.index', $send);
+        return view('pages.ranking.fakultas', $send);
     }
     public function rankingUniversitas()
     {
         $send = [
             'title' => "Ranking Universitas"
         ];
-        return view('pages.ranking-universitas.index', $send);
+        return view('pages.ranking.universitas', $send);
     }
 }

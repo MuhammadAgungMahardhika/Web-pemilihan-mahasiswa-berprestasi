@@ -77,6 +77,10 @@
                 @role('juri_fakultas')
                     @include('menu.juri-fakultas')
                 @endrole
+
+                @role('juri_universitas')
+                    @include('menu.juri-universitas')
+                @endrole
                 {{-- <li class="sidebar-title">Forms &amp; Tables</li> --}}
 
             </ul>

@@ -39,7 +39,7 @@
 </head>
 
 <body class="light">
-    <script src="assets/static/js/initTheme.js"></script>
+    <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
     <div id="app">
         @include('components.large-modal')
         @include('components.normal-modal')

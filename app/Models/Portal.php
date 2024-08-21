@@ -9,9 +9,4 @@ class Portal extends Model
 {
     use HasFactory;
     protected $guarded = [];
-
-    public function utusan()
-    {
-        return $this->hasMany(Utusan::class, 'id_portal');
-    }
 }

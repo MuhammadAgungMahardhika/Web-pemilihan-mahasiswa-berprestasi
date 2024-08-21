@@ -25,18 +25,6 @@ function showData() {
                 searchable: false,
             },
             {
-                data: "nim_mahasiswa",
-                name: "nim_mahasiswa",
-                orderable: true,
-                searchable: true,
-            },
-            {
-                data: "nama_mahasiswa",
-                name: "nama_mahasiswa",
-                orderable: true,
-                searchable: true,
-            },
-            {
                 data: "nama_fakultas",
                 name: "nama_fakultas",
                 orderable: true,
@@ -48,6 +36,19 @@ function showData() {
                 orderable: true,
                 searchable: true,
             },
+            {
+                data: "nim_mahasiswa",
+                name: "nim_mahasiswa",
+                orderable: true,
+                searchable: true,
+            },
+            {
+                data: "nama_mahasiswa",
+                name: "nama_mahasiswa",
+                orderable: true,
+                searchable: true,
+            },
+
             {
                 data: "total_skor",
                 name: "total_skor",
