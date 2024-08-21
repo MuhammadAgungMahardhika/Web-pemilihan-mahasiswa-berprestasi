@@ -83,7 +83,6 @@ function save(idMahasiswa, totalSkor) {
     let data = {
         periode: periode,
         id_mahasiswa: idMahasiswa,
-        total_skor: parseInt(totalSkor),
         tingkat: "departmen",
     };
 

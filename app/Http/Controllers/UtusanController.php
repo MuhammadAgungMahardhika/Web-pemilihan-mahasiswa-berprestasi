@@ -37,12 +37,16 @@ class UtusanController extends Controller
     {
         try {
 
-            $utusan = Utusan::with(['mahasiswa', 'portal'])
-                ->whereHas('mahasiswa', function ($query) use ($idDepartmen) {
-                    $query->where('id_departmen', $idDepartmen);
-                })
-                ->where('tingkat', 'departmen')
-                ->where('periode', session('portal')->periode)
+            $periode = session('portal')->periode;
+            $utusan =  Utusan::with(['mahasiswa', 'portal'])
+                ->select('utusans.*', DB::raw('SUM(capaian_unggulans.skor) as total_skor'))
+                ->join('mahasiswas', 'mahasiswas.id', '=', 'utusans.id_mahasiswa')
+                ->join('dokumen_prestasis', 'dokumen_prestasis.id_mahasiswa', '=', 'mahasiswas.id')
+                ->join('capaian_unggulans', 'capaian_unggulans.id', '=', 'dokumen_prestasis.id_capaian_unggulan')
+                ->where('mahasiswas.id_departmen', $idDepartmen)
+                ->where('utusans.tingkat', 'departmen')
+                ->where('utusans.periode', $periode)
+                ->groupBy('utusans.id')
                 ->get();
             return DataTables::of($utusan)
                 ->make(true);

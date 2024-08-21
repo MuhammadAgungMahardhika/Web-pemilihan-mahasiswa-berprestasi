@@ -37,7 +37,7 @@ function showData() {
                 searchable: true,
             },
             {
-                data: "total_skor",
+                data: "total_skor", // Menampilkan total skor
                 name: "total_skor",
                 orderable: true,
                 searchable: true,
