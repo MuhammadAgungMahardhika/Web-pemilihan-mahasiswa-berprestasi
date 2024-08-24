@@ -25,14 +25,14 @@ function showData() {
                 searchable: false,
             },
             {
-                data: "mahasiswa.nim",
-                name: "mahasiswa.nim",
+                data: "nim_mahasiswa",
+                name: "nim_mahasiswa",
                 orderable: true,
                 searchable: true,
             },
             {
-                data: "mahasiswa.nama",
-                name: "mahasiswa.nama",
+                data: "nama_mahasiswa",
+                name: "nama_mahasiswa",
                 orderable: true,
                 searchable: true,
             },
@@ -55,7 +55,7 @@ function showData() {
                     return `
                         <div class="row g-2 text-center">
                             <div class="col">
-                                <a onclick="deleteModal('${row.id}','${row.mahasiswa.nama}')" class="btn btn-danger btn-sm"><i class="fa fa-x"></i> </a>
+                                <a onclick="deleteModal('${row.id}','${row.nama_mahasiswa}')" class="btn btn-danger btn-sm"><i class="fa fa-x"></i> </a>
                             </div>
                         </div>
                     `;
