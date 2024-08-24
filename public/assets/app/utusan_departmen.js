@@ -73,9 +73,9 @@ function reloadData() {
 }
 
 function deleteModal(id, nama) {
-    const modalHeader = "Batalkan Utusan";
+    const modalHeader = "Pembatalan Utusan Departemen";
     const modalBody = `Apakah Anda Yakin Menghapus (${nama}) dari Utusan Departemen ?`;
-    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Batalkan</a>`;
+    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Iya, batalkan utusan</a>`;
     showModal(modalHeader, modalBody, modalFooter);
 }
 

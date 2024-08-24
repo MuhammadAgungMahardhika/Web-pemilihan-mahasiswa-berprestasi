@@ -203,7 +203,7 @@ function editModal(id) {
 function deleteModal(id) {
     const modalHeader = "Hapus Data Bahasa Inggris";
     const modalBody = `Apakah Anda Yakin Menghapus Data Ini?`;
-    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Hapus</a>`;
+    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Iya, Hapus</a>`;
     showModal(modalHeader, modalBody, modalFooter);
 }
 

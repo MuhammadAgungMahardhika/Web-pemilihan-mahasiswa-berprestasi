@@ -171,7 +171,7 @@ function editModal(id) {
 function deleteModal(id, periode) {
     const modalHeader = "Hapus Portal";
     const modalBody = `Apakah Anda Yakin Menghapus Periode ${periode} Ini?`;
-    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Hapus</a>`;
+    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Iya, Hapus</a>`;
     showModal(modalHeader, modalBody, modalFooter);
 }
 

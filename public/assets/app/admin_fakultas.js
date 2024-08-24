@@ -264,9 +264,9 @@ function editModal(id) {
 }
 
 function deleteModal(id, name) {
-    const modalHeader = "Delete User";
-    const modalBody = `Are you sure you want to delete user ${name}?`;
-    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Delete</a>`;
+    const modalHeader = "Hapus Admin Fakultas";
+    const modalBody = `Apakah anda yakin ingin menghapus pengguna (${name}) ini?`;
+    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Iya, hapus</a>`;
     showModal(modalHeader, modalBody, modalFooter);
 }
 

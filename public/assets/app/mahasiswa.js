@@ -356,7 +356,7 @@ function editModal(id) {
 function deleteModal(id, nama) {
     const modalHeader = "Hapus Mahasiswa";
     const modalBody = `Apakah Anda Yakin Menghapus Mahasiswa ${nama} Ini?`;
-    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Hapus</a>`;
+    const modalFooter = `<a class="btn btn-danger btn-lg" onclick="deleteItem('${id}')">Iya, Hapus</a>`;
     showModal(modalHeader, modalBody, modalFooter);
 }
 
