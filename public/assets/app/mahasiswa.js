@@ -153,6 +153,9 @@ function addModal() {
     const modalBody = `
         <form class="form form-horizontal">
             <div class="form-body"> 
+                <div class="row mb-2">
+                    <label for="nim"> <i class="text-danger">*</i> Akun Mahasiswa Otomatis dibuatkan, Username Berdasarkan Nim dan Password Default 12345678 </label>
+                </div>
                 <div class="row">
                     <div class="col-4 form-group">
                         <label for="nik">NIK </label>

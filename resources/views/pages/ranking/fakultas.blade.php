@@ -13,9 +13,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <p class=" p-2"><i class="text-danger">*</i> Ranking yang muncul adalah Mahasiswa yang
-                        sudah dinilai ( <i class="text-success fw-bold">Karya Ilmiah, Bahasa Inggris, Dokumen Prestasi</i>
-                        )</p>
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
