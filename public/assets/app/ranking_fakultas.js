@@ -80,6 +80,7 @@ function showData() {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
+                    console.log(row)
                     return `
                         <div class="row g-2 text-center">
                             <div class="col">
