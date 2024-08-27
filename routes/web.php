@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dokumen-prestasi', [PageController::class, 'dokumenPrestasi']);
         Route::get('/bahasa-inggris', [PageController::class, 'bahasaInggris']);
         Route::get('/uji-bahasa-inggris', [PageController::class, 'ujiBahasaInggris']);
+        Route::get('/uji-bahasa-inggris-universitas', [PageController::class, 'ujiBahasaInggrisUniversitas']);
         Route::get('/karya-ilmiah', [PageController::class, 'karyaIlmiah']);
         Route::get('/ranking-departmen', [PageController::class, 'rankingDepartmen']);
         Route::get('/ranking-fakultas', [PageController::class, 'rankingFakultas']);

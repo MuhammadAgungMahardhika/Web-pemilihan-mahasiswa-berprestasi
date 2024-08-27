@@ -213,7 +213,9 @@ function selectCapaianUnggulan(capaianUnggulanId = null) {
                     capaianUnggulanId != null && capaianUnggulanId == r.id
                         ? "selected"
                         : ""
-                }>${r.nama}</option>`;
+                }>${r.nama} | ${r.kategori.nama + r.kategori.jenis} | ${
+                    r.bidang.nama
+                }</option>`;
             });
             $("#id_capaian_unggulan").html(dataOption);
         },

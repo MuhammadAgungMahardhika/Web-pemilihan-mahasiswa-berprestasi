@@ -11,6 +11,7 @@ use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\KaryaIlmiahController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UtusanController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\UtusanController;
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('print/mahasiswa/{id}', [PDFController::class, 'generatePDF']);
 Route::middleware(['auth'])->group(function () {
     // route untuk datatable
     Route::get('portal/data', [PortalController::class, 'getPortalData']);
@@ -80,8 +82,8 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('karya-ilmiah/review-universitas/{id}', [KaryaIlmiahController::class, 'reviewKaryaIlmiahTingkatUniversitas']);
         Route::apiResource('karya-ilmiah', KaryaIlmiahController::class);
 
-        Route::get('bahasa-inggris/data', [BahasaInggrisController::class, 'getBahasaInggrisData']);
         Route::get('bahasa-inggris/fakultas/data', [BahasaInggrisController::class, 'getBahasaInggrisDataByFakultas']);
+        Route::get('bahasa-inggris/universitas/data', [BahasaInggrisController::class, 'getBahasaInggrisDataByUniversitas']);
         Route::apiResource('bahasa-inggris', BahasaInggrisController::class);
 
         Route::get('utusan/data', [UtusanController::class, 'getUtusanData']);
@@ -89,6 +91,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('utusan/fakultas/{id}', [UtusanController::class, 'getUtusanDataByFakultas']);
         Route::get('utusan/departmen/{id}', [UtusanController::class, 'getUtusanDataByDepartmen']);
         Route::patch('utusan/tingkat/{id}', [UtusanController::class, 'updateTingkat']);
+
         Route::apiResource('utusan', UtusanController::class);
     });
 });

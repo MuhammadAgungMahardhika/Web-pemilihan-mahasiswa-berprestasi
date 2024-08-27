@@ -18,6 +18,9 @@ return new class extends Migration
             $table->float('listening');
             $table->float('speaking');
             $table->float('writing');
+            $table->float('listening_universitas')->nullable();
+            $table->float('speaking_universitas')->nullable();
+            $table->float('writing_universitas')->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

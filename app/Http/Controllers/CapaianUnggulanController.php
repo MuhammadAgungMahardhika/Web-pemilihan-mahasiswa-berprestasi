@@ -41,7 +41,7 @@ class CapaianUnggulanController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $capaianUnggulan = CapaianUnggulan::all();
+            $capaianUnggulan = CapaianUnggulan::with('kategori', 'bidang')->get();
             return response()->json([
                 'data' => $capaianUnggulan
             ]);

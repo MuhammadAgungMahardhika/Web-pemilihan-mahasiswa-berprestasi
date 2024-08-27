@@ -20,6 +20,9 @@ class BahasaInggrisController extends Controller
         'speaking.numeric' => 'Nilai speaking harus berupa angka.',
         'writing.required' => 'Nilai writing harus diisi.',
         'writing.numeric' => 'Nilai writing harus berupa angka.',
+        'listening_universitas.numeric' => 'Nilai listening harus berupa angka.',
+        'speaking_universitas.numeric' => 'Nilai speaking harus berupa angka.',
+        'writing_universitas.numeric' => 'Nilai writing harus berupa angka.',
         'id_mahasiswa.unique' => 'Mahasiswa sudah pernah di uji, hapus jika ingin pengujian ulang',
     ];
 
@@ -32,6 +35,23 @@ class BahasaInggrisController extends Controller
                 $query->where('id_fakultas', $idFakultas);
             })
                 ->with(['mahasiswa.departmen'])
+                ->where('periode', $periode)
+                ->get();
+            return DataTables::of($bahasaInggris)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data Bahasa Inggris tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+    public function getBahasaInggrisDataByUniversitas(): JsonResponse
+    {
+        try {
+            $periode = session('portal')->periode;
+            $idFakultas = Auth::user()->id_fakultas;
+            $bahasaInggris = BahasaInggris::with(['mahasiswa.departmen', 'mahasiswa.departmen.fakultas'])
                 ->where('periode', $periode)
                 ->get();
             return DataTables::of($bahasaInggris)
@@ -120,9 +140,12 @@ class BahasaInggrisController extends Controller
             $request->validate([
                 'periode' => 'required|string|min:4|max:4',
                 'id_mahasiswa' => 'required|integer|unique:bahasa_inggris,id_mahasiswa,' . $id,
-                'listening' => 'required|numeric',
-                'speaking' => 'required|numeric',
-                'writing' => 'required|numeric',
+                'listening' => 'nullable|numeric',
+                'speaking' => 'nullable|numeric',
+                'writing' => 'nullable|numeric',
+                'listening_universitas' => 'nullable|numeric',
+                'speaking_universitas' => 'nullable|numeric',
+                'writing_universitas' => 'nullable|numeric',
             ], $this->message);
 
             DB::beginTransaction();

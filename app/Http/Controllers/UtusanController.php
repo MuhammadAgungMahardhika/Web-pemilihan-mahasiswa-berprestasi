@@ -154,11 +154,11 @@ class UtusanController extends Controller
                 'fakultas.nama_fakultas as nama_fakultas',
                 'departmens.nama_departmen as nama_departmen',
                 DB::raw('IFNULL(subqueryKaryaIlmiah.rata_rata_universitas, 0) as karya_ilmiah_skor'),
-                DB::raw('ROUND(IFNULL(bahasa_inggris.listening, 0) + IFNULL(bahasa_inggris.speaking, 0) + IFNULL(bahasa_inggris.writing, 0), 2) as bahasa_inggris_skor'),
+                DB::raw('ROUND(IFNULL(bahasa_inggris.listening_universitas, 0) + IFNULL(bahasa_inggris.speaking_universitas, 0) + IFNULL(bahasa_inggris.writing_universitas, 0), 2) as bahasa_inggris_skor'),
                 DB::raw('IFNULL(SUM(capaian_unggulans.skor), 0) as dokumen_prestasi_skor'),
                 DB::raw('ROUND(
                     IFNULL(subqueryKaryaIlmiah.rata_rata_universitas, 0) +
-                    IFNULL(bahasa_inggris.listening, 0) + IFNULL(bahasa_inggris.speaking, 0) + IFNULL(bahasa_inggris.writing, 0) +
+                    IFNULL(bahasa_inggris.listening_universitas, 0) + IFNULL(bahasa_inggris.speaking_universitas, 0) + IFNULL(bahasa_inggris.writing_universitas, 0) +
                     IFNULL(SUM(capaian_unggulans.skor), 0), 2) as total_skor')
             )
                 ->join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
@@ -184,9 +184,9 @@ class UtusanController extends Controller
                     'fakultas.nama_fakultas',
                     'departmens.nama_departmen',
                     'subqueryKaryaIlmiah.rata_rata_universitas',
-                    'bahasa_inggris.listening',
-                    'bahasa_inggris.speaking',
-                    'bahasa_inggris.writing'
+                    'bahasa_inggris.listening_universitas',
+                    'bahasa_inggris.speaking_universitas',
+                    'bahasa_inggris.writing_universitas'
                 )
                 ->get();
 

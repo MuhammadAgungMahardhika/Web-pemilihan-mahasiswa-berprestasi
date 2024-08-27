@@ -53,7 +53,15 @@ class PageController extends Controller
         $send = [
             'title' => "Uji Bahasa Inggris"
         ];
-        return view('pages.uji-bahasa-inggris.index', $send);
+        return view('pages.uji-bahasa-inggris.fakultas', $send);
+    }
+
+    public function ujiBahasaInggrisUniversitas()
+    {
+        $send = [
+            'title' => "Uji Bahasa Inggris"
+        ];
+        return view('pages.uji-bahasa-inggris.universitas', $send);
     }
     public function karyaIlmiah()
     {

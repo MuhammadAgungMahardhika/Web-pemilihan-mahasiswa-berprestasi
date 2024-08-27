@@ -74,56 +74,56 @@ class MahasiswaController extends Controller
         try {
             $periode = session('portal')->periode;
             $subqueryKaryaIlmiah = DB::table('penilaian_karya_ilmiahs')
-            ->select('id_karya_ilmiah', DB::raw('AVG(skor_fakultas) as rata_rata_skor_fakultas'))
-            ->groupBy('id_karya_ilmiah');
-        
-        $mahasiswa = DB::table('mahasiswas as m')
-            ->leftJoin('karya_ilmiahs as k', 'm.id', '=', 'k.id_mahasiswa')
-            ->leftJoinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
-                $join->on('k.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
-            })
-            ->leftJoin('bahasa_inggris as bi', 'm.id', '=', 'bi.id_mahasiswa')
-            ->leftJoin('dokumen_prestasis as dp', 'm.id', '=', 'dp.id_mahasiswa')
-            ->leftJoin('capaian_unggulans as cu', 'dp.id_capaian_unggulan', '=', 'cu.id')
-            ->leftJoin('departmens as d', 'm.id_departmen', '=', 'd.id')
-            ->leftJoin('utusans as u', 'm.id', '=', 'u.id_mahasiswa')
-            ->select(
-                'm.id',
-                'm.nim',
-                'm.nama',
-                'm.ipk',
-                'd.nama_departmen',
-                'u.id as id_utusan',
-                DB::raw('IFNULL(subqueryKaryaIlmiah.rata_rata_skor_fakultas, 0) as karya_ilmiah_skor'),
-                DB::raw('ROUND(IFNULL(bi.listening, 0) + IFNULL(bi.speaking, 0) + IFNULL(bi.writing, 0), 2) as bahasa_inggris_skor'),
-                DB::raw('IFNULL(SUM(cu.skor), 0) as dokumen_prestasi_skor'),
-                DB::raw('ROUND(
+                ->select('id_karya_ilmiah', DB::raw('AVG(skor_fakultas) as rata_rata_skor_fakultas'))
+                ->groupBy('id_karya_ilmiah');
+
+            $mahasiswa = DB::table('mahasiswas as m')
+                ->leftJoin('karya_ilmiahs as k', 'm.id', '=', 'k.id_mahasiswa')
+                ->leftJoinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
+                    $join->on('k.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
+                })
+                ->leftJoin('bahasa_inggris as bi', 'm.id', '=', 'bi.id_mahasiswa')
+                ->leftJoin('dokumen_prestasis as dp', 'm.id', '=', 'dp.id_mahasiswa')
+                ->leftJoin('capaian_unggulans as cu', 'dp.id_capaian_unggulan', '=', 'cu.id')
+                ->leftJoin('departmens as d', 'm.id_departmen', '=', 'd.id')
+                ->leftJoin('utusans as u', 'm.id', '=', 'u.id_mahasiswa')
+                ->select(
+                    'm.id',
+                    'm.nim',
+                    'm.nama',
+                    'm.ipk',
+                    'd.nama_departmen',
+                    'u.id as id_utusan',
+                    DB::raw('IFNULL(subqueryKaryaIlmiah.rata_rata_skor_fakultas, 0) as karya_ilmiah_skor'),
+                    DB::raw('ROUND(IFNULL(bi.listening, 0) + IFNULL(bi.speaking, 0) + IFNULL(bi.writing, 0), 2) as bahasa_inggris_skor'),
+                    DB::raw('IFNULL(SUM(cu.skor), 0) as dokumen_prestasi_skor'),
+                    DB::raw('ROUND(
                     IFNULL(subqueryKaryaIlmiah.rata_rata_skor_fakultas, 0) +
                     IFNULL(bi.listening, 0) +
                     IFNULL(bi.speaking, 0) +
                     IFNULL(bi.writing, 0) +
                     IFNULL(SUM(cu.skor), 0),
                 2) as total_skor')
-            )
-            ->where('dp.status', '=', 'diterima')
-            ->where('dp.periode', '=', 2024)
-            ->where('d.id_fakultas', '=', 1)
-            ->where('u.tingkat', '=', 'departmen') // Sesuaikan dengan kondisi yang sesuai
-            ->groupBy(
-                'm.id',
-                'm.nim',
-                'm.nama',
-                'm.ipk',
-                'd.nama_departmen',
-                'u.id',
-                'subqueryKaryaIlmiah.rata_rata_skor_fakultas',
-                'bi.listening',
-                'bi.speaking',
-                'bi.writing'
-            )
-            ->get();
-        
-        
+                )
+                ->where('dp.status', '=', 'diterima')
+                ->where('dp.periode', '=', 2024)
+                ->where('d.id_fakultas', '=', 1)
+                ->where('u.tingkat', '=', 'departmen') // Sesuaikan dengan kondisi yang sesuai
+                ->groupBy(
+                    'm.id',
+                    'm.nim',
+                    'm.nama',
+                    'm.ipk',
+                    'd.nama_departmen',
+                    'u.id',
+                    'subqueryKaryaIlmiah.rata_rata_skor_fakultas',
+                    'bi.listening',
+                    'bi.speaking',
+                    'bi.writing'
+                )
+                ->get();
+
+
             return DataTables::of($mahasiswa)->make(true);
         } catch (Exception $e) {
             return response()->json([
@@ -139,59 +139,59 @@ class MahasiswaController extends Controller
         try {
             $periode = session('portal')->periode;
 
-           // Subquery to calculate the average score for each 'id_karya_ilmiah'
+            // Subquery to calculate the average score for each 'id_karya_ilmiah'
             $subqueryKaryaIlmiah = DB::table('penilaian_karya_ilmiahs')
-            ->select('id_karya_ilmiah', DB::raw('COALESCE(AVG(skor_universitas), 0) as rata_rata_skor_universitas'))
-            ->groupBy('id_karya_ilmiah');
+                ->select('id_karya_ilmiah', DB::raw('COALESCE(AVG(skor_universitas), 0) as rata_rata_skor_universitas'))
+                ->groupBy('id_karya_ilmiah');
 
             // Main query to fetch mahasiswa data with scores and total score calculation
             $mahasiswa = DB::table('mahasiswas as m')
-            ->leftJoin('karya_ilmiahs as k', 'm.id', '=', 'k.id_mahasiswa')
-            ->leftJoinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
-                $join->on('k.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
-            })
-            ->leftJoin('bahasa_inggris as bi', 'm.id', '=', 'bi.id_mahasiswa')
-            ->leftJoin('dokumen_prestasis as dp', 'm.id', '=', 'dp.id_mahasiswa')
-            ->leftJoin('capaian_unggulans as cu', 'dp.id_capaian_unggulan', '=', 'cu.id')
-            ->leftJoin('departmens as d', 'm.id_departmen', '=', 'd.id')
-            ->leftJoin('fakultas as f', 'd.id_fakultas', '=', 'f.id')
-            ->leftJoin('utusans as u', 'm.id', '=', 'u.id_mahasiswa')
-            ->select(
-                'm.id',
-                'm.nim',
-                'm.nama',
-                'm.ipk',
-                'f.nama_fakultas',
-                'd.nama_departmen',
-                'u.id as id_utusan',
-                DB::raw('IFNULL(subqueryKaryaIlmiah.rata_rata_skor_universitas, 0) as karya_ilmiah_skor'),
-                DB::raw('ROUND(IFNULL(bi.listening, 0) + IFNULL(bi.speaking, 0) + IFNULL(bi.writing, 0), 2) as bahasa_inggris_skor'),
-                DB::raw('IFNULL(SUM(cu.skor), 0) as dokumen_prestasi_skor'),
-                DB::raw('ROUND(
+                ->leftJoin('karya_ilmiahs as k', 'm.id', '=', 'k.id_mahasiswa')
+                ->leftJoinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
+                    $join->on('k.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
+                })
+                ->leftJoin('bahasa_inggris as bi', 'm.id', '=', 'bi.id_mahasiswa')
+                ->leftJoin('dokumen_prestasis as dp', 'm.id', '=', 'dp.id_mahasiswa')
+                ->leftJoin('capaian_unggulans as cu', 'dp.id_capaian_unggulan', '=', 'cu.id')
+                ->leftJoin('departmens as d', 'm.id_departmen', '=', 'd.id')
+                ->leftJoin('fakultas as f', 'd.id_fakultas', '=', 'f.id')
+                ->leftJoin('utusans as u', 'm.id', '=', 'u.id_mahasiswa')
+                ->select(
+                    'm.id',
+                    'm.nim',
+                    'm.nama',
+                    'm.ipk',
+                    'f.nama_fakultas',
+                    'd.nama_departmen',
+                    'u.id as id_utusan',
+                    DB::raw('IFNULL(subqueryKaryaIlmiah.rata_rata_skor_universitas, 0) as karya_ilmiah_skor'),
+                    DB::raw('ROUND(IFNULL(bi.listening_universitas, 0) + IFNULL(bi.speaking_universitas, 0) + IFNULL(bi.writing_universitas, 0), 2) as bahasa_inggris_skor'),
+                    DB::raw('IFNULL(SUM(cu.skor), 0) as dokumen_prestasi_skor'),
+                    DB::raw('ROUND(
                     IFNULL(subqueryKaryaIlmiah.rata_rata_skor_universitas, 0) +
-                    IFNULL(bi.listening, 0) +
-                    IFNULL(bi.speaking, 0) +
-                    IFNULL(bi.writing, 0) +
+                    IFNULL(bi.listening_universitas, 0) +
+                    IFNULL(bi.speaking_universitas, 0) +
+                    IFNULL(bi.writing_universitas, 0) +
                     IFNULL(SUM(cu.skor), 0),
                 2) as total_skor')
-            )
-            ->where('dp.status', '=', 'diterima')
-            ->where('dp.periode', '=', $periode) // Gunakan variabel periode yang tepat
-            ->where('u.tingkat', '=', 'fakultas')
-            ->groupBy(
-                'm.id',
-                'm.nim',
-                'm.nama',
-                'm.ipk',
-                'f.nama_fakultas',
-                'd.nama_departmen',
-                'u.id',
-                'subqueryKaryaIlmiah.rata_rata_skor_universitas',
-                'bi.listening',
-                'bi.speaking',
-                'bi.writing'
-            )
-            ->get();
+                )
+                ->where('dp.status', '=', 'diterima')
+                ->where('dp.periode', '=', $periode) // Gunakan variabel periode yang tepat
+                ->where('u.tingkat', '=', 'fakultas')
+                ->groupBy(
+                    'm.id',
+                    'm.nim',
+                    'm.nama',
+                    'm.ipk',
+                    'f.nama_fakultas',
+                    'd.nama_departmen',
+                    'u.id',
+                    'subqueryKaryaIlmiah.rata_rata_skor_universitas',
+                    'bi.listening',
+                    'bi.speaking',
+                    'bi.writing'
+                )
+                ->get();
 
             return DataTables::of($mahasiswa)->make(true);
         } catch (Exception $e) {
