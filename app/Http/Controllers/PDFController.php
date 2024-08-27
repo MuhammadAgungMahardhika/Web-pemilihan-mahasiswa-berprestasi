@@ -98,7 +98,7 @@ class PDFController extends Controller
         // Biodata text
         $pdf->SetFont('Arial', '', 12);
         foreach ($biodata as $label => $value) {
-            $pdf->Cell(40, 10, $label, 0, 0);
+            $pdf->Cell(50, 10, $label, 0, 0);
             $pdf->Cell(0, 10, ': ' . $value, 0, 1);
         }
 
@@ -109,7 +109,7 @@ class PDFController extends Controller
         $pdf->Cell(0, 10, 'Skor', 0, 1);
         $pdf->SetFont('Arial', '', 12);
         foreach ($scores as $label => $value) {
-            $pdf->Cell(60, 10, $label, 0, 0);
+            $pdf->Cell(50, 10, $label, 0, 0);
             $pdf->Cell(0, 10, ': ' . $value, 0, 1);
         }
 
