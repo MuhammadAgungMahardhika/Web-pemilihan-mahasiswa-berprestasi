@@ -105,8 +105,9 @@ class UtusanController extends Controller
                         ->where('dokumen_prestasis.periode', '=', $periode);
                 })
                 ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
+                ->leftJoin('karya_ilmiahs', 'mahasiswas.id', '=', 'karya_ilmiahs.id_mahasiswa')
                 ->leftJoinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
-                    $join->on('mahasiswas.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
+                    $join->on('karya_ilmiahs.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
                 })
                 ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
                 ->leftJoin('bahasa_inggris', 'mahasiswas.id', '=', 'bahasa_inggris.id_mahasiswa')
