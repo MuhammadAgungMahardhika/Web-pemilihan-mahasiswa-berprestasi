@@ -57,6 +57,7 @@ function update() {
         let dataMahasiswa = {
             nim: $("#nim").val(),
             nik: $("#nik").val(),
+            ipk: $("#ipk").val(),
             id_departmen: $("#id_departmen").val(),
             nama: $("#nama_mahasiswa").val(),
             semester: $("#semester").val(),

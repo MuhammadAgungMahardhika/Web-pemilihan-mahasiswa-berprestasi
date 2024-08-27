@@ -73,11 +73,13 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- @if (Auth::user()->id_role == 1)
+                        @if (Auth::user()->id_role == 1)
                             <div class="col-md-6 col-lg-6 col-12 shadow-sm  p-4">
                                 <div class="row">
                                     <input type="hidden" value="{{ Auth::user()->mahasiswa->id_departmen }}"
                                         class="form-control" id="id_departmen">
+                                    <input type="hidden" value="{{ Auth::user()->mahasiswa->ipk }}" class="form-control"
+                                        id="ipk">
                                     <div class="col-md-6 form-group">
                                         <label for="nim">Nim</label>
                                         <input type="text" value="{{ Auth::user()->mahasiswa->nim }}"
@@ -172,7 +174,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif --}}
+                        @endif
                     </div>
                 </div>
             </div>

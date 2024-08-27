@@ -190,7 +190,7 @@ function addModal() {
                         </select>
                     </div>
                     <div class="col-4 form-group">
-                        <label for="ipk">Ipk</label>
+                        <label for="ipk">Ipk  <i class="text-danger">*</i></label>
                         <input type="number"  step="0.01" id="ipk" class="form-control">
                     </div>
                     <div class="col-4 form-group">

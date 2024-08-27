@@ -13,18 +13,27 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-
         DB::table('users')->insert([
-            'id_role' => 6,
-            "name" => "juri_universitas",
-            "username" => "juri_universitas",
+            'id_role' => 1,
+            'id_mahasiswa' => 1,
+            "name" => "mahasiswa",
+            "username" => 123456789,
             "password" => Hash::make("12345678"),
         ]);
+
         DB::table('users')->insert([
-            'id_role' => 5,
+            'id_role' => 2,
+            'id_departmen' => 1,
+            "name" => "admin_departmen",
+            "username" => "admin_departmen",
+            "password" => Hash::make("12345678"),
+        ]);
+
+        DB::table('users')->insert([
+            'id_role' => 3,
             'id_fakultas' => 1,
-            "name" => "juri_fakultas",
-            "username" => "juri_fakultas",
+            "name" => "admin_fakultas",
+            "username" => "admin_fakultas",
             "password" => Hash::make("12345678"),
         ]);
         DB::table('users')->insert([
@@ -34,24 +43,17 @@ class UserSeeder extends Seeder
             "password" => Hash::make("12345678"),
         ]);
         DB::table('users')->insert([
-            'id_role' => 3,
+            'id_role' => 5,
             'id_fakultas' => 1,
-            "name" => "admin_fakultas",
-            "username" => "admin_fakultas",
+            "name" => "juri_fakultas",
+            "username" => "juri_fakultas",
             "password" => Hash::make("12345678"),
         ]);
+
         DB::table('users')->insert([
-            'id_role' => 2,
-            'id_departmen' => 1,
-            "name" => "admin_departmen",
-            "username" => "admin_departmen",
-            "password" => Hash::make("12345678"),
-        ]);
-        DB::table('users')->insert([
-            'id_role' => 1,
-            'id_mahasiswa' => 1,
-            "name" => "mahasiswa",
-            "username" => 123456789,
+            'id_role' => 6,
+            "name" => "juri_universitas",
+            "username" => "juri_universitas",
             "password" => Hash::make("12345678"),
         ]);
     }

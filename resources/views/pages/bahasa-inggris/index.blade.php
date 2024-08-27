@@ -54,32 +54,32 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if ($data->listening_universitas)
-                            <div class="col-6">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr class="bg-primary">
-                                            <th class="text-center text-white" colspan="3">
-                                                Tingkat Universitas
-                                            </th>
 
-                                        </tr>
-                                        <tr>
-                                            <th>Listening</th>
-                                            <th>Speaking</th>
-                                            <th>Writing</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{{ $data ? $data->listening_universitas : '-' }}</td>
-                                            <td>{{ $data ? $data->speaking_universitas : '-' }}</td>
-                                            <td>{{ $data ? $data->writing_universitas : '-' }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
+                        <div class="col-6">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-primary">
+                                        <th class="text-center text-white" colspan="3">
+                                            Tingkat Universitas
+                                        </th>
+
+                                    </tr>
+                                    <tr>
+                                        <th>Listening</th>
+                                        <th>Speaking</th>
+                                        <th>Writing</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ $data ? $data->listening_universitas : '-' }}</td>
+                                        <td>{{ $data ? $data->speaking_universitas : '-' }}</td>
+                                        <td>{{ $data ? $data->writing_universitas : '-' }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
 
                     </div>
                 </div>

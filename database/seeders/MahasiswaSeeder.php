@@ -17,6 +17,7 @@ class MahasiswaSeeder extends Seeder
             'id_departmen' => 1,
             'nim' => 123456789,
             'nama' => 'Mahasiswa Nama',
+            'ipk' => 3.4,
             'jenis_kelamin' => 'laki-laki',
         ]);
     }

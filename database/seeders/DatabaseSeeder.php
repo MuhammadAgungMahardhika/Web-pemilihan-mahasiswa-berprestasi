@@ -20,13 +20,13 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             RoleSeeder::class,
-            UserSeeder::class,
             FakultasSeeder::class,
             DepartmenSeeder::class,
+            MahasiswaSeeder::class,
+            UserSeeder::class,
             KategoriSeeder::class,
             BidangSeeder::class,
             CapaianUnggulanSeeder::class,
-            MahasiswaSeeder::class
         ]);
     }
 }
