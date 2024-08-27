@@ -149,6 +149,7 @@ class UtusanController extends Controller
             $utusan = Utusan::select(
                 'utusans.id as id',
                 'utusans.tanggal_utus_universitas as tanggal_utus_universitas',
+                'mahasiswas.id as id_mahasiswa',
                 'mahasiswas.nim as nim_mahasiswa',
                 'mahasiswas.nama as nama_mahasiswa',
                 'fakultas.nama_fakultas as nama_fakultas',
@@ -158,7 +159,8 @@ class UtusanController extends Controller
                 DB::raw('IFNULL(SUM(capaian_unggulans.skor), 0) as dokumen_prestasi_skor'),
                 DB::raw('ROUND(
                     IFNULL(subqueryKaryaIlmiah.rata_rata_universitas, 0) +
-                    IFNULL(bahasa_inggris.listening_universitas, 0) + IFNULL(bahasa_inggris.speaking_universitas, 0) + IFNULL(bahasa_inggris.writing_universitas, 0) +
+                    IFNULL(bahasa_inggris.listening_universitas, 0) + IFNULL(bahasa_inggris.speaking_universitas, 0) + 
+                    IFNULL(bahasa_inggris.writing_universitas, 0) +
                     IFNULL(SUM(capaian_unggulans.skor), 0), 2) as total_skor')
             )
                 ->join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
@@ -179,6 +181,7 @@ class UtusanController extends Controller
                 ->groupBy(
                     'utusans.id',
                     'utusans.tanggal_utus_universitas',
+                    'mahasiswas.id',
                     'mahasiswas.nim',
                     'mahasiswas.nama',
                     'fakultas.nama_fakultas',

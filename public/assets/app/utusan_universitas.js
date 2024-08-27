@@ -69,7 +69,7 @@ function showData() {
                     return `
                         <div class="row g-2 text-center">
                             <div class="col">
-                                <a target="_blank"  href="/api/print/mahasiswa/${row.id}" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> </a>
+                                <a target="_blank"  href="/api/print/mahasiswa/${row.id_mahasiswa}" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> </a>
                             </div>
                             <div class="col">
                                 <a onclick="deleteModal('${row.id}','${row.nama_mahasiswa}')" class="btn btn-danger btn-sm"><i class="fa fa-x"></i> </a>
