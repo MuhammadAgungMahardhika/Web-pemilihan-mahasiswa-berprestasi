@@ -142,7 +142,7 @@ class UtusanController extends Controller
 
             // Subquery to calculate the average score for each 'id_karya_ilmiah'
             $subqueryKaryaIlmiah = DB::table('penilaian_karya_ilmiahs')
-                ->select('id_karya_ilmiah', DB::raw('COALESCE(AVG(skor_universitas), 0) as rata_rata_universitas'))
+                ->select('id_karya_ilmiah', DB::raw('COALESCE(AVG(skor_universitas), 0) as rata_rata_skor_universitas'))
                 ->groupBy('id_karya_ilmiah');
 
             // Main query to fetch utusan data with scores and total score calculation
@@ -154,11 +154,11 @@ class UtusanController extends Controller
                 'mahasiswas.nama as nama_mahasiswa',
                 'fakultas.nama_fakultas as nama_fakultas',
                 'departmens.nama_departmen as nama_departmen',
-                DB::raw('IFNULL(subqueryKaryaIlmiah.rata_rata_universitas, 0) as karya_ilmiah_skor'),
+                DB::raw('IFNULL(subqueryKaryaIlmiah.rata_rata_skor_universitas, 0) as karya_ilmiah_skor'),
                 DB::raw('ROUND(IFNULL(bahasa_inggris.listening_universitas, 0) + IFNULL(bahasa_inggris.speaking_universitas, 0) + IFNULL(bahasa_inggris.writing_universitas, 0), 2) as bahasa_inggris_skor'),
                 DB::raw('IFNULL(SUM(capaian_unggulans.skor), 0) as dokumen_prestasi_skor'),
                 DB::raw('ROUND(
-                    IFNULL(subqueryKaryaIlmiah.rata_rata_universitas, 0) +
+                    IFNULL(subqueryKaryaIlmiah.rata_rata_skor_universitas, 0) +
                     IFNULL(bahasa_inggris.listening_universitas, 0) + IFNULL(bahasa_inggris.speaking_universitas, 0) + 
                     IFNULL(bahasa_inggris.writing_universitas, 0) +
                     IFNULL(SUM(capaian_unggulans.skor), 0), 2) as total_skor')
@@ -170,8 +170,9 @@ class UtusanController extends Controller
                         ->where('dokumen_prestasis.periode', '=', $periode);
                 })
                 ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
+                ->leftJoin('karya_ilmiahs', 'mahasiswas.id', '=', 'karya_ilmiahs.id_mahasiswa')
                 ->leftJoinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
-                    $join->on('mahasiswas.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
+                    $join->on('karya_ilmiahs.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
                 })
                 ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
                 ->join('fakultas', 'departmens.id_fakultas', '=', 'fakultas.id')
@@ -186,13 +187,12 @@ class UtusanController extends Controller
                     'mahasiswas.nama',
                     'fakultas.nama_fakultas',
                     'departmens.nama_departmen',
-                    'subqueryKaryaIlmiah.rata_rata_universitas',
+                    'subqueryKaryaIlmiah.rata_rata_skor_universitas',
                     'bahasa_inggris.listening_universitas',
                     'bahasa_inggris.speaking_universitas',
                     'bahasa_inggris.writing_universitas'
                 )
                 ->get();
-
             return DataTables::of($utusan)->make(true);
         } catch (Exception $e) {
             return response()->json([
