@@ -62,6 +62,23 @@ class UserController extends Controller
         }
     }
     // Method untuk DataTables API
+    public function getUserDataByJuriDepartmen(): JsonResponse
+    {
+        try {
+            $idDepartmen = Auth::user()->id_departmen;
+            $user = User::where('id_role', 7)
+                ->where('id_departmen', '=', $idDepartmen)
+                ->get();
+            return DataTables::of($user)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data Juri tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
+    // Method untuk DataTables API
     public function getUserDataByJuriFakultas(): JsonResponse
     {
         try {

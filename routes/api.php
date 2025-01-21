@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('user/data', [UserController::class, 'getUserData']);
     Route::get('user/fakultas/data', [UserController::class, 'getUserDataByFakultas']);
     Route::get('user/departmen/data', [UserController::class, 'getUserDataByDepartmen']);
+    Route::get('user/juri-departmen/data', [UserController::class, 'getUserDataByJuriDepartmen']);
     Route::get('user/juri-fakultas/data', [UserController::class, 'getUserDataByJuriFakultas']);
     Route::get('user/juri-universitas/data', [UserController::class, 'getUserDataByJuriUniversitas']);
     Route::post('user/activate', [UserController::class, 'activateUser']);

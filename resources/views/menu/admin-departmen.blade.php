@@ -17,3 +17,16 @@
         <span>Utusan Departmen</span>
     </a>
 </li>
+<li class="sidebar-item  has-sub {{ request()->is('juri-departmen') ? 'active' : '' }}">
+    <a href="#" class="sidebar-link">
+        <i class="bi bi-stack"></i>
+        <span>Data</span>
+    </a>
+    <ul class="submenu submenu-closed {{ request()->is('juri-departmen') ? 'active' : '' }}">
+
+        <li class="submenu-item  {{ request()->is('juri-departmen') ? 'active' : '' }}">
+            <a href="{{ url('juri-departmen') }}" class="submenu-link">Juri Departemen</a>
+        </li>
+
+    </ul>
+</li>

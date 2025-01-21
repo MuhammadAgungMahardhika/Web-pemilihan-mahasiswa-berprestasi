@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fakultas', [PageController::class, 'fakultas']);
     Route::get('/admin-fakultas', [PageController::class, 'adminFakultas']);
     Route::get('/juri-fakultas', [PageController::class, 'juriFakultas']);
+    Route::get('/juri-departmen', [PageController::class, 'juriDepartmen']);
     Route::get('/juri-universitas', [PageController::class, 'juriUniversitas']);
     Route::get('/admin-departmen', [PageController::class, 'adminDepartmen']);
     Route::get('/portal', [PageController::class, 'portal']);

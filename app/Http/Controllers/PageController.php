@@ -158,6 +158,13 @@ class PageController extends Controller
         return view('pages.penilaian-karya-ilmiah.universitas', $send);
     }
 
+    public function juriDepartmen()
+    {
+        $send = [
+            'title' => "Juri Departemen"
+        ];
+        return view('pages.juri.departmen', $send);
+    }
     public function juriFakultas()
     {
         $send = [
