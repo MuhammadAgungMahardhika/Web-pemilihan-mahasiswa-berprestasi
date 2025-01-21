@@ -67,6 +67,7 @@ function showData() {
             {
                 data: "total_skor",
                 name: "total_skor",
+                class: "text-end",
                 orderable: true,
                 searchable: true,
             },

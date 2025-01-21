@@ -38,20 +38,41 @@ class UtusanController extends Controller
         try {
             $periode = session('portal')->periode;
 
-            // Main query to fetch utusan data with total score calculation
+            // Subquery to calculate the average score for each 'id_karya_ilmiah'
+            $subqueryKaryaIlmiah = DB::table('penilaian_karya_ilmiahs')
+                ->select('id_karya_ilmiah', DB::raw('COALESCE(AVG(skor_departmen), 0) as rata_rata_skor_departmen'))
+                ->groupBy('id_karya_ilmiah');
+
+            // Main query to fetch utusan data with scores and total score calculation
             $utusan = Utusan::select(
                 'utusans.id as id',
                 'utusans.tanggal_utus_departmen as tanggal_utus_departmen',
                 'mahasiswas.nim as nim_mahasiswa',
                 'mahasiswas.nama as nama_mahasiswa',
                 'departmens.nama_departmen as nama_departmen',
-                DB::raw('IFNULL(SUM(capaian_unggulans.skor), 0) as total_skor')
+                DB::raw('IFNULL(subqueryKaryaIlmiah.rata_rata_skor_departmen, 0) as karya_ilmiah_skor'),
+                DB::raw('ROUND(IFNULL(bahasa_inggris.listening_departmen, 0) + IFNULL(bahasa_inggris.speaking_departmen, 0) + IFNULL(bahasa_inggris.writing_departmen, 0), 2) as bahasa_inggris_skor'),
+                DB::raw('IFNULL(SUM(capaian_unggulans.skor), 0) as dokumen_prestasi_skor'),
+                DB::raw('ROUND(
+                    (IFNULL(subqueryKaryaIlmiah.rata_rata_skor_departmen, 0) * 0.30) +
+                    (IFNULL(bahasa_inggris.listening_departmen, 0) + IFNULL(bahasa_inggris.speaking_departmen, 0) + IFNULL(bahasa_inggris.writing_departmen, 0)) * 0.20 +
+                    (IFNULL(SUM(capaian_unggulans.skor), 0) * 0.50),
+                2) as total_skor')
             )
-                ->join('mahasiswas', 'mahasiswas.id', '=', 'utusans.id_mahasiswa')
-                ->join('dokumen_prestasis', 'dokumen_prestasis.id_mahasiswa', '=', 'mahasiswas.id')
-                ->join('capaian_unggulans', 'capaian_unggulans.id', '=', 'dokumen_prestasis.id_capaian_unggulan')
-                ->leftJoin('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id') // Ensure to join with departmens table
-                ->where('mahasiswas.id_departmen', $idDepartmen)
+                ->join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
+                ->join('dokumen_prestasis', function ($join) use ($periode) {
+                    $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')
+                        ->where('dokumen_prestasis.status', '=', 'diterima')
+                        ->where('dokumen_prestasis.periode', '=', $periode);
+                })
+                ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
+                ->leftJoin('karya_ilmiahs', 'mahasiswas.id', '=', 'karya_ilmiahs.id_mahasiswa')
+                ->leftJoinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
+                    $join->on('karya_ilmiahs.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
+                })
+                ->join('departmens', 'mahasiswas.id_departmen', '=', 'departmens.id')
+                ->leftJoin('bahasa_inggris', 'mahasiswas.id', '=', 'bahasa_inggris.id_mahasiswa')
+                ->where('departmens.id', $idDepartmen)
                 ->where('utusans.tingkat', 'departmen')
                 ->where('utusans.periode', $periode)
                 ->groupBy(
@@ -59,7 +80,11 @@ class UtusanController extends Controller
                     'utusans.tanggal_utus_departmen',
                     'mahasiswas.nim',
                     'mahasiswas.nama',
-                    'departmens.nama_departmen'
+                    'departmens.nama_departmen',
+                    'subqueryKaryaIlmiah.rata_rata_skor_departmen',
+                    'bahasa_inggris.listening_departmen',
+                    'bahasa_inggris.speaking_departmen',
+                    'bahasa_inggris.writing_departmen'
                 )
                 ->get();
 
@@ -94,10 +119,12 @@ class UtusanController extends Controller
                 DB::raw('ROUND(IFNULL(bahasa_inggris.listening, 0) + IFNULL(bahasa_inggris.speaking, 0) + IFNULL(bahasa_inggris.writing, 0), 2) as bahasa_inggris_skor'),
                 DB::raw('IFNULL(SUM(capaian_unggulans.skor), 0) as dokumen_prestasi_skor'),
                 DB::raw('ROUND(
-                IFNULL(subqueryKaryaIlmiah.rata_rata_skor_fakultas, 0) +
-                IFNULL(bahasa_inggris.listening, 0) + IFNULL(bahasa_inggris.speaking, 0) + IFNULL(bahasa_inggris.writing, 0) +
-                IFNULL(SUM(capaian_unggulans.skor), 0), 2) as total_skor')
+                    (IFNULL(subqueryKaryaIlmiah.rata_rata_skor_fakultas, 0) * 0.30) +
+                    (IFNULL(bahasa_inggris.listening, 0) + IFNULL(bahasa_inggris.speaking, 0) + IFNULL(bahasa_inggris.writing, 0)) * 0.20 +
+                    (IFNULL(SUM(capaian_unggulans.skor), 0) * 0.50),
+                2) as total_skor')
             )
+
                 ->join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
                 ->join('dokumen_prestasis', function ($join) use ($periode) {
                     $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')
@@ -159,10 +186,10 @@ class UtusanController extends Controller
                 DB::raw('ROUND(IFNULL(bahasa_inggris.listening_universitas, 0) + IFNULL(bahasa_inggris.speaking_universitas, 0) + IFNULL(bahasa_inggris.writing_universitas, 0), 2) as bahasa_inggris_skor'),
                 DB::raw('IFNULL(SUM(capaian_unggulans.skor), 0) as dokumen_prestasi_skor'),
                 DB::raw('ROUND(
-                    IFNULL(subqueryKaryaIlmiah.rata_rata_skor_universitas, 0) +
-                    IFNULL(bahasa_inggris.listening_universitas, 0) + IFNULL(bahasa_inggris.speaking_universitas, 0) + 
-                    IFNULL(bahasa_inggris.writing_universitas, 0) +
-                    IFNULL(SUM(capaian_unggulans.skor), 0), 2) as total_skor')
+                    (IFNULL(subqueryKaryaIlmiah.rata_rata_skor_universitas, 0) * 0.30) +
+                    (IFNULL(bahasa_inggris.listening_universitas, 0) + IFNULL(bahasa_inggris.speaking_universitas, 0) + IFNULL(bahasa_inggris.writing_universitas, 0)) * 0.20 +
+                    (IFNULL(SUM(capaian_unggulans.skor), 0) * 0.50),
+                2) as total_skor')
             )
                 ->join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
                 ->join('dokumen_prestasis', function ($join) use ($periode) {

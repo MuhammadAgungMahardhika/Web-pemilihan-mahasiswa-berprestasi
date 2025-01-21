@@ -28,7 +28,7 @@
                                     <th>Karya Ilmiah (a)</th>
                                     <th>Bahasa Inggris (b)</th>
                                     <th>Dokumen Prestasi (c)</th>
-                                    <th>Total Skor (a+b+c)</th>
+                                    <th>Total Skor</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>

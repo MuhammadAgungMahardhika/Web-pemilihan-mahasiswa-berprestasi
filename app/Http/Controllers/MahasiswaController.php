@@ -76,7 +76,7 @@ class MahasiswaController extends Controller
                     2) as total_skor')
                 )
                 ->where('dp.status', '=', 'diterima')
-                ->where('dp.periode', '=', 2024)
+                ->where('dp.periode', '=', $periode)
                 ->where('d.id', '=', $idDepartmen)  // Pastikan ini benar
                 ->groupBy(
                     'm.id',
@@ -140,7 +140,7 @@ class MahasiswaController extends Controller
                 2) as total_skor')
                 )
                 ->where('dp.status', '=', 'diterima')
-                ->where('dp.periode', '=', 2024)
+                ->where('dp.periode', '=', $periode)
                 ->where('d.id_fakultas', '=', $idFakultas)
                 ->where('u.tingkat', '=', 'departmen') // Sesuaikan dengan kondisi yang sesuai
                 ->groupBy(
