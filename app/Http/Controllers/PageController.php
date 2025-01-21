@@ -48,6 +48,13 @@ class PageController extends Controller
         ];
         return view('pages.dokumen-prestasi.index', $send);
     }
+    public function ujiBahasaInggrisDepartmen()
+    {
+        $send = [
+            'title' => "Uji Bahasa Inggris Departmen"
+        ];
+        return view('pages.uji-bahasa-inggris.departmen', $send);
+    }
     public function ujiBahasaInggris()
     {
         $send = [
@@ -142,6 +149,13 @@ class PageController extends Controller
             'data' =>  $mahasiswa
         ];
         return view('pages.verifikasi-dokumen.index', $send);
+    }
+    public function penilaianKaryaIlmiahDepartmen()
+    {
+        $send = [
+            'title' => "Penilaian Karya Ilmiah"
+        ];
+        return view('pages.penilaian-karya-ilmiah.departmen', $send);
     }
     public function penilaianKaryaIlmiahFakultas()
     {

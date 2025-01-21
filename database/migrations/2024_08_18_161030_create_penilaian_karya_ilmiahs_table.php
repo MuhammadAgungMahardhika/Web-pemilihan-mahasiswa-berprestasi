@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_karya_ilmiah');
             $table->unsignedBigInteger('id_user');
+            $table->float('skor_departmen')->nullable();
             $table->float('skor_fakultas')->nullable();
             $table->float('skor_universitas')->nullable();
             $table->timestamps();

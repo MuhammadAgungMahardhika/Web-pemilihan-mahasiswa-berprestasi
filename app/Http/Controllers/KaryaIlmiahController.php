@@ -20,6 +20,26 @@ class KaryaIlmiahController extends Controller
         'dokumen_url.required' => 'Dokumen harus di upload',
     ];
 
+    public function getKaryaIlmiahDataByDepartmen($idDepartmen): JsonResponse
+    {
+        try {
+            $periode = session('portal')->periode;
+
+            $karyaIlmiah = KaryaIlmiah::whereHas('mahasiswa.departmen', function ($query) use ($idDepartmen) {
+                $query->where('id_departmen', $idDepartmen);
+            })->where('periode', $periode)
+                ->with(['mahasiswa.departmen', 'penilaian_karya_ilmiah'])
+                ->get();
+
+            return DataTables::of($karyaIlmiah)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data karya ilmiah tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
     public function getKaryaIlmiahDataByFakultas($idFakultas): JsonResponse
     {
         try {
@@ -166,6 +186,44 @@ class KaryaIlmiahController extends Controller
             DB::rollBack();
             return response()->json([
                 'message' => 'Gagal mengubah karya ilmiah',
+                'data' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function reviewKaryaIlmiahTingkatDepartmen(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'skor_departmen' => 'required',
+            ], $this->message);
+            $userId = Auth::user()->id;
+
+            $karyaIlmiah = PenilaianKaryaIlmiah::where('id_karya_ilmiah', $id)
+                ->where('id_user', $userId)
+                ->first();
+
+            // Jika record ada, update; jika tidak ada, create
+            if ($karyaIlmiah) {
+                $karyaIlmiah->update([
+                    'skor_departmen' => $request->skor_departmen,
+                    'updated_by' => $userId,
+                ]);
+            } else {
+                $karyaIlmiah = PenilaianKaryaIlmiah::create([
+                    'id_karya_ilmiah' => $id,
+                    'id_user' => $userId,
+                    'skor_departmen' => $request->skor_departmen,
+                    'created_by' => $userId,
+                ]);
+            }
+            return response()->json([
+                'message' => 'Berhasil melakukan penilaian karya ilmiah',
+                'data' => $karyaIlmiah
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Gagal melakukan penilaian karya ilmiah',
                 'data' => $e->getMessage()
             ], 500);
         }

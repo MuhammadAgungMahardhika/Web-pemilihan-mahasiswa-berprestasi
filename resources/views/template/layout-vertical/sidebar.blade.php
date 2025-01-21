@@ -70,6 +70,10 @@
                     @include('menu.admin-departmen')
                 @endrole
 
+                @role('juri_departmen')
+                    @include('menu.juri-departmen')
+                @endrole
+
                 @role('mahasiswa')
                     @include('menu.mahasiswa')
                 @endrole
@@ -82,7 +86,6 @@
                     @include('menu.juri-universitas')
                 @endrole
                 {{-- <li class="sidebar-title">Forms &amp; Tables</li> --}}
-
             </ul>
         </div>
         <div class="ps__rail-x" style="left: 0px; bottom: 0px;">

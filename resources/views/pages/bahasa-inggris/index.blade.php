@@ -30,7 +30,31 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6 form-group">
+                        <div class="col-4 form-group">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-primary">
+                                        <th class="text-center text-white" colspan="3">
+                                            Tingkat Departemen
+                                        </th>
+
+                                    </tr>
+                                    <tr>
+                                        <th>Listening</th>
+                                        <th>Speaking</th>
+                                        <th>Writing</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ $data ? $data->listening_departmen : '-' }}</td>
+                                        <td>{{ $data ? $data->speaking_departmen : '-' }}</td>
+                                        <td>{{ $data ? $data->writing_departmen : '-' }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-4 form-group">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-primary">
@@ -47,15 +71,15 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{ $data ? $data->listening : '-' }}</td>
-                                        <td>{{ $data ? $data->speaking : '-' }}</td>
-                                        <td>{{ $data ? $data->writing : '-' }}</td>
+                                        <td>{{ $data && $data->listening ? $data->listening : '-' }}</td>
+                                        <td>{{ $data && $data->speaking ? $data->speaking : '-' }}</td>
+                                        <td>{{ $data && $data->writing ? $data->writing : '-' }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-4">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-primary">
@@ -72,9 +96,12 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{ $data ? $data->listening_universitas : '-' }}</td>
-                                        <td>{{ $data ? $data->speaking_universitas : '-' }}</td>
-                                        <td>{{ $data ? $data->writing_universitas : '-' }}</td>
+                                        <td>{{ $data && $data->listening_universitas ? $data->listening_universitas : '-' }}
+                                        </td>
+                                        <td>{{ $data && $data->speaking_universitas ? $data->speaking_universitas : '-' }}
+                                        </td>
+                                        <td>{{ $data && $data->writing_universitas ? $data->writing_universitas : '-' }}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

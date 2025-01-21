@@ -14,8 +14,8 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    {{-- <a onclick="addModal()" class="btn btn-primary" title="Tambah Uji Bahasa Inggris"><i
-                            class="fa fa-plus"></i></a> --}}
+                    <a onclick="addModal()" class="btn btn-primary" title="Tambah Uji Bahasa Inggris Departmen"><i
+                            class="fa fa-plus"></i></a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -45,9 +45,9 @@
 
     <script>
         const periode = "{{ session('portal')->periode }}"
-        const idFakultas = '{{ Auth()->user()->id_fakultas }}'
+        const idDepartmen = '{{ Auth()->user()->id_departmen }}'
     </script>
 
     <script src="{{ asset('assets/extensions/datatable/dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/app/uji_bahasa_inggris.js') }}"></script>
+    <script src="{{ asset('assets/app/uji_bahasa_inggris_departmen.js') }}"></script>
 @endsection

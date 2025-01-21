@@ -15,9 +15,15 @@ return new class extends Migration
             $table->id();
             $table->year('periode');
             $table->unsignedBigInteger('id_mahasiswa')->unique();
-            $table->float('listening');
-            $table->float('speaking');
-            $table->float('writing');
+            // departmen
+            $table->float('listening_departmen')->nullable();
+            $table->float('speaking_departmen')->nullable();
+            $table->float('writing_departmen')->nullable();
+            // fakultas
+            $table->float('listening')->nullable();
+            $table->float('speaking')->nullable();
+            $table->float('writing')->nullable();
+            // universitas
             $table->float('listening_universitas')->nullable();
             $table->float('speaking_universitas')->nullable();
             $table->float('writing_universitas')->nullable();

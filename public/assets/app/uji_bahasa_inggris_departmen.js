@@ -6,7 +6,7 @@ function showData() {
     table = $("#datatable").DataTable({
         processing: true,
         serverSide: true,
-        ajax: "/api/bahasa-inggris/fakultas/data",
+        ajax: "/api/bahasa-inggris/departmen/data",
         autoWidth: false,
         columnDefs: [
             {
@@ -43,20 +43,20 @@ function showData() {
                 searchable: true,
             },
             {
-                data: "listening",
-                name: "listening",
+                data: "listening_departmen",
+                name: "listening_departmen",
                 orderable: true,
                 searchable: true,
             },
             {
-                data: "speaking",
-                name: "speaking",
+                data: "speaking_departmen",
+                name: "speaking_departmen",
                 orderable: true,
                 searchable: true,
             },
             {
-                data: "writing",
-                name: "writing",
+                data: "writing_departmen",
+                name: "writing_departmen",
                 orderable: true,
                 searchable: true,
             },
@@ -65,13 +65,15 @@ function showData() {
                 className: "text-center",
                 render: function (data, type, row) {
                     return `
-                    <div class="row g-2 text-center">
-                        <div class="col">
-                            <a onclick="editModal('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> </a>
+                        <div class="row g-2 text-center">
+                            <div class="col">
+                                <a onclick="editModal('${row.id}')" class="btn btn-primary btn-sm"><i class="fa fa-info"></i> </a>
+                            </div>
+                            <div class="col">
+                                <a onclick="deleteModal('${row.id}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </a>
+                            </div>
                         </div>
-                       
-                    </div>
-                 `;
+                    `;
                 },
             },
         ],
@@ -85,7 +87,7 @@ function reloadData() {
     }
 }
 function addModal() {
-    const modalHeader = "Tambah Bahasa Inggris";
+    const modalHeader = "Tambah Bahasa Inggris Departemen";
     const modalBody = `
         <form class="form form-horizontal">
             <div class="form-body">
@@ -100,16 +102,16 @@ function addModal() {
                 </div>
                 <div class="row">
                     <div class="col-4 form-group">
-                        <label for="listening">Listening <i class="text-danger">*</i></label>
-                        <input type="number" step="0.01" id="listening" class="form-control">
+                        <label for="listening_departmen">Listening <i class="text-danger">*</i></label>
+                        <input type="number" step="0.01" id="listening_departmen" class="form-control">
                     </div>
                     <div class="col-4 form-group">
-                        <label for="speaking">Speaking <i class="text-danger">*</i></label>
-                        <input type="number" step="0.01" id="speaking" class="form-control">
+                        <label for="speaking_departmen">Speaking <i class="text-danger">*</i></label>
+                        <input type="number" step="0.01" id="speaking_departmen" class="form-control">
                     </div>
                     <div class="col-4 form-group">
-                        <label for="writing">Writing <i class="text-danger">*</i></label>
-                        <input type="number" step="0.01" id="writing" class="form-control">
+                        <label for="writing_departmen">Writing <i class="text-danger">*</i></label>
+                        <input type="number" step="0.01" id="writing_departmen" class="form-control">
                     </div>
                 </div>
             </div>
@@ -209,11 +211,17 @@ function deleteModal(id) {
 function save() {
     const periode = $("#periode").val();
     const id_mahasiswa = $("#id_mahasiswa").val();
-    const listening = $("#listening").val();
-    const speaking = $("#speaking").val();
-    const writing = $("#writing").val();
+    const listening_departmen = $("#listening_departmen").val();
+    const speaking_departmen = $("#speaking_departmen").val();
+    const writing_departmen = $("#writing_departmen").val();
 
-    let data = { periode, id_mahasiswa, listening, speaking, writing };
+    let data = {
+        periode,
+        id_mahasiswa,
+        listening_departmen,
+        speaking_departmen,
+        writing_departmen,
+    };
 
     $.ajax({
         type: "POST",
@@ -238,11 +246,17 @@ function save() {
 function update(id) {
     const periode = $("#periode").val();
     const id_mahasiswa = $("#id_mahasiswa").val();
-    const listening = $("#listening").val();
-    const speaking = $("#speaking").val();
-    const writing = $("#writing").val();
+    const listening_departmen = $("#listening_departmen").val();
+    const speaking_departmen = $("#speaking_departmen").val();
+    const writing_departmen = $("#writing_departmen").val();
 
-    let data = { periode, id_mahasiswa, listening, speaking, writing };
+    let data = {
+        periode,
+        id_mahasiswa,
+        listening_departmen,
+        speaking_departmen,
+        writing_departmen,
+    };
 
     $.ajax({
         type: "PATCH",

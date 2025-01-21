@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('portal')->group(function () {
         Route::get('/dokumen-prestasi', [PageController::class, 'dokumenPrestasi']);
         Route::get('/bahasa-inggris', [PageController::class, 'bahasaInggris']);
+        Route::get('/uji-bahasa-inggris-departmen', [PageController::class, 'ujiBahasaInggrisDepartmen']);
         Route::get('/uji-bahasa-inggris', [PageController::class, 'ujiBahasaInggris']);
         Route::get('/uji-bahasa-inggris-universitas', [PageController::class, 'ujiBahasaInggrisUniversitas']);
         Route::get('/karya-ilmiah', [PageController::class, 'karyaIlmiah']);
@@ -68,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/utusan-fakultas', [PageController::class, 'utusanFakultas']);
         Route::get('/utusan-universitas', [PageController::class, 'utusanUniversitas']);
         Route::get('/mahasiswa/verifikasi-dokumen/{idMahasiswa}', [PageController::class, 'verifikasiDokumenByMahasiswa']);
+        Route::get('/penilaian-karya-ilmiah-departmen', [PageController::class, 'penilaianKaryaIlmiahDepartmen']);
         Route::get('/penilaian-karya-ilmiah-fakultas', [PageController::class, 'penilaianKaryaIlmiahFakultas']);
         Route::get('/penilaian-karya-ilmiah-universitas', [PageController::class, 'penilaianKaryaIlmiahUniversitas']);
     });

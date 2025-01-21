@@ -44,7 +44,11 @@
                             $penilaianKaryaIlmiah = $data->penilaian_karya_ilmiah;
                             $isEvaluatedByUser = [];
                             foreach ($penilaianKaryaIlmiah as $penilaian) {
-                                if ($penilaian->skor_fakultas || $penilaian->skor_universitas) {
+                                if (
+                                    $penilaian->skor_departmen ||
+                                    $penilaian->skor_fakultas ||
+                                    $penilaian->skor_universitas
+                                ) {
                                     $isEvaluatedByUser[] = [
                                         'user' => $penilaian->user->name ?? '-',
                                         'created_at' => $penilaian->created_at->format('d-m-Y H:i:s'),

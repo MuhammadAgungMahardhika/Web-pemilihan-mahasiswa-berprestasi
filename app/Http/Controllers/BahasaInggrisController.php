@@ -26,6 +26,26 @@ class BahasaInggrisController extends Controller
         'id_mahasiswa.unique' => 'Mahasiswa sudah pernah di uji, hapus jika ingin pengujian ulang',
     ];
 
+    public function getBahasaInggrisDataByDepartmen(): JsonResponse
+    {
+        try {
+            $periode = session('portal')->periode;
+            $idDepartmen = Auth::user()->id_departmen;
+            $bahasaInggris = BahasaInggris::whereHas('mahasiswa.departmen', function ($query) use ($idDepartmen) {
+                $query->where('id_departmen', $idDepartmen);
+            })
+                ->with(['mahasiswa.departmen'])
+                ->where('periode', $periode)
+                ->get();
+            return DataTables::of($bahasaInggris)
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data Bahasa Inggris tidak ditemukan',
+                'data' => $e->getMessage()
+            ], 404);
+        }
+    }
     public function getBahasaInggrisDataByFakultas(): JsonResponse
     {
         try {
@@ -90,9 +110,9 @@ class BahasaInggrisController extends Controller
             $request->validate([
                 'periode' => 'required|string|min:4|max:4',
                 'id_mahasiswa' => 'required|integer|unique:bahasa_inggris',
-                'listening' => 'required|numeric',
-                'speaking' => 'required|numeric',
-                'writing' => 'required|numeric',
+                'listening_departmen' => 'required|numeric',
+                'speaking_departmen' => 'required|numeric',
+                'writing_departmen' => 'required|numeric',
             ], $this->message);
 
             DB::beginTransaction();
@@ -140,6 +160,9 @@ class BahasaInggrisController extends Controller
             $request->validate([
                 'periode' => 'required|string|min:4|max:4',
                 'id_mahasiswa' => 'required|integer|unique:bahasa_inggris,id_mahasiswa,' . $id,
+                'listening_departmen' => 'nullable|numeric',
+                'speaking_departmen' => 'nullable|numeric',
+                'writing_departmen' => 'nullable|numeric',
                 'listening' => 'nullable|numeric',
                 'speaking' => 'nullable|numeric',
                 'writing' => 'nullable|numeric',
