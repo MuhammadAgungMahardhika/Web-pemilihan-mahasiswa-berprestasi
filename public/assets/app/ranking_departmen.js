@@ -75,6 +75,10 @@ function showData() {
                 data: null,
                 className: "text-center",
                 render: function (data, type, row) {
+                    console.log(row.id_utusan);
+                    if (row.id_utusan) {
+                        return `<i class="fa fa-check"></i>`;
+                    }
                     return `
                         <div class="row g-2 text-center">
                             <div class="col">

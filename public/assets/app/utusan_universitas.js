@@ -54,6 +54,7 @@ function showData() {
                 name: "total_skor",
                 orderable: true,
                 searchable: true,
+                class: "text-end",
             },
             {
                 data: "tanggal_utus_universitas",

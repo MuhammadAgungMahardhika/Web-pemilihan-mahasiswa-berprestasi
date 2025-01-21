@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,23 +12,24 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('roles')->insert([
-            'nama' => 'mahasiswa',
-        ]);
-        DB::table('roles')->insert([
-            'nama' => 'admin_departmen',
-        ]);
-        DB::table('roles')->insert([
-            'nama' => 'admin_fakultas',
-        ]);
-        DB::table('roles')->insert([
-            'nama' => 'admin_universitas',
-        ]);
-        DB::table('roles')->insert([
-            'nama' => 'juri_fakultas',
-        ]);
-        DB::table('roles')->insert([
-            'nama' => 'juri_universitas',
-        ]);
+        // Path file CSV yang benar, berdasarkan folder 'database/csv/'
+        $filePath = base_path('database/csv/role.csv');
+
+        // Membuka file CSV
+        if (($handle = fopen($filePath, 'r')) !== false) {
+            // Membaca header (baris pertama) dan mengabaikannya
+            $header = fgetcsv($handle, 1000, ';'); // Menyesuaikan dengan delimiter ";"
+
+            // Membaca setiap baris CSV dan memasukkan data
+            while (($data = fgetcsv($handle, 1000, ';')) !== false) {
+                DB::table('roles')->insert([
+                    'nama' => $data[1], // Mengambil nama role dari CSV (data[1] karena data pertama adalah 'id')
+
+                ]);
+            }
+
+            // Menutup file setelah selesai membaca
+            fclose($handle);
+        }
     }
 }

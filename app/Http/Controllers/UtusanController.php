@@ -124,7 +124,6 @@ class UtusanController extends Controller
                     (IFNULL(SUM(capaian_unggulans.skor), 0) * 0.50),
                 2) as total_skor')
             )
-
                 ->join('mahasiswas', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
                 ->join('dokumen_prestasis', function ($join) use ($periode) {
                     $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')

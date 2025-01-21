@@ -62,7 +62,7 @@ class PDFController extends Controller
             'Dokumen Prestasi' => $dokumenPrestasiSkor,
             'Karya Ilmiah' => $rataRataSkorKaryaIlmiah,
             'Bahasa Inggris' => $bahasaInggrisSkor,
-            'Total Skor' => $dokumenPrestasiSkor + $rataRataSkorKaryaIlmiah + $bahasaInggrisSkor
+            'Total Skor' => $dokumenPrestasiSkor * 0.5 + $rataRataSkorKaryaIlmiah * 0.3 + $bahasaInggrisSkor * 0.2
         ];
 
         $photo = $dataMahasiswa->user->foto_url ? $dataMahasiswa->user->foto_url : null;

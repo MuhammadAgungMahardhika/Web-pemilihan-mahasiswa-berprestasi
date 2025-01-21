@@ -132,12 +132,10 @@ class MahasiswaController extends Controller
                     DB::raw('ROUND(IFNULL(bi.listening, 0) + IFNULL(bi.speaking, 0) + IFNULL(bi.writing, 0), 2) as bahasa_inggris_skor'),
                     DB::raw('IFNULL(SUM(cu.skor), 0) as dokumen_prestasi_skor'),
                     DB::raw('ROUND(
-                    IFNULL(subqueryKaryaIlmiah.rata_rata_skor_fakultas, 0) +
-                    IFNULL(bi.listening, 0) +
-                    IFNULL(bi.speaking, 0) +
-                    IFNULL(bi.writing, 0) +
-                    IFNULL(SUM(cu.skor), 0),
-                2) as total_skor')
+                        (IFNULL(SUM(cu.skor), 0) * 0.50) +
+                        (IFNULL(subqueryKaryaIlmiah.rata_rata_skor_fakultas, 0) * 0.30) +
+                        (ROUND(IFNULL(bi.listening, 0) + IFNULL(bi.speaking, 0) + IFNULL(bi.writing, 0), 2) * 0.20),
+                    2) as total_skor')
                 )
                 ->where('dp.status', '=', 'diterima')
                 ->where('dp.periode', '=', $periode)
@@ -202,12 +200,10 @@ class MahasiswaController extends Controller
                     DB::raw('ROUND(IFNULL(bi.listening_universitas, 0) + IFNULL(bi.speaking_universitas, 0) + IFNULL(bi.writing_universitas, 0), 2) as bahasa_inggris_skor'),
                     DB::raw('IFNULL(SUM(cu.skor), 0) as dokumen_prestasi_skor'),
                     DB::raw('ROUND(
-                    IFNULL(subqueryKaryaIlmiah.rata_rata_skor_universitas, 0) +
-                    IFNULL(bi.listening_universitas, 0) +
-                    IFNULL(bi.speaking_universitas, 0) +
-                    IFNULL(bi.writing_universitas, 0) +
-                    IFNULL(SUM(cu.skor), 0),
-                2) as total_skor')
+                        (IFNULL(SUM(cu.skor), 0) * 0.50) +
+                        (IFNULL(subqueryKaryaIlmiah.rata_rata_skor_universitas, 0) * 0.30) +
+                        (ROUND(IFNULL(bi.listening_universitas, 0) + IFNULL(bi.speaking_universitas, 0) + IFNULL(bi.writing_universitas, 0), 2) * 0.20),
+                    2) as total_skor')
                 )
                 ->where('dp.status', '=', 'diterima')
                 ->where('dp.periode', '=', $periode) // Gunakan variabel periode yang tepat
