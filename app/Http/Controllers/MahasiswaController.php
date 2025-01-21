@@ -45,17 +45,51 @@ class MahasiswaController extends Controller
     {
         try {
             $periode = session('portal')->periode;
-            $mahasiswa = Mahasiswa::select('mahasiswas.*', DB::raw('SUM(capaian_unggulans.skor) as total_skor'))
-                ->join('dokumen_prestasis', function ($join) use ($periode) {
-                    $join->on('mahasiswas.id', '=', 'dokumen_prestasis.id_mahasiswa')
-                        ->where('dokumen_prestasis.status', '=', 'diterima')
-                        ->where('dokumen_prestasis.periode', $periode);
+            $subqueryKaryaIlmiah = DB::table('penilaian_karya_ilmiahs')
+                ->select('id_karya_ilmiah', DB::raw('AVG(skor_departmen) as rata_rata_skor_departmen'))
+                ->groupBy('id_karya_ilmiah');
+
+            $mahasiswa = DB::table('mahasiswas as m')
+                ->leftJoin('karya_ilmiahs as k', 'm.id', '=', 'k.id_mahasiswa')
+                ->leftJoinSub($subqueryKaryaIlmiah, 'subqueryKaryaIlmiah', function ($join) {
+                    $join->on('k.id', '=', 'subqueryKaryaIlmiah.id_karya_ilmiah');
                 })
-                ->join('capaian_unggulans', 'dokumen_prestasis.id_capaian_unggulan', '=', 'capaian_unggulans.id')
-                ->leftJoin('utusans', 'utusans.id_mahasiswa', '=', 'mahasiswas.id')
-                ->where('mahasiswas.id_departmen', $idDepartmen)
-                ->where('utusans.id_mahasiswa', '=', null)
-                ->groupBy('mahasiswas.id', 'mahasiswas.nama', 'mahasiswas.nim')
+                ->leftJoin('bahasa_inggris as bi', 'm.id', '=', 'bi.id_mahasiswa')
+                ->leftJoin('dokumen_prestasis as dp', 'm.id', '=', 'dp.id_mahasiswa')
+                ->leftJoin('capaian_unggulans as cu', 'dp.id_capaian_unggulan', '=', 'cu.id')
+                ->leftJoin('departmens as d', 'm.id_departmen', '=', 'd.id')  // Periksa apakah d.id adalah kolom yang benar
+                ->leftJoin('utusans as u', 'm.id', '=', 'u.id_mahasiswa')
+                ->select(
+                    'm.id',
+                    'm.nim',
+                    'm.nama',
+                    'm.ipk',
+                    'd.nama_departmen',
+                    'u.id as id_utusan',
+                    DB::raw('IFNULL(subqueryKaryaIlmiah.rata_rata_skor_departmen, 0) as karya_ilmiah_skor'),
+                    DB::raw('ROUND(IFNULL(bi.listening_departmen, 0) + IFNULL(bi.speaking_departmen, 0) + IFNULL(bi.writing_departmen, 0), 2) as bahasa_inggris_skor'),
+                    DB::raw('IFNULL(SUM(cu.skor), 0) as dokumen_prestasi_skor'),
+                    DB::raw('ROUND(
+                        (IFNULL(SUM(cu.skor), 0) * 0.50) +
+                        (IFNULL(subqueryKaryaIlmiah.rata_rata_skor_departmen, 0) * 0.30) +
+                        (ROUND(IFNULL(bi.listening_departmen, 0) + IFNULL(bi.speaking_departmen, 0) + IFNULL(bi.writing_departmen, 0), 2) * 0.20),
+                    2) as total_skor')
+                )
+                ->where('dp.status', '=', 'diterima')
+                ->where('dp.periode', '=', 2024)
+                ->where('d.id', '=', $idDepartmen)  // Pastikan ini benar
+                ->groupBy(
+                    'm.id',
+                    'm.nim',
+                    'm.nama',
+                    'm.ipk',
+                    'd.nama_departmen',
+                    'u.id',
+                    'subqueryKaryaIlmiah.rata_rata_skor_departmen',
+                    'bi.listening_departmen',
+                    'bi.speaking_departmen',
+                    'bi.writing_departmen'
+                )
                 ->get();
 
             return DataTables::of($mahasiswa)
@@ -107,7 +141,7 @@ class MahasiswaController extends Controller
                 )
                 ->where('dp.status', '=', 'diterima')
                 ->where('dp.periode', '=', 2024)
-                ->where('d.id_fakultas', '=', 1)
+                ->where('d.id_fakultas', '=', $idFakultas)
                 ->where('u.tingkat', '=', 'departmen') // Sesuaikan dengan kondisi yang sesuai
                 ->groupBy(
                     'm.id',

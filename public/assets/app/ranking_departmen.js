@@ -43,6 +43,28 @@ function showData() {
                 searchable: true,
             },
             {
+                data: "karya_ilmiah_skor",
+                name: "karya_ilmiah_skor",
+                orderable: true,
+                searchable: true,
+                class: "text-end",
+            },
+            {
+                data: "bahasa_inggris_skor",
+                name: "bahasa_inggris_skor",
+                orderable: true,
+                searchable: true,
+                class: "text-end",
+            },
+            {
+                data: "dokumen_prestasi_skor",
+                name: "dokumen_prestasi_skor",
+                orderable: true,
+                searchable: true,
+                class: "text-end",
+            },
+
+            {
                 data: "total_skor",
                 name: "total_skor",
                 orderable: true,
@@ -62,7 +84,7 @@ function showData() {
                 },
             },
         ],
-        order: [[4, "desc"]],
+        order: [[7, "desc"]],
     });
 }
 function sendModal(id, nama, totalSkor) {
